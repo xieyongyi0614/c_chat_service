@@ -1,0 +1,25 @@
+---
+alwaysApply: true
+---
+
+# Nest.js 项目架构与开发规范
+
+## 1. 项目结构
+
+nest-project/
+│
+├── src/
+│ ├── app.module.ts // 主模块
+│ ├── main.ts // 应用程序入口
+│ ├── common/ // 公共模块和服务
+│ ├── modules/ // 各功能模块
+│ │ ├── auth/ // 认证模块
+│ │ ├── user/ // 用户模块
+│ │ ├── chat/ // 聊天模块
+│ └── shared/ // 共享组件/服务
+│
+├── test/ // 测试文件
+├── .env // 环境变量配置
+├── package.json // 项目依赖
+├── tsconfig.json // TypeScript 配置
+└── .eslintrc.js // ESLint 配置
