@@ -2,24 +2,57 @@
 alwaysApply: true
 ---
 
-# Nest.js 项目架构与开发规范
+# 🏗️ 项目结构与约定
 
-## 1. 项目结构
+## 目录结构
 
-nest-project/
-│
-├── src/
-│ ├── app.module.ts // 主模块
-│ ├── main.ts // 应用程序入口
-│ ├── common/ // 公共模块和服务
-│ ├── modules/ // 各功能模块
-│ │ ├── auth/ // 认证模块
-│ │ ├── user/ // 用户模块
-│ │ ├── chat/ // 聊天模块
-│ └── shared/ // 共享组件/服务
-│
-├── test/ // 测试文件
-├── .env // 环境变量配置
-├── package.json // 项目依赖
-├── tsconfig.json // TypeScript 配置
-└── .eslintrc.js // ESLint 配置
+- `/src`
+  - `/common` - 存放通用工具、守卫、拦截器、过滤器等。
+  - `/modules` - 按功能模块划分，如 `auth`, `user`, `chat`, `message`, `group`。
+  - `/prisma` - Prisma 客户端和服务。
+- 使用 `@nestjs/common` 中的 `Logger` 进行日志记录。
+- 所有 DTO (Data Transfer Objects) 放置于对应模块下的 `dto/` 文件夹内。
+- 所有 Entities 或 Prisma 生成的模型在 `@prisma/client` 中定义，不单独创建 Entity 类（除非需要额外逻辑）。
+
+## 命名规范
+
+- **文件命名**: 使用 `kebab-case` (短横线分隔)。例如：`user.service.ts`, `create-message.dto.ts`。
+- **类命名**: 使用 `PascalCase` (帕斯卡命名法)。例如：`UserService`, `CreateMessageDto`。
+- **变量/函数命名**: 使用 `camelCase` (驼峰命名法)。例如：`userId`, `getUserById()`。
+- **常量命名**: 使用 `UPPER_SNAKE_CASE` (大写蛇形命名法)。例如：`MAX_MESSAGE_LENGTH`。
+- **模块名称**: 模块文件名应与其主要服务/控制器同名，并以 `.module.ts` 结尾。例如：`user.module.ts` 包含 `UserController` 和 `UserService`。
+
+# 🧠 核心模块设计原则
+
+## 认证与授权 (`auth`)
+
+- 使用 JWT (JSON Web Tokens) 进行用户认证。
+- 实现基于角色的访问控制 (RBAC) 或声明式访问控制 (如 `@UseGuards(JwtAuthGuard)` )。
+- 密码必须经过哈希处理（推荐使用 bcrypt）后再存储。
+
+## 数据库交互 (`prisma`)
+
+- 统一通过 `PrismaService` 访问数据库。
+- 在 `*.service.ts` 文件中编写业务逻辑和数据库操作。
+- 复杂查询优先考虑使用 Prisma 的关系查询能力。
+- 注意处理数据库事务，尤其是在涉及多个表更新的操作中（使用 `prisma.$transaction()`）。
+
+# 🔌 API 设计规范
+
+## RESTful 风格
+
+- 尽可能遵循 RESTful API 设计原则。
+- 使用标准 HTTP 动词：GET, POST, PUT, PATCH, DELETE。
+- URL 路径使用名词复数形式表示资源集合。例如：`GET /users`, `POST /messages`。
+
+## 请求与响应
+
+- 所有请求体和响应体均使用 JSON 格式。
+- 统一错误响应格式：
+  ```json
+  {
+    "code": 400,
+    "message": "错误描述信息",
+    "error": "Bad Request" // 可选
+  }
+  ```

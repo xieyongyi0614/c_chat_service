@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  Inject,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,9 +13,7 @@ export interface ResponseInterceptorConfig {
 export const RESPONSE_INTERCEPTOR_CONFIG = 'RESPONSE_INTERCEPTOR_CONFIG';
 
 @Injectable()
-export class ResponseInterceptor<T>
-  implements NestInterceptor<T, API.ApiResponse<T>>
-{
+export class ResponseInterceptor<T> implements NestInterceptor<T, API.ApiResponse<T>> {
   private readonly config: ResponseInterceptorConfig;
 
   constructor(
@@ -29,30 +21,22 @@ export class ResponseInterceptor<T>
     private readonly contextService: RequestContextService,
 
     @Inject(RESPONSE_INTERCEPTOR_CONFIG)
-    config?: ResponseInterceptorConfig,
+    config?: ResponseInterceptorConfig
   ) {
     this.config = { useStatusCodeAsCode: true, excludePaths: [], ...config };
   }
 
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler,
-  ): Observable<API.ApiResponse<T>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<API.ApiResponse<T>> {
     const request = context.switchToHttp().getRequest();
 
     if (this.shouldSkip(request.url)) {
       return next.handle();
     }
 
-    return next
-      .handle()
-      .pipe(map((data) => this.transformResponse(context, data)));
+    return next.handle().pipe(map((data) => this.transformResponse(context, data)));
   }
 
-  private transformResponse(
-    context: ExecutionContext,
-    data: unknown,
-  ): API.ApiResponse<T> {
+  private transformResponse(context: ExecutionContext, data: unknown): API.ApiResponse<T> {
     const response = context.switchToHttp().getResponse();
 
     const statusCode = this.getNormalizedStatusCode(response.statusCode || 200);
@@ -61,7 +45,7 @@ export class ResponseInterceptor<T>
       message: this.resolveMessage(data, statusCode),
       data: this.resolveData(data),
       timestamp: this.generateTimestamp(),
-      requestId: this.getRequestId() ?? '',
+      requestId: this.getRequestId() ?? ''
     };
     response.setHeader('X-Request-Id', baseResponse.requestId);
 
@@ -69,19 +53,16 @@ export class ResponseInterceptor<T>
     return baseResponse;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private resolveCode(data: any, statusCode: number): number {
     if (data?.code !== undefined) return data.code;
     return this.config.useStatusCodeAsCode ? statusCode : 200;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private resolveMessage(data: any, statusCode: number): string {
     if (data?.message) return data.message;
     return this.getStatusMessage(statusCode);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private resolveData(data: any): T {
     if (data === null || data === undefined) return null as T;
     if (this.isApiResponseLike(data)) return data.data ?? null;
@@ -92,20 +73,14 @@ export class ResponseInterceptor<T>
     return Date.now();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private isApiResponseLike(obj: any): boolean {
-    return (
-      obj &&
-      typeof obj === 'object' &&
-      ('message' in obj || 'data' in obj || 'code' in obj)
-    );
+    return obj && typeof obj === 'object' && ('message' in obj || 'data' in obj || 'code' in obj);
   }
 
   private shouldSkip(url: string): boolean {
     return (
-      this.config.excludePaths?.some(
-        (path) => url.includes(path) || new RegExp(path).test(url),
-      ) ?? false
+      this.config.excludePaths?.some((path) => url.includes(path) || new RegExp(path).test(url)) ??
+      false
     );
   }
   private getNormalizedStatusCode(statusCode: number): number {
@@ -125,7 +100,7 @@ export class ResponseInterceptor<T>
       401: '未授权',
       403: '禁止访问',
       404: '资源不存在',
-      500: '服务器错误',
+      500: '服务器错误'
     };
 
     return messages[statusCode] || (statusCode < 400 ? 'success' : 'error');
