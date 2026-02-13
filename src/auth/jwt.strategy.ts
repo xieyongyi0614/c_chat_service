@@ -8,7 +8,7 @@ import { MyConfigService } from '../config/config.service';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private authService: AuthService,
-    private myConfigService: MyConfigService
+    myConfigService: MyConfigService
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -17,12 +17,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async validate(payload: any) {
-    // const user = await this.authService.validateUser(payload.sub);
-    // if (!user) {
-    //   throw new UnauthorizedException();
-    // }
-    // return user;
+    const user = await this.authService.validateUser(payload.sub);
+    if (!user) {
+      throw new UnauthorizedException('用户不存在或已被禁用');
+    }
+    return user;
   }
 }

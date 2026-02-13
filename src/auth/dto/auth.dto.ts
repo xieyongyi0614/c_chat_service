@@ -1,47 +1,64 @@
 import { Transform } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MinLength,
+  Matches,
+  Min,
+  Max
+} from 'class-validator';
 
 export class RegisterDto {
-    @IsEmail()
-    @IsNotEmpty()
-    email: string;
+  @IsEmail({}, { message: '邮箱格式不正确' })
+  @IsNotEmpty({ message: '邮箱不能为空' })
+  email: string;
 
-    @IsString()
-    @IsNotEmpty()
-    username: string;
+  @IsString()
+  @IsNotEmpty({ message: '用户名不能为空' })
+  username: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(6)
-    password: string;
+  @IsString()
+  @IsNotEmpty({ message: '密码不能为空' })
+  @MinLength(6, { message: '密码长度至少为6位' })
+  password: string;
 
-    @Transform(({ value }) => {
-        if (value === undefined || value === null || value === '') {
-            return 1;
-        }
-        return Number(value);
-    })
-    @IsNumber({}, { message: 'role must be a number' })
-    @IsOptional()
-    role?: number;
+  @IsOptional()
+  @IsString()
+  @Matches(/^1[3-9]\d{9}$/, { message: '手机号格式不正确' })
+  phone?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (value === undefined || value === null || value === '') {
+      return 2;
+    }
+    return Number(value);
+  })
+  @IsNumber({}, { message: '性别必须是数字' })
+  @Min(0, { message: '性别值无效' })
+  @Max(2, { message: '性别值无效' })
+  gender?: number; // 0-女, 1-男, 2-其他
 }
 
 export class LoginDto {
-    @IsEmail()
-    @IsNotEmpty()
-    email: string;
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 }
 
 export class AuthResponseDto {
-    access_token: string;
-    user: {
-        id: string;
-        email: string;
-        username: string;
-        role: number;
-    };
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+    username: string;
+    role: number;
+  };
 }

@@ -106,34 +106,3 @@ export class HealthService {
 ```env
 DATABASE_URL="mysql://username:password@localhost:3306/corner_blog"
 ```
-
-## API 端点
-
-### 文章 API
-
-- `GET /articles` - 获取文章列表
-- `GET /articles/:id` - 获取单个文章
-- `GET /articles/slug/:slug` - 通过 slug 获取文章
-- `POST /articles` - 创建文章
-- `PUT /articles/:id` - 更新文章
-- `DELETE /articles/:id` - 删除文章
-- `PUT /articles/:id/publish` - 发布文章
-- `PUT /articles/:id/unpublish` - 取消发布文章
-
-### 分类 API
-
-- `GET /categories` - 获取分类列表
-- `GET /categories/:id` - 获取单个分类
-- `GET /categories/slug/:slug` - 通过 slug 获取分类
-- `POST /categories` - 创建分类
-- `PUT /categories/:id` - 更新分类
-- `DELETE /categories/:id` - 删除分类
-
-### 标签 API
-
-- `GET /tags` - 获取标签列表
-- `GET /tags/:id` - 获取单个标签
-- `GET /tags/slug/:slug` - 通过 slug 获取标签
-- `POST /tags` - 创建标签
-- `PUT /tags/:id` - 更新标签
-- `DELETE /tags/:id` - 删除标签
