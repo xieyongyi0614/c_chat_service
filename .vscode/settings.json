@@ -1,0 +1,7 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+  ],
+  "eslint.run": "onSave" // 或 "onType"，决定何时运行检查
+}

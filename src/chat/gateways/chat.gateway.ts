@@ -13,13 +13,28 @@ import { WsJwtAuthGuard } from '../../auth/guards/ws-jwt-auth.guard';
 import { MessageService } from '../services/message.service';
 import { ChatRoomService } from '../services/chat-room.service';
 import { SendMessageDto, JoinRoomDto, LeaveRoomDto, TypingDto } from '../dto/send-message.dto';
+import { WsAuthService } from '../../auth/ws-auth.service';
 
 @WebSocketGateway({
+  namespace: '/chat',
   cors: {
-    origin: '*', // 生产环境应该配置具体的域名
+    // ✅ 安全方案：从环境变量动态加载允许的源
+    origin: (origin, callback) => {
+      const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['https://yourdomain.com'];
+
+      // 允许 Electron 开发环境（仅开发用！）
+      if (process.env.NODE_ENV === 'development' && origin?.includes('localhost')) {
+        return callback(null, true);
+      }
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true
-  },
-  namespace: '/chat'
+  }
 })
 @UsePipes(new ValidationPipe())
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -34,38 +49,59 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
     private messageService: MessageService,
-    private chatRoomService: ChatRoomService
+    private chatRoomService: ChatRoomService,
+    private wsAuthService: WsAuthService
   ) {}
 
   /**
    * 客户端连接时
    */
-  @UseGuards(WsJwtAuthGuard)
   async handleConnection(@ConnectedSocket() client: Socket) {
-    const user = client.data.user;
-    if (!user || !user.sub) {
-      this.logger.warn('连接失败：用户信息缺失');
-      client.disconnect();
-      return;
+    try {
+      // ✅ 关键：手动认证
+      const user = await this.wsAuthService.authenticateSocket(client);
+
+      // ✅ 确保 data 对象存在
+      if (!client.data) client.data = {};
+      client.data.user = user;
+
+      if (!user || !user.sub) {
+        this.logger.warn('连接失败：用户信息缺失');
+        client.disconnect();
+        return;
+      }
+
+      const userId = user.sub;
+      const socketId = client.id;
+
+      // 记录用户 socket 连接
+      if (!this.userSockets.has(userId)) {
+        this.userSockets.set(userId, new Set());
+      }
+      this.userSockets.get(userId)!.add(socketId);
+
+      // 获取用户所在的聊天室并加入
+      const rooms = await this.chatRoomService.getUserRooms(userId);
+      for (const room of rooms) {
+        await this.joinRoom(client, room.id, userId);
+      }
+
+      this.logger.log(`用户 ${userId} 已连接，Socket ID: ${socketId}`);
+      this.logger.log(`用户 ${userId} 已加入 ${rooms.length} 个聊天室`);
+      console.log(this.userSockets, 'this.userSockets');
+    } catch (error) {
+      // 优雅错误处理
+      this.logger.warn(`🔐 认证失败: ${error.message}`);
+      client.emit('auth_error', {
+        message: error.message,
+        timestamp: new Date().toISOString()
+      });
+
+      // 安全延迟断开
+      setTimeout(() => {
+        if (client.connected) client.disconnect(true);
+      }, 1000);
     }
-
-    const userId = user.sub;
-    const socketId = client.id;
-
-    // 记录用户 socket 连接
-    if (!this.userSockets.has(userId)) {
-      this.userSockets.set(userId, new Set());
-    }
-    this.userSockets.get(userId)!.add(socketId);
-
-    // 获取用户所在的聊天室并加入
-    const rooms = await this.chatRoomService.getUserRooms(userId);
-    for (const room of rooms) {
-      await this.joinRoom(client, room.id, userId);
-    }
-
-    this.logger.log(`用户 ${userId} 已连接，Socket ID: ${socketId}`);
-    this.logger.log(`用户 ${userId} 已加入 ${rooms.length} 个聊天室`);
   }
 
   /**

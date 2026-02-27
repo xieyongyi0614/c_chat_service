@@ -12,7 +12,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       database: process.env.DB_NAME,
       connectionLimit: Number(process.env.DB_CONNECTION_LIMIT ?? 10)
     });
-    console.log(process.env.DB_NAME, 'asdlasd');
     super({ adapter });
   }
   async onModuleInit() {
