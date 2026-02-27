@@ -69,3 +69,13 @@ export namespace UsersTypes {
 
   export type PostAdminUsersLoginResponse = AuthResponse;
 }
+
+export namespace AuthTypes {
+  export interface JWTPayload {
+    id: string;
+    email: string;
+  }
+  export interface WsHandshakeAuth {
+    token: string;
+  }
+}

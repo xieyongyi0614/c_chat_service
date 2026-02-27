@@ -3,12 +3,17 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../core/database';
 import { RegisterDto, LoginDto, AuthResponseDto } from '.';
 import * as bcrypt from 'bcryptjs';
+import { Socket } from 'socket.io';
+import { WsException } from '@nestjs/websockets';
+import { MyConfigService } from 'src/config';
+import { AuthTypes } from 'types/api/users-types';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private readonly configService: MyConfigService
   ) {}
 
   /**
@@ -38,8 +43,6 @@ export class AuthService {
     // 哈希密码
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    console.log(hashedPassword, 'hashedPassword');
-    // 创建用户
     const user = await this.prisma.user.create({
       data: {
         email,
@@ -51,16 +54,15 @@ export class AuthService {
       }
     });
 
-    // 生成JWT token
-    const payload = { sub: user.id, email: user.email };
-    const access_token = this.jwtService.sign(payload);
+    const payload = { id: user.id, email: user.email };
+    const access_token = this.jwtService.sign<AuthTypes.JWTPayload>(payload);
 
     return {
       access_token,
       user: {
         id: user.id,
         email: user.email,
-        username: user.nickname || user.email, // 返回 nickname 作为 username
+        username: user.nickname || user.email,
         role: 0 // 默认角色，可根据业务需求调整
       }
     };
@@ -94,8 +96,8 @@ export class AuthService {
     }
 
     // 生成JWT token
-    const payload = { sub: user.id, email: user.email };
-    const access_token = this.jwtService.sign(payload);
+    const payload = { id: user.id, email: user.email };
+    const access_token = this.jwtService.sign<AuthTypes.JWTPayload>(payload);
 
     return {
       access_token,
@@ -128,5 +130,25 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  async authenticateSocket(client: Socket) {
+    const auth = client.handshake.auth as AuthTypes.WsHandshakeAuth;
+    if (!auth?.token) {
+      throw new WsException('未提供认证信息');
+    }
+
+    try {
+      const payload = await this.jwtService.verifyAsync<AuthTypes.JWTPayload>(auth.token, {
+        secret: this.configService.jwtSecret
+      });
+
+      if (!payload?.id) {
+        throw new WsException('无效的用户凭证');
+      }
+      return payload;
+    } catch (error) {
+      throw new WsException(`认证失败: ${(error as Error)?.message}`);
+    }
   }
 }

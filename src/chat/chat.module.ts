@@ -3,11 +3,10 @@ import { ChatGateway } from './gateways/chat.gateway';
 import { MessageService } from './services/message.service';
 import { ChatRoomService } from './services/chat-room.service';
 import { AuthModule } from '../auth/auth.module';
-import { WsAuthService } from 'src/auth/ws-auth.service';
 
 @Module({
   imports: [AuthModule],
-  providers: [ChatGateway, MessageService, ChatRoomService, WsAuthService],
+  providers: [ChatGateway, MessageService, ChatRoomService],
   exports: [MessageService, ChatRoomService]
 })
 export class ChatModule {}
