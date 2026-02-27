@@ -14,7 +14,7 @@ export class MyConfigService {
   }
 
   get jwtSecret() {
-    return this.configService.get<string>('JWT_SECRET');
+    return this.configService.get<string>('JWT_SECRET') ?? '';
   }
   get jwtExpiresIn() {
     return this.configService.get<string>('JWT_EXPIRES_IN') ?? '7d';

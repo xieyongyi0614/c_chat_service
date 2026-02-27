@@ -13,7 +13,8 @@ import { WsJwtAuthGuard } from '../../auth/guards/ws-jwt-auth.guard';
 import { MessageService } from '../services/message.service';
 import { ChatRoomService } from '../services/chat-room.service';
 import { SendMessageDto, JoinRoomDto, LeaveRoomDto, TypingDto } from '../dto/send-message.dto';
-import { WsAuthService } from '../../auth/ws-auth.service';
+import { AuthService } from 'src/auth';
+import { ChatSocket } from 'types/socket.types';
 
 @WebSocketGateway({
   namespace: '/chat',
@@ -50,28 +51,25 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private messageService: MessageService,
     private chatRoomService: ChatRoomService,
-    private wsAuthService: WsAuthService
+    private authService: AuthService
   ) {}
 
   /**
    * 客户端连接时
    */
-  async handleConnection(@ConnectedSocket() client: Socket) {
+  async handleConnection(@ConnectedSocket() client: ChatSocket) {
     try {
-      // ✅ 关键：手动认证
-      const user = await this.wsAuthService.authenticateSocket(client);
+      const jwtPayload = await this.authService.authenticateSocket(client);
 
-      // ✅ 确保 data 对象存在
-      if (!client.data) client.data = {};
-      client.data.user = user;
+      client.data.user = jwtPayload;
 
-      if (!user || !user.sub) {
+      if (!jwtPayload || !jwtPayload.id) {
         this.logger.warn('连接失败：用户信息缺失');
         client.disconnect();
         return;
       }
 
-      const userId = user.sub;
+      const userId = jwtPayload.id;
       const socketId = client.id;
 
       // 记录用户 socket 连接
@@ -90,10 +88,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.logger.log(`用户 ${userId} 已加入 ${rooms.length} 个聊天室`);
       console.log(this.userSockets, 'this.userSockets');
     } catch (error) {
-      // 优雅错误处理
-      this.logger.warn(`🔐 认证失败: ${error.message}`);
+      const errorMessage = (error as Error)?.message;
+      this.logger.warn(`🔐 认证失败: ${errorMessage}`);
       client.emit('auth_error', {
-        message: error.message,
+        message: errorMessage,
         timestamp: new Date().toISOString()
       });
 
@@ -107,35 +105,34 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /**
    * 客户端断开连接时
    */
-  async handleDisconnect(@ConnectedSocket() client: Socket) {
+  async handleDisconnect(@ConnectedSocket() client: ChatSocket) {
     const user = client.data.user;
-    if (!user || !user.sub) {
+    if (!user || !user.id) {
       return;
     }
 
-    const userId = user.sub;
     const socketId = client.id;
 
     // 从用户 socket 映射中移除
-    const userSocketSet = this.userSockets.get(userId);
+    const userSocketSet = this.userSockets.get(user.id);
     if (userSocketSet) {
       userSocketSet.delete(socketId);
       if (userSocketSet.size === 0) {
-        this.userSockets.delete(userId);
+        this.userSockets.delete(user.id);
       }
     }
 
     // 从所有房间中移除
     for (const [roomId, userIds] of this.roomUsers.entries()) {
-      if (userIds.has(userId)) {
-        userIds.delete(userId);
+      if (userIds.has(user.id)) {
+        userIds.delete(user.id);
         if (userIds.size === 0) {
           this.roomUsers.delete(roomId);
         }
       }
     }
 
-    this.logger.log(`用户 ${userId} 已断开连接，Socket ID: ${socketId}`);
+    this.logger.log(`用户 ${user.id} 已断开连接，Socket ID: ${socketId}`);
   }
 
   /**
@@ -143,8 +140,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
    */
   @SubscribeMessage('join_room')
   @UseGuards(WsJwtAuthGuard)
-  async handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody() dto: JoinRoomDto) {
-    const userId = client.data.user.sub;
+  async handleJoinRoom(@ConnectedSocket() client: ChatSocket, @MessageBody() dto: JoinRoomDto) {
+    const userId = client.data.user.id;
     const { room_id } = dto;
 
     // 验证用户是否在聊天室中
@@ -172,8 +169,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
    */
   @SubscribeMessage('leave_room')
   @UseGuards(WsJwtAuthGuard)
-  async handleLeaveRoom(@ConnectedSocket() client: Socket, @MessageBody() dto: LeaveRoomDto) {
-    const userId = client.data.user.sub;
+  async handleLeaveRoom(@ConnectedSocket() client: ChatSocket, @MessageBody() dto: LeaveRoomDto) {
+    const userId = client.data.user.id;
     const { room_id } = dto;
 
     client.leave(room_id);
@@ -202,8 +199,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
    */
   @SubscribeMessage('send_message')
   @UseGuards(WsJwtAuthGuard)
-  async handleSendMessage(@ConnectedSocket() client: Socket, @MessageBody() dto: SendMessageDto) {
-    const userId = client.data.user.sub;
+  async handleSendMessage(
+    @ConnectedSocket() client: ChatSocket,
+    @MessageBody() dto: SendMessageDto
+  ) {
+    const userId = client.data.user.id;
     const { room_id, content, type } = dto;
 
     // 验证用户是否在聊天室中
@@ -247,8 +247,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
    */
   @SubscribeMessage('typing')
   @UseGuards(WsJwtAuthGuard)
-  async handleTyping(@ConnectedSocket() client: Socket, @MessageBody() dto: TypingDto) {
-    const userId = client.data.user.sub;
+  async handleTyping(@ConnectedSocket() client: ChatSocket, @MessageBody() dto: TypingDto) {
+    const userId = client.data.user.id;
     const { room_id, is_typing } = dto;
 
     // 验证用户是否在聊天室中
@@ -271,10 +271,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('get_messages')
   @UseGuards(WsJwtAuthGuard)
   async handleGetMessages(
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: ChatSocket,
     @MessageBody() data: { room_id: string; page?: number; page_size?: number }
   ) {
-    const userId = client.data.user.sub;
+    const userId = client.data.user.id;
     const { room_id, page = 1, page_size = 50 } = data;
 
     // 验证用户是否在聊天室中
@@ -303,10 +303,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('recall_message')
   @UseGuards(WsJwtAuthGuard)
   async handleRecallMessage(
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: ChatSocket,
     @MessageBody() data: { message_id: string }
   ) {
-    const userId = client.data.user.sub;
+    const userId = client.data.user.id;
     const { message_id } = data;
 
     try {

@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthService } from './auth.service';
 import { MyConfigService } from '../config/config.service';
+import { AuthTypes } from 'types/api/users-types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -10,15 +11,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private authService: AuthService,
     myConfigService: MyConfigService
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: myConfigService.jwtSecret
     });
   }
 
-  async validate(payload: any) {
-    const user = await this.authService.validateUser(payload.sub);
+  async validate(payload: AuthTypes.JWTPayload) {
+    const user = await this.authService.validateUser(payload.id);
     if (!user) {
       throw new UnauthorizedException('用户不存在或已被禁用');
     }
