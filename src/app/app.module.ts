@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 import { ChatModule } from '../chat/chat.module';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import {
   CoreModule,
   HttpExceptionFilter,
@@ -13,6 +13,7 @@ import {
   ResponseInterceptor
 } from '../core';
 import { CommonModule, RequestContextMiddleware } from '../common';
+import { AdminModule } from 'src/api/web/admin.module';
 
 @Module({
   imports: [
@@ -24,11 +25,11 @@ import { CommonModule, RequestContextMiddleware } from '../common';
     CoreModule,
     AuthModule,
     CommonModule,
-    ChatModule
+    ChatModule,
 
-    // AdminModule,
+    AdminModule
 
-    // RouterModule.register([{ path: 'admin', module: AdminModule }]),
+    // RouterModule.register([{ path: 'web', module: AdminModule }])
   ],
   controllers: [AppController],
   providers: [
