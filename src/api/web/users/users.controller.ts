@@ -1,11 +1,12 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Headers, Request } from '@nestjs/common';
 import { AuthService, RegisterDto, LoginDto, RolesGuard, JwtAuthGuard, Roles } from '../../../auth';
 import { PrismaService } from '../../../core/database';
 // import { SAFE_USER_SELECT } from './constants';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { paginationTrans } from '../../../utils';
 import { UserSearchDto } from './dto/user.dto';
-import { UsersTypes } from 'types/api/users-types';
+import { UsersTypes } from 'src/types/api/users-types';
+import { JwtRequest } from 'src/types/api/base-types';
 
 @ApiTags('用户管理')
 @Controller('users')
@@ -119,17 +120,27 @@ export class UserController {
   //   return user;
   // }
 
-  @Post('register')
-  @ApiOperation({ summary: '用户注册' })
-  @ApiResponse({ status: 201, description: '用户注册成功' })
-  async register(@Body() registerDto: RegisterDto): Promise<UsersTypes.AuthResponse> {
-    return this.authService.register(registerDto);
-  }
+  // @Post('sign-up')
+  // @ApiOperation({ summary: '用户注册' })
+  // @ApiResponse({ status: 201, description: '用户注册成功' })
+  // async register(@Body() registerDto: RegisterDto): Promise<UsersTypes.AuthResponse> {
+  //   return this.authService.register(registerDto);
+  // }
 
-  @Post('login')
-  @ApiOperation({ summary: '用户登录' })
-  @ApiResponse({ status: 200, description: '用户登录成功' })
-  async login(@Body() loginDto: LoginDto): Promise<UsersTypes.AuthResponse> {
-    return this.authService.login(loginDto);
+  // @Post('sign-in')
+  // @ApiOperation({ summary: '用户登录' })
+  // @ApiResponse({ status: 200, description: '用户登录成功' })
+  // async login(@Body() loginDto: LoginDto): Promise<UsersTypes.AuthResponse> {
+  //   return this.authService.login(loginDto);
+  // }
+
+  @Get('userInfo')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '获取当前用户信息' })
+  @ApiResponse({ status: 200, description: '获取成功' })
+  @ApiResponse({ status: 401, description: '未授权' })
+  getProfile(@Request() req: JwtRequest) {
+    return req.user;
   }
 }

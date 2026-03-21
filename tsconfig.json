@@ -24,7 +24,7 @@
     // "noUnusedParameters": true
   },
   "include": [
-    "src/**/*", // 确保包含你的类型定义文件，例如 src/types/
-    "types/**/*"
+    "src/**/*",
+    "src/types/**/*",
   ]
 }

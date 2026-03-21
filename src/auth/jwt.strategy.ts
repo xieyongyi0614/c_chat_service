@@ -3,17 +3,14 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthService } from './auth.service';
 import { MyConfigService } from '../config/config.service';
-import { AuthTypes } from 'types/api/users-types';
-
+import { AuthTypes } from 'src/types/api/users-types';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private authService: AuthService,
     myConfigService: MyConfigService
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: myConfigService.jwtSecret

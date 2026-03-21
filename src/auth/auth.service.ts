@@ -6,7 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { Socket } from 'socket.io';
 import { WsException } from '@nestjs/websockets';
 import { MyConfigService } from 'src/config';
-import { AuthTypes } from 'types/api/users-types';
+import { AuthTypes } from 'src/types/api/users-types';
 
 @Injectable()
 export class AuthService {
@@ -57,15 +57,7 @@ export class AuthService {
     const payload = { id: user.id, email: user.email };
     const access_token = this.jwtService.sign<AuthTypes.JWTPayload>(payload);
 
-    return {
-      access_token,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.nickname || user.email,
-        role: 0 // 默认角色，可根据业务需求调整
-      }
-    };
+    return { access_token };
   }
 
   /**
@@ -77,7 +69,7 @@ export class AuthService {
     // 查找用户
     const user = await this.prisma.user.findUnique({
       where: { email },
-      select: { state: true, password: true, id: true, email: true, nickname: true }
+      select: { password: true, id: true, email: true, state: true }
     });
 
     if (!user) {
@@ -99,15 +91,7 @@ export class AuthService {
     const payload = { id: user.id, email: user.email };
     const access_token = this.jwtService.sign<AuthTypes.JWTPayload>(payload);
 
-    return {
-      access_token,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.nickname || user.email, // 返回 nickname 作为 username
-        role: 0 // 默认角色，可根据业务需求调整
-      }
-    };
+    return { access_token };
   }
 
   /**
@@ -121,7 +105,8 @@ export class AuthService {
         email: true,
         nickname: true,
         avatar_url: true,
-        state: true
+        state: true,
+        update_time: true
       }
     });
 
