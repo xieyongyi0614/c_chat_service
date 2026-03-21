@@ -9,12 +9,13 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { WsJwtAuthGuard } from '../../auth/guards/ws-jwt-auth.guard';
 import { MessageService } from '../services/message.service';
 import { ChatRoomService } from '../services/chat-room.service';
 import { SendMessageDto, JoinRoomDto, LeaveRoomDto, TypingDto } from '../dto/send-message.dto';
-import { AuthService } from 'src/auth';
-import { ChatSocket } from 'types/socket.types';
+import { AuthService, WsJwtAuthGuard } from 'src/auth';
+import { ChatSocket } from 'src/types/socket.types';
+import { Command } from '@xieyongyi0614/c_chat_proto';
+// import { Command } from '../../proto';
 
 @WebSocketGateway({
   namespace: '/chat',
@@ -105,7 +106,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /**
    * 客户端断开连接时
    */
-  async handleDisconnect(@ConnectedSocket() client: ChatSocket) {
+  handleDisconnect(@ConnectedSocket() client: ChatSocket) {
     const user = client.data.user;
     if (!user || !user.id) {
       return;
@@ -135,6 +136,53 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.log(`用户 ${user.id} 已断开连接，Socket ID: ${socketId}`);
   }
 
+  /** protobuf 消息处理 */
+  @SubscribeMessage('message')
+  @UseGuards(WsJwtAuthGuard)
+  async handleProtobufMessage(
+    @ConnectedSocket() client: ChatSocket,
+    @MessageBody() protobufStr: Buffer
+  ) {
+    const userId = client.data.user.id;
+    const command = Command.decode(protobufStr);
+    console.log(`收到请求: Type=${command.type}, User=${JSON.stringify(client.data.user)}`);
+    let responseCommand: Command | null = null;
+
+    if (command.type === 101) {
+      console.log('处理 Ping...');
+      responseCommand = Command.create({
+        type: 101,
+        userId: client.data.user?.id
+      });
+    }
+
+    if (responseCommand) {
+      const responseBuffer = Command.encode(responseCommand).finish();
+
+      // ⭐ 关键：发给当前发起请求的 socket
+      client.emit('message', responseBuffer);
+      console.log('✅ 已发送', responseCommand);
+    }
+
+    // const { room_id } = dto;
+    // // 验证用户是否在聊天室中
+    // const isInRoom = await this.chatRoomService.isUserInRoom(userId, room_id);
+    // if (!isInRoom) {
+    //   this.logger.warn(`用户 ${userId} 尝试加入无权访问的房间 ${room_id}`);
+    //   client.emit('error', { message: '无权加入此聊天室' });
+    //   return;
+    // }
+    // await this.joinRoom(client, room_id, userId);
+    // // 通知房间内其他用户
+    // client.to(room_id).emit('user_joined', {
+    //   room_id,
+    //   user_id: userId,
+    //   message: '用户已加入聊天室'
+    // });
+    // this.logger.log(`用户 ${userId} 加入聊天室 ${room_id}`);
+  }
+
+  private handlePing() {}
   /**
    * 加入聊天室
    */

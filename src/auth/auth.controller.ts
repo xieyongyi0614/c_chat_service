@@ -1,19 +1,8 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpCode,
-  HttpStatus,
-  UseGuards,
-  Get,
-  UnauthorizedException,
-  Headers
-} from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto, AuthResponseDto } from './dto/auth.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { MyConfigService } from '../config/config.service';
 
 @ApiTags('认证')
@@ -25,7 +14,7 @@ export class AuthController {
     private readonly configService: MyConfigService
   ) {}
 
-  @Post('register')
+  @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '用户注册' })
   @ApiResponse({
@@ -38,7 +27,7 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Post('login')
+  @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '用户登录' })
   @ApiResponse({
@@ -49,51 +38,6 @@ export class AuthController {
   @ApiResponse({ status: 401, description: '邮箱或密码错误' })
   async login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
     return this.authService.login(loginDto);
-  }
-
-  @Get('profile')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: '获取当前用户信息' })
-  @ApiResponse({ status: 200, description: '获取成功' })
-  @ApiResponse({ status: 401, description: '未授权' })
-  async getProfile(@Headers('authorization') authorization: string) {
-    // 从请求头中提取 token
-    const token = this.extractTokenFromHeader(authorization);
-
-    if (!token) {
-      throw new UnauthorizedException('未提供认证令牌');
-    }
-
-    try {
-      // 解析 token 获取用户信息
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.jwtSecret
-      });
-
-      if (!payload || !payload.sub) {
-        throw new UnauthorizedException('无效的认证令牌');
-      }
-
-      // 根据用户 ID 从数据库获取完整的用户信息
-      const user = await this.authService.validateUser(payload.sub);
-
-      if (!user) {
-        throw new UnauthorizedException('用户不存在或已被禁用');
-      }
-
-      return {
-        id: user.id,
-        email: user.email,
-        nickname: user.nickname,
-        avatar_url: user.avatar_url
-      };
-    } catch (error) {
-      if (error instanceof UnauthorizedException) {
-        throw error;
-      }
-      throw new UnauthorizedException('认证失败: ' + (error.message || '未知错误'));
-    }
   }
 
   /**

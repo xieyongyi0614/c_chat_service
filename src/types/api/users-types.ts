@@ -68,6 +68,11 @@ export namespace UsersTypes {
   }
 
   export type PostAdminUsersLoginResponse = AuthResponse;
+
+  export type GetUserInfoResponse = Pick<
+    UsersItem,
+    'id' | 'email' | 'nickname' | 'avatar_url' | 'state'
+  >;
 }
 
 export namespace AuthTypes {
