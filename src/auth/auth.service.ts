@@ -13,7 +13,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-    private readonly configService: MyConfigService
+    private readonly configService: MyConfigService,
   ) {}
 
   /**
@@ -24,7 +24,7 @@ export class AuthService {
 
     // 检查邮箱是否已存在
     const existingUser = await this.prisma.user.findUnique({
-      where: { email }
+      where: { email },
     });
     if (existingUser) {
       throw new ConflictException('该邮箱已被注册');
@@ -33,7 +33,7 @@ export class AuthService {
     // 检查手机号是否已存在（如果提供了手机号）
     if (registerDto.phone) {
       const existingPhoneUser = await this.prisma.user.findUnique({
-        where: { phone: registerDto.phone }
+        where: { phone: registerDto.phone },
       });
       if (existingPhoneUser) {
         throw new ConflictException('该手机号已被注册');
@@ -50,8 +50,8 @@ export class AuthService {
         nickname: username, // 将 username 映射到 nickname
         phone: registerDto.phone || null,
         gender: registerDto.gender ?? 2, // 默认其他
-        state: 0 // 正常状态
-      }
+        state: 0, // 正常状态
+      },
     });
 
     const payload = { id: user.id, email: user.email };
@@ -69,7 +69,7 @@ export class AuthService {
     // 查找用户
     const user = await this.prisma.user.findUnique({
       where: { email },
-      select: { password: true, id: true, email: true, state: true }
+      select: { password: true, id: true, email: true, state: true },
     });
 
     if (!user) {
@@ -106,10 +106,9 @@ export class AuthService {
         nickname: true,
         avatar_url: true,
         state: true,
-        update_time: true
-      }
+        update_time: true,
+      },
     });
-
     if (!user || user.state !== 0) {
       return null;
     }
@@ -125,7 +124,7 @@ export class AuthService {
 
     try {
       const payload = await this.jwtService.verifyAsync<AuthTypes.JWTPayload>(auth.token, {
-        secret: this.configService.jwtSecret
+        secret: this.configService.jwtSecret,
       });
 
       if (!payload?.id) {
