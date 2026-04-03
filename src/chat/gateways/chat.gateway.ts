@@ -5,7 +5,8 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   MessageBody,
-  ConnectedSocket
+  ConnectedSocket,
+  WsException,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
@@ -14,8 +15,9 @@ import { ChatRoomService } from '../services/chat-room.service';
 import { SendMessageDto, JoinRoomDto, LeaveRoomDto, TypingDto } from '../dto/send-message.dto';
 import { AuthService, WsJwtAuthGuard } from 'src/auth';
 import { ChatSocket } from 'src/types/socket.types';
-import { Command } from '@xieyongyi0614/c_chat_proto';
-// import { Command } from '../../proto';
+import { SocketProtoEventType, SOCKET_PROTO_EVENT } from 'src/proto/protoMap';
+import { Command, IResult, Result, UserInfo } from 'src/proto';
+import { isArray } from 'class-validator';
 
 @WebSocketGateway({
   namespace: '/chat',
@@ -35,8 +37,8 @@ import { Command } from '@xieyongyi0614/c_chat_proto';
         callback(new Error('Not allowed by CORS'));
       }
     },
-    credentials: true
-  }
+    credentials: true,
+  },
 })
 @UsePipes(new ValidationPipe())
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -52,7 +54,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private messageService: MessageService,
     private chatRoomService: ChatRoomService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   /**
@@ -63,43 +65,47 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const jwtPayload = await this.authService.authenticateSocket(client);
 
       client.data.user = jwtPayload;
+      const userInfo = await this.authService.validateUser(jwtPayload.id);
 
-      if (!jwtPayload || !jwtPayload.id) {
-        this.logger.warn('连接失败：用户信息缺失');
-        client.disconnect();
-        return;
+      if (!jwtPayload || !jwtPayload.id || !userInfo) {
+        // this.logger.warn('连接失败：用户信息缺失');
+        // client.disconnect();
+        throw new WsException('连接失败：用户信息缺失');
       }
-
-      const userId = jwtPayload.id;
-      const socketId = client.id;
 
       // 记录用户 socket 连接
-      if (!this.userSockets.has(userId)) {
-        this.userSockets.set(userId, new Set());
+      if (!this.userSockets.has(userInfo.id)) {
+        this.userSockets.set(userInfo.id, new Set());
       }
-      this.userSockets.get(userId)!.add(socketId);
-
-      // 获取用户所在的聊天室并加入
-      const rooms = await this.chatRoomService.getUserRooms(userId);
-      for (const room of rooms) {
-        await this.joinRoom(client, room.id, userId);
-      }
-
-      this.logger.log(`用户 ${userId} 已连接，Socket ID: ${socketId}`);
-      this.logger.log(`用户 ${userId} 已加入 ${rooms.length} 个聊天室`);
+      this.userSockets.get(userInfo.id)!.add(client.id);
       console.log(this.userSockets, 'this.userSockets');
+      // client.emit('message', responseBuffer);
+      this.sendMessageToClient(
+        client,
+        SOCKET_PROTO_EVENT.getUserInfo,
+        UserInfo.encode(UserInfo.create(userInfo)).finish(),
+      );
+      // 获取用户所在的聊天室并加入
+      // const rooms = await this.chatRoomService.getUserRooms(userId);
+      // for (const room of rooms) {
+      //   await this.joinRoom(client, room.id, userId);
+      // }
+
+      // this.logger.log(`用户 ${userId} 已连接，Socket ID: ${socketId}`);
+      // this.logger.log(`用户 ${userId} 已加入 ${rooms.length} 个聊天室`);
+      // console.log(this.userSockets, 'this.userSockets');
     } catch (error) {
       const errorMessage = (error as Error)?.message;
       this.logger.warn(`🔐 认证失败: ${errorMessage}`);
       client.emit('auth_error', {
         message: errorMessage,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       // 安全延迟断开
-      setTimeout(() => {
-        if (client.connected) client.disconnect(true);
-      }, 1000);
+      // setTimeout(() => {
+      //   if (client.connected) client.disconnect(true);
+      // }, 1000);
     }
   }
 
@@ -139,30 +145,21 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /** protobuf 消息处理 */
   @SubscribeMessage('message')
   @UseGuards(WsJwtAuthGuard)
-  async handleProtobufMessage(
-    @ConnectedSocket() client: ChatSocket,
-    @MessageBody() protobufStr: Buffer
-  ) {
-    const userId = client.data.user.id;
+  handleProtobufMessage(@ConnectedSocket() client: ChatSocket, @MessageBody() protobufStr: Buffer) {
     const command = Command.decode(protobufStr);
-    console.log(`收到请求: Type=${command.type}, User=${JSON.stringify(client.data.user)}`);
-    let responseCommand: Command | null = null;
+    console.log(`收到请求：Event=${command.event}, User=${JSON.stringify(client.data.user)}`);
 
-    if (command.type === 101) {
-      console.log('处理 Ping...');
-      responseCommand = Command.create({
-        type: 101,
-        userId: client.data.user?.id
-      });
+    if (command.event === SOCKET_PROTO_EVENT.ping) {
+      this.sendMessageToClient(client, SOCKET_PROTO_EVENT.ping);
     }
 
-    if (responseCommand) {
-      const responseBuffer = Command.encode(responseCommand).finish();
+    // if (responseCommand) {
+    //   const responseBuffer = Command.encode(responseCommand).finish();
 
-      // ⭐ 关键：发给当前发起请求的 socket
-      client.emit('message', responseBuffer);
-      console.log('✅ 已发送', responseCommand);
-    }
+    //   // ⭐ 关键：发给当前发起请求的 socket
+    //   client.emit('message', responseBuffer);
+    //   console.log('✅ 已发送', responseCommand);
+    // }
 
     // const { room_id } = dto;
     // // 验证用户是否在聊天室中
@@ -182,7 +179,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // this.logger.log(`用户 ${userId} 加入聊天室 ${room_id}`);
   }
 
-  private handlePing() {}
+  sendMessageToClient(
+    socketClient: ChatSocket,
+    event: SocketProtoEventType,
+    body?: Uint8Array | Uint8Array[],
+  ) {
+    const newBody = body ? (isArray(body) ? body : [body]) : undefined;
+
+    const sendCommand = Command.create({
+      event,
+      userId: socketClient.data.user?.id,
+      body: newBody,
+    });
+    const responseBuffer = Command.encode(sendCommand).finish();
+    socketClient.emit('message', responseBuffer);
+    console.log('✅ 已发送到客户端', sendCommand);
+  }
+
   /**
    * 加入聊天室
    */
@@ -206,7 +219,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.to(room_id).emit('user_joined', {
       room_id,
       user_id: userId,
-      message: '用户已加入聊天室'
+      message: '用户已加入聊天室',
     });
 
     this.logger.log(`用户 ${userId} 加入聊天室 ${room_id}`);
@@ -217,7 +230,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
    */
   @SubscribeMessage('leave_room')
   @UseGuards(WsJwtAuthGuard)
-  async handleLeaveRoom(@ConnectedSocket() client: ChatSocket, @MessageBody() dto: LeaveRoomDto) {
+  handleLeaveRoom(@ConnectedSocket() client: ChatSocket, @MessageBody() dto: LeaveRoomDto) {
     const userId = client.data.user.id;
     const { room_id } = dto;
 
@@ -236,7 +249,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.to(room_id).emit('user_left', {
       room_id,
       user_id: userId,
-      message: '用户已离开聊天室'
+      message: '用户已离开聊天室',
     });
 
     this.logger.log(`用户 ${userId} 离开聊天室 ${room_id}`);
@@ -249,7 +262,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WsJwtAuthGuard)
   async handleSendMessage(
     @ConnectedSocket() client: ChatSocket,
-    @MessageBody() dto: SendMessageDto
+    @MessageBody() dto: SendMessageDto,
   ) {
     const userId = client.data.user.id;
     const { room_id, content, type } = dto;
@@ -267,7 +280,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         sender_id: userId,
         room_id,
         content,
-        type
+        type,
       });
 
       // 广播消息到房间内所有用户
@@ -280,7 +293,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         is_read: message.is_read,
         state: message.state,
         create_time: message.create_time,
-        user: message.user
+        user: message.user,
       });
 
       this.logger.log(`用户 ${userId} 在房间 ${room_id} 发送消息`);
@@ -309,7 +322,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.to(room_id).emit('user_typing', {
       room_id,
       user_id: userId,
-      is_typing: is_typing === 'true'
+      is_typing: is_typing === 'true',
     });
   }
 
@@ -320,7 +333,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WsJwtAuthGuard)
   async handleGetMessages(
     @ConnectedSocket() client: ChatSocket,
-    @MessageBody() data: { room_id: string; page?: number; page_size?: number }
+    @MessageBody() data: { room_id: string; page?: number; page_size?: number },
   ) {
     const userId = client.data.user.id;
     const { room_id, page = 1, page_size = 50 } = data;
@@ -337,7 +350,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       client.emit('messages_history', {
         room_id,
-        ...result
+        ...result,
       });
     } catch (error) {
       this.logger.error('获取消息历史失败', error);
@@ -352,7 +365,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WsJwtAuthGuard)
   async handleRecallMessage(
     @ConnectedSocket() client: ChatSocket,
-    @MessageBody() data: { message_id: string }
+    @MessageBody() data: { message_id: string },
   ) {
     const userId = client.data.user.id;
     const { message_id } = data;
@@ -363,7 +376,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // 广播撤回消息到房间内所有用户
       this.server.to(message.room_id || '').emit('message_recalled', {
         message_id,
-        room_id: message.room_id
+        room_id: message.room_id,
       });
 
       this.logger.log(`用户 ${userId} 撤回消息 ${message_id}`);
@@ -380,7 +393,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WsJwtAuthGuard)
   async handleMarkRead(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { message_id: string }
+    @MessageBody() data: { message_id: string },
   ) {
     const userId = client.data.user.sub;
     const { message_id } = data;

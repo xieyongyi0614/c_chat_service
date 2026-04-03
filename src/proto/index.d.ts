@@ -1,233 +1,364 @@
-import * as $protobuf from 'protobufjs';
-import Long = require('long');
+import * as $protobuf from "protobufjs";
+import Long = require("long");
 /** Properties of a Command. */
 export interface ICommand {
-  /** Command type */
-  type?: number | null;
 
-  /** Command userId */
-  userId?: string | null;
+    /** Command event */
+    event?: (string|null);
 
-  /** Command client */
-  client?: string | null;
+    /** Command userId */
+    userId?: (string|null);
 
-  /** Command body */
-  body?: Uint8Array[] | null;
+    /** Command client */
+    client?: (string|null);
+
+    /** Command body */
+    body?: (Uint8Array[]|null);
 }
 
 /** Represents a Command. */
 export class Command implements ICommand {
-  /**
-   * Constructs a new Command.
-   * @param [properties] Properties to set
-   */
-  constructor(properties?: ICommand);
 
-  /** Command type. */
-  public type: number;
+    /**
+     * Constructs a new Command.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ICommand);
 
-  /** Command userId. */
-  public userId: string;
+    /** Command event. */
+    public event: string;
 
-  /** Command client. */
-  public client: string;
+    /** Command userId. */
+    public userId: string;
 
-  /** Command body. */
-  public body: Uint8Array[];
+    /** Command client. */
+    public client: string;
 
-  /**
-   * Creates a new Command instance using the specified properties.
-   * @param [properties] Properties to set
-   * @returns Command instance
-   */
-  public static create(properties?: ICommand): Command;
+    /** Command body. */
+    public body: Uint8Array[];
 
-  /**
-   * Encodes the specified Command message. Does not implicitly {@link Command.verify|verify} messages.
-   * @param message Command message or plain object to encode
-   * @param [writer] Writer to encode to
-   * @returns Writer
-   */
-  public static encode(message: ICommand, writer?: $protobuf.Writer): $protobuf.Writer;
+    /**
+     * Creates a new Command instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Command instance
+     */
+    public static create(properties?: ICommand): Command;
 
-  /**
-   * Encodes the specified Command message, length delimited. Does not implicitly {@link Command.verify|verify} messages.
-   * @param message Command message or plain object to encode
-   * @param [writer] Writer to encode to
-   * @returns Writer
-   */
-  public static encodeDelimited(message: ICommand, writer?: $protobuf.Writer): $protobuf.Writer;
+    /**
+     * Encodes the specified Command message. Does not implicitly {@link Command.verify|verify} messages.
+     * @param message Command message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ICommand, writer?: $protobuf.Writer): $protobuf.Writer;
 
-  /**
-   * Decodes a Command message from the specified reader or buffer.
-   * @param reader Reader or buffer to decode from
-   * @param [length] Message length if known beforehand
-   * @returns Command
-   * @throws {Error} If the payload is not a reader or valid buffer
-   * @throws {$protobuf.util.ProtocolError} If required fields are missing
-   */
-  public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Command;
+    /**
+     * Encodes the specified Command message, length delimited. Does not implicitly {@link Command.verify|verify} messages.
+     * @param message Command message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ICommand, writer?: $protobuf.Writer): $protobuf.Writer;
 
-  /**
-   * Decodes a Command message from the specified reader or buffer, length delimited.
-   * @param reader Reader or buffer to decode from
-   * @returns Command
-   * @throws {Error} If the payload is not a reader or valid buffer
-   * @throws {$protobuf.util.ProtocolError} If required fields are missing
-   */
-  public static decodeDelimited(reader: $protobuf.Reader | Uint8Array): Command;
+    /**
+     * Decodes a Command message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Command
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Command;
 
-  /**
-   * Verifies a Command message.
-   * @param message Plain object to verify
-   * @returns `null` if valid, otherwise the reason why it is not
-   */
-  public static verify(message: { [k: string]: any }): string | null;
+    /**
+     * Decodes a Command message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Command
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Command;
 
-  /**
-   * Creates a Command message from a plain object. Also converts values to their respective internal types.
-   * @param object Plain object
-   * @returns Command
-   */
-  public static fromObject(object: { [k: string]: any }): Command;
+    /**
+     * Verifies a Command message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
 
-  /**
-   * Creates a plain object from a Command message. Also converts values to other types if specified.
-   * @param message Command
-   * @param [options] Conversion options
-   * @returns Plain object
-   */
-  public static toObject(
-    message: Command,
-    options?: $protobuf.IConversionOptions
-  ): { [k: string]: any };
+    /**
+     * Creates a Command message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Command
+     */
+    public static fromObject(object: { [k: string]: any }): Command;
 
-  /**
-   * Converts this Command to JSON.
-   * @returns JSON object
-   */
-  public toJSON(): { [k: string]: any };
+    /**
+     * Creates a plain object from a Command message. Also converts values to other types if specified.
+     * @param message Command
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Command, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
-  /**
-   * Gets the default type url for Command
-   * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-   * @returns The default type url
-   */
-  public static getTypeUrl(typeUrlPrefix?: string): string;
+    /**
+     * Converts this Command to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for Command
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
 }
 
 /** Properties of a Result. */
 export interface IResult {
-  /** Result success */
-  success?: boolean | null;
 
-  /** Result errorCode */
-  errorCode?: string | null;
+    /** Result success */
+    success?: (boolean|null);
 
-  /** Result errorMessage */
-  errorMessage?: string | null;
+    /** Result errorCode */
+    errorCode?: (string|null);
 
-  /** Result data */
-  data?: Uint8Array | null;
+    /** Result errorMessage */
+    errorMessage?: (string|null);
+
+    /** Result data */
+    data?: (Uint8Array|null);
+
+    /** Result type */
+    type?: (string|null);
 }
 
 /** Represents a Result. */
 export class Result implements IResult {
-  /**
-   * Constructs a new Result.
-   * @param [properties] Properties to set
-   */
-  constructor(properties?: IResult);
 
-  /** Result success. */
-  public success: boolean;
+    /**
+     * Constructs a new Result.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IResult);
 
-  /** Result errorCode. */
-  public errorCode: string;
+    /** Result success. */
+    public success: boolean;
 
-  /** Result errorMessage. */
-  public errorMessage: string;
+    /** Result errorCode. */
+    public errorCode: string;
 
-  /** Result data. */
-  public data: Uint8Array;
+    /** Result errorMessage. */
+    public errorMessage: string;
 
-  /**
-   * Creates a new Result instance using the specified properties.
-   * @param [properties] Properties to set
-   * @returns Result instance
-   */
-  public static create(properties?: IResult): Result;
+    /** Result data. */
+    public data: Uint8Array;
 
-  /**
-   * Encodes the specified Result message. Does not implicitly {@link Result.verify|verify} messages.
-   * @param message Result message or plain object to encode
-   * @param [writer] Writer to encode to
-   * @returns Writer
-   */
-  public static encode(message: IResult, writer?: $protobuf.Writer): $protobuf.Writer;
+    /** Result type. */
+    public type: string;
 
-  /**
-   * Encodes the specified Result message, length delimited. Does not implicitly {@link Result.verify|verify} messages.
-   * @param message Result message or plain object to encode
-   * @param [writer] Writer to encode to
-   * @returns Writer
-   */
-  public static encodeDelimited(message: IResult, writer?: $protobuf.Writer): $protobuf.Writer;
+    /**
+     * Creates a new Result instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Result instance
+     */
+    public static create(properties?: IResult): Result;
 
-  /**
-   * Decodes a Result message from the specified reader or buffer.
-   * @param reader Reader or buffer to decode from
-   * @param [length] Message length if known beforehand
-   * @returns Result
-   * @throws {Error} If the payload is not a reader or valid buffer
-   * @throws {$protobuf.util.ProtocolError} If required fields are missing
-   */
-  public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Result;
+    /**
+     * Encodes the specified Result message. Does not implicitly {@link Result.verify|verify} messages.
+     * @param message Result message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IResult, writer?: $protobuf.Writer): $protobuf.Writer;
 
-  /**
-   * Decodes a Result message from the specified reader or buffer, length delimited.
-   * @param reader Reader or buffer to decode from
-   * @returns Result
-   * @throws {Error} If the payload is not a reader or valid buffer
-   * @throws {$protobuf.util.ProtocolError} If required fields are missing
-   */
-  public static decodeDelimited(reader: $protobuf.Reader | Uint8Array): Result;
+    /**
+     * Encodes the specified Result message, length delimited. Does not implicitly {@link Result.verify|verify} messages.
+     * @param message Result message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IResult, writer?: $protobuf.Writer): $protobuf.Writer;
 
-  /**
-   * Verifies a Result message.
-   * @param message Plain object to verify
-   * @returns `null` if valid, otherwise the reason why it is not
-   */
-  public static verify(message: { [k: string]: any }): string | null;
+    /**
+     * Decodes a Result message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Result
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Result;
 
-  /**
-   * Creates a Result message from a plain object. Also converts values to their respective internal types.
-   * @param object Plain object
-   * @returns Result
-   */
-  public static fromObject(object: { [k: string]: any }): Result;
+    /**
+     * Decodes a Result message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Result
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Result;
 
-  /**
-   * Creates a plain object from a Result message. Also converts values to other types if specified.
-   * @param message Result
-   * @param [options] Conversion options
-   * @returns Plain object
-   */
-  public static toObject(
-    message: Result,
-    options?: $protobuf.IConversionOptions
-  ): { [k: string]: any };
+    /**
+     * Verifies a Result message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
 
-  /**
-   * Converts this Result to JSON.
-   * @returns JSON object
-   */
-  public toJSON(): { [k: string]: any };
+    /**
+     * Creates a Result message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Result
+     */
+    public static fromObject(object: { [k: string]: any }): Result;
 
-  /**
-   * Gets the default type url for Result
-   * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-   * @returns The default type url
-   */
-  public static getTypeUrl(typeUrlPrefix?: string): string;
+    /**
+     * Creates a plain object from a Result message. Also converts values to other types if specified.
+     * @param message Result
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Result, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Result to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for Result
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a UserInfo. */
+export interface IUserInfo {
+
+    /** UserInfo id */
+    id?: (string|null);
+
+    /** UserInfo email */
+    email?: (string|null);
+
+    /** UserInfo nickname */
+    nickname?: (string|null);
+
+    /** UserInfo avatarUrl */
+    avatarUrl?: (string|null);
+
+    /** UserInfo state */
+    state?: (number|null);
+
+    /** UserInfo updateTime */
+    updateTime?: (number|Long|null);
+}
+
+/** Represents a UserInfo. */
+export class UserInfo implements IUserInfo {
+
+    /**
+     * Constructs a new UserInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IUserInfo);
+
+    /** UserInfo id. */
+    public id: string;
+
+    /** UserInfo email. */
+    public email: string;
+
+    /** UserInfo nickname. */
+    public nickname?: (string|null);
+
+    /** UserInfo avatarUrl. */
+    public avatarUrl?: (string|null);
+
+    /** UserInfo state. */
+    public state: number;
+
+    /** UserInfo updateTime. */
+    public updateTime: (number|Long);
+
+    /**
+     * Creates a new UserInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns UserInfo instance
+     */
+    public static create(properties?: IUserInfo): UserInfo;
+
+    /**
+     * Encodes the specified UserInfo message. Does not implicitly {@link UserInfo.verify|verify} messages.
+     * @param message UserInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IUserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified UserInfo message, length delimited. Does not implicitly {@link UserInfo.verify|verify} messages.
+     * @param message UserInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IUserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a UserInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns UserInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): UserInfo;
+
+    /**
+     * Decodes a UserInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns UserInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): UserInfo;
+
+    /**
+     * Verifies a UserInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a UserInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns UserInfo
+     */
+    public static fromObject(object: { [k: string]: any }): UserInfo;
+
+    /**
+     * Creates a plain object from a UserInfo message. Also converts values to other types if specified.
+     * @param message UserInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: UserInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this UserInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for UserInfo
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
 }
