@@ -16,8 +16,9 @@ import { SendMessageDto, JoinRoomDto, LeaveRoomDto, TypingDto } from '../dto/sen
 import { AuthService, WsJwtAuthGuard } from 'src/auth';
 import { ChatSocket } from 'src/types/socket.types';
 import { SocketProtoEventType, SOCKET_PROTO_EVENT } from 'src/proto/protoMap';
-import { Command, IResult, Result, UserInfo } from 'src/proto';
-import { isArray } from 'class-validator';
+import { Command, UserInfo } from 'src/proto';
+import { MessageHandler } from './message.handler';
+import { UsersService } from 'src/api/web/users/users.service';
 
 @WebSocketGateway({
   namespace: '/chat',
@@ -41,7 +42,10 @@ import { isArray } from 'class-validator';
   },
 })
 @UsePipes(new ValidationPipe())
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ChatGateway
+  extends MessageHandler
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
@@ -55,7 +59,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private messageService: MessageService,
     private chatRoomService: ChatRoomService,
     private authService: AuthService,
-  ) {}
+    userService: UsersService,
+  ) {
+    super(userService);
+  }
 
   /**
    * 客户端连接时
@@ -78,7 +85,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.userSockets.set(userInfo.id, new Set());
       }
       this.userSockets.get(userInfo.id)!.add(client.id);
-      console.log(this.userSockets, 'this.userSockets');
+      console.log(this.userSockets, userInfo, 'this.userSockets');
       // client.emit('message', responseBuffer);
       this.sendMessageToClient(
         client,
@@ -145,13 +152,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   /** protobuf 消息处理 */
   @SubscribeMessage('message')
   @UseGuards(WsJwtAuthGuard)
-  handleProtobufMessage(@ConnectedSocket() client: ChatSocket, @MessageBody() protobufStr: Buffer) {
+  async handleProtobufMessage(
+    @ConnectedSocket() client: ChatSocket,
+    @MessageBody() protobufStr: Buffer,
+  ) {
     const command = Command.decode(protobufStr);
     console.log(`收到请求：Event=${command.event}, User=${JSON.stringify(client.data.user)}`);
 
-    if (command.event === SOCKET_PROTO_EVENT.ping) {
-      this.sendMessageToClient(client, SOCKET_PROTO_EVENT.ping);
-    }
+    await this.dispatch(command, client);
+    // if (command.event === SOCKET_PROTO_EVENT.ping) {
+    //   this.sendMessageToClient(client, SOCKET_PROTO_EVENT.ping);
+    // }
+    // if (command.event === SOCKET_PROTO_EVENT.getUserList) {
+    //   console.log('获取用户列表', command);
+    //   if (command.payload) {
+    //     const params = GetUserList.decode(command.body[0]);
+    //     console.log('获取用户列表', params);
+    //   }
+    // }
 
     // if (responseCommand) {
     //   const responseBuffer = Command.encode(responseCommand).finish();
@@ -179,23 +197,32 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // this.logger.log(`用户 ${userId} 加入聊天室 ${room_id}`);
   }
 
-  sendMessageToClient(
-    socketClient: ChatSocket,
-    event: SocketProtoEventType,
-    body?: Uint8Array | Uint8Array[],
-  ) {
-    const newBody = body ? (isArray(body) ? body : [body]) : undefined;
+  // sendMessageToClient(
+  //   socketClient: ChatSocket,
+  //   event: SocketProtoEventType,
+  //   payload?: Uint8Array | Uint8Array[],
+  // ) {
+  //   const sendCommand = Command.create({
+  //     event,
+  //     userId: socketClient.data.user?.id,
+  //     payload: payload ? (isArray(payload) ? payload : [payload]) : undefined,
+  //   });
+  //   const responseBuffer = Command.encode(sendCommand).finish();
+  //   socketClient.emit('message', responseBuffer);
+  //   console.log('✅ 已发送到客户端', sendCommand, responseBuffer);
+  // }
+  // private handlePing(client: ChatSocket) {
+  //   this.sendMessageToClient(client, SOCKET_PROTO_EVENT.ping);
+  // }
 
-    const sendCommand = Command.create({
-      event,
-      userId: socketClient.data.user?.id,
-      body: newBody,
-    });
-    const responseBuffer = Command.encode(sendCommand).finish();
-    socketClient.emit('message', responseBuffer);
-    console.log('✅ 已发送到客户端', sendCommand);
-  }
+  // --- 1. 实现基类的注册方法 ---
+  // protected initializeHandlers(): void {
+  //   this.handlers.set(SOCKET_PROTO_EVENT.ping, (client) => this.handlePing(client));
 
+  //   this.handlers.set(SOCKET_PROTO_EVENT.getUserList, (client, body) =>
+  //     this.handleGetUserList(client, body),
+  //   );
+  // }
   /**
    * 加入聊天室
    */

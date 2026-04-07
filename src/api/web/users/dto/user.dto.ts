@@ -1,12 +1,16 @@
-// import { PaginationDto } from '../../../../common';
+import { PaginationDto } from '../../../../common';
 import { IsOptional, IsString } from 'class-validator';
 
-export class UserSearchDto {
+export class UserSearchDto extends PaginationDto {
   @IsOptional()
   @IsString()
-  username?: string;
+  nickname?: string;
 
   @IsOptional()
   @IsString()
   email?: string;
+
+  @IsOptional()
+  @IsString()
+  word?: string;
 }

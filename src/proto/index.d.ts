@@ -12,8 +12,11 @@ export interface ICommand {
     /** Command client */
     client?: (string|null);
 
-    /** Command body */
-    body?: (Uint8Array[]|null);
+    /** Command requestId */
+    requestId?: (string|null);
+
+    /** Command payload */
+    payload?: (Uint8Array[]|null);
 }
 
 /** Represents a Command. */
@@ -34,8 +37,11 @@ export class Command implements ICommand {
     /** Command client. */
     public client: string;
 
-    /** Command body. */
-    public body: Uint8Array[];
+    /** Command requestId. */
+    public requestId: string;
+
+    /** Command payload. */
+    public payload: Uint8Array[];
 
     /**
      * Creates a new Command instance using the specified properties.
@@ -115,125 +121,226 @@ export class Command implements ICommand {
     public static getTypeUrl(typeUrlPrefix?: string): string;
 }
 
-/** Properties of a Result. */
-export interface IResult {
+/** Namespace Common. */
+export namespace Common {
 
-    /** Result success */
-    success?: (boolean|null);
+    /** Properties of a PaginationRequest. */
+    interface IPaginationRequest {
 
-    /** Result errorCode */
-    errorCode?: (string|null);
+        /** PaginationRequest page */
+        page?: (number|null);
 
-    /** Result errorMessage */
-    errorMessage?: (string|null);
+        /** PaginationRequest pageSize */
+        pageSize?: (number|null);
+    }
 
-    /** Result data */
-    data?: (Uint8Array|null);
+    /** Represents a PaginationRequest. */
+    class PaginationRequest implements IPaginationRequest {
 
-    /** Result type */
-    type?: (string|null);
-}
+        /**
+         * Constructs a new PaginationRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Common.IPaginationRequest);
 
-/** Represents a Result. */
-export class Result implements IResult {
+        /** PaginationRequest page. */
+        public page: number;
 
-    /**
-     * Constructs a new Result.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IResult);
+        /** PaginationRequest pageSize. */
+        public pageSize: number;
 
-    /** Result success. */
-    public success: boolean;
+        /**
+         * Creates a new PaginationRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PaginationRequest instance
+         */
+        public static create(properties?: Common.IPaginationRequest): Common.PaginationRequest;
 
-    /** Result errorCode. */
-    public errorCode: string;
+        /**
+         * Encodes the specified PaginationRequest message. Does not implicitly {@link Common.PaginationRequest.verify|verify} messages.
+         * @param message PaginationRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Common.IPaginationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
-    /** Result errorMessage. */
-    public errorMessage: string;
+        /**
+         * Encodes the specified PaginationRequest message, length delimited. Does not implicitly {@link Common.PaginationRequest.verify|verify} messages.
+         * @param message PaginationRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Common.IPaginationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
-    /** Result data. */
-    public data: Uint8Array;
+        /**
+         * Decodes a PaginationRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns PaginationRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Common.PaginationRequest;
 
-    /** Result type. */
-    public type: string;
+        /**
+         * Decodes a PaginationRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns PaginationRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Common.PaginationRequest;
 
-    /**
-     * Creates a new Result instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns Result instance
-     */
-    public static create(properties?: IResult): Result;
+        /**
+         * Verifies a PaginationRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
 
-    /**
-     * Encodes the specified Result message. Does not implicitly {@link Result.verify|verify} messages.
-     * @param message Result message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IResult, writer?: $protobuf.Writer): $protobuf.Writer;
+        /**
+         * Creates a PaginationRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PaginationRequest
+         */
+        public static fromObject(object: { [k: string]: any }): Common.PaginationRequest;
 
-    /**
-     * Encodes the specified Result message, length delimited. Does not implicitly {@link Result.verify|verify} messages.
-     * @param message Result message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IResult, writer?: $protobuf.Writer): $protobuf.Writer;
+        /**
+         * Creates a plain object from a PaginationRequest message. Also converts values to other types if specified.
+         * @param message PaginationRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Common.PaginationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
-    /**
-     * Decodes a Result message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns Result
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Result;
+        /**
+         * Converts this PaginationRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
 
-    /**
-     * Decodes a Result message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Result
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Result;
+        /**
+         * Gets the default type url for PaginationRequest
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
 
-    /**
-     * Verifies a Result message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
+    /** Properties of a PaginationResponse. */
+    interface IPaginationResponse {
 
-    /**
-     * Creates a Result message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Result
-     */
-    public static fromObject(object: { [k: string]: any }): Result;
+        /** PaginationResponse total */
+        total?: (number|null);
 
-    /**
-     * Creates a plain object from a Result message. Also converts values to other types if specified.
-     * @param message Result
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Result, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        /** PaginationResponse page */
+        page?: (number|null);
 
-    /**
-     * Converts this Result to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
+        /** PaginationResponse pageSize */
+        pageSize?: (number|null);
 
-    /**
-     * Gets the default type url for Result
-     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns The default type url
-     */
-    public static getTypeUrl(typeUrlPrefix?: string): string;
+        /** PaginationResponse totalPage */
+        totalPage?: (number|null);
+    }
+
+    /** Represents a PaginationResponse. */
+    class PaginationResponse implements IPaginationResponse {
+
+        /**
+         * Constructs a new PaginationResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Common.IPaginationResponse);
+
+        /** PaginationResponse total. */
+        public total: number;
+
+        /** PaginationResponse page. */
+        public page: number;
+
+        /** PaginationResponse pageSize. */
+        public pageSize: number;
+
+        /** PaginationResponse totalPage. */
+        public totalPage: number;
+
+        /**
+         * Creates a new PaginationResponse instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PaginationResponse instance
+         */
+        public static create(properties?: Common.IPaginationResponse): Common.PaginationResponse;
+
+        /**
+         * Encodes the specified PaginationResponse message. Does not implicitly {@link Common.PaginationResponse.verify|verify} messages.
+         * @param message PaginationResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Common.IPaginationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PaginationResponse message, length delimited. Does not implicitly {@link Common.PaginationResponse.verify|verify} messages.
+         * @param message PaginationResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Common.IPaginationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PaginationResponse message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns PaginationResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Common.PaginationResponse;
+
+        /**
+         * Decodes a PaginationResponse message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns PaginationResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Common.PaginationResponse;
+
+        /**
+         * Verifies a PaginationResponse message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PaginationResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PaginationResponse
+         */
+        public static fromObject(object: { [k: string]: any }): Common.PaginationResponse;
+
+        /**
+         * Creates a plain object from a PaginationResponse message. Also converts values to other types if specified.
+         * @param message PaginationResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Common.PaginationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PaginationResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for PaginationResponse
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
 }
 
 /** Properties of a UserInfo. */
@@ -357,6 +464,212 @@ export class UserInfo implements IUserInfo {
 
     /**
      * Gets the default type url for UserInfo
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a GetUserList. */
+export interface IGetUserList {
+
+    /** GetUserList pagination */
+    pagination?: (Common.IPaginationRequest|null);
+
+    /** GetUserList word */
+    word?: (string|null);
+}
+
+/** Represents a GetUserList. */
+export class GetUserList implements IGetUserList {
+
+    /**
+     * Constructs a new GetUserList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IGetUserList);
+
+    /** GetUserList pagination. */
+    public pagination?: (Common.IPaginationRequest|null);
+
+    /** GetUserList word. */
+    public word: string;
+
+    /**
+     * Creates a new GetUserList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns GetUserList instance
+     */
+    public static create(properties?: IGetUserList): GetUserList;
+
+    /**
+     * Encodes the specified GetUserList message. Does not implicitly {@link GetUserList.verify|verify} messages.
+     * @param message GetUserList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IGetUserList, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified GetUserList message, length delimited. Does not implicitly {@link GetUserList.verify|verify} messages.
+     * @param message GetUserList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IGetUserList, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a GetUserList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns GetUserList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetUserList;
+
+    /**
+     * Decodes a GetUserList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns GetUserList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GetUserList;
+
+    /**
+     * Verifies a GetUserList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a GetUserList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns GetUserList
+     */
+    public static fromObject(object: { [k: string]: any }): GetUserList;
+
+    /**
+     * Creates a plain object from a GetUserList message. Also converts values to other types if specified.
+     * @param message GetUserList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: GetUserList, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this GetUserList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for GetUserList
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a GetUserListResponse. */
+export interface IGetUserListResponse {
+
+    /** GetUserListResponse pagination */
+    pagination?: (Common.IPaginationResponse|null);
+
+    /** GetUserListResponse list */
+    list?: (IUserInfo[]|null);
+}
+
+/** Represents a GetUserListResponse. */
+export class GetUserListResponse implements IGetUserListResponse {
+
+    /**
+     * Constructs a new GetUserListResponse.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IGetUserListResponse);
+
+    /** GetUserListResponse pagination. */
+    public pagination?: (Common.IPaginationResponse|null);
+
+    /** GetUserListResponse list. */
+    public list: IUserInfo[];
+
+    /**
+     * Creates a new GetUserListResponse instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns GetUserListResponse instance
+     */
+    public static create(properties?: IGetUserListResponse): GetUserListResponse;
+
+    /**
+     * Encodes the specified GetUserListResponse message. Does not implicitly {@link GetUserListResponse.verify|verify} messages.
+     * @param message GetUserListResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IGetUserListResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified GetUserListResponse message, length delimited. Does not implicitly {@link GetUserListResponse.verify|verify} messages.
+     * @param message GetUserListResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IGetUserListResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a GetUserListResponse message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns GetUserListResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetUserListResponse;
+
+    /**
+     * Decodes a GetUserListResponse message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns GetUserListResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GetUserListResponse;
+
+    /**
+     * Verifies a GetUserListResponse message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a GetUserListResponse message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns GetUserListResponse
+     */
+    public static fromObject(object: { [k: string]: any }): GetUserListResponse;
+
+    /**
+     * Creates a plain object from a GetUserListResponse message. Also converts values to other types if specified.
+     * @param message GetUserListResponse
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: GetUserListResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this GetUserListResponse to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for GetUserListResponse
      * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns The default type url
      */
