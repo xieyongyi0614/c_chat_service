@@ -10,11 +10,11 @@ export namespace UsersTypes {
 
   export enum UserRole {
     ADMIN = 0,
-    USER = 1
+    USER = 1,
   }
   export enum UserStatus {
     INACTIVE = 0,
-    ACTIVE = 1
+    ACTIVE = 1,
   }
   export interface GetAdminUsersParams extends API.RequestListParams {
     username?: string;

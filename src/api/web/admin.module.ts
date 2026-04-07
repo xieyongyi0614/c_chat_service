@@ -8,12 +8,12 @@ import { AuthModule } from '../../auth';
 
 @Module({
   controllers: [
-    UserController
+    UserController,
     // UploadController
   ],
   imports: [AuthModule],
   providers: [
     // UploadService
-  ]
+  ],
 })
 export class AdminModule {}

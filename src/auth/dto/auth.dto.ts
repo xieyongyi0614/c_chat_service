@@ -8,7 +8,7 @@ import {
   MinLength,
   Matches,
   Min,
-  Max
+  Max,
 } from 'class-validator';
 
 export class RegisterDto {

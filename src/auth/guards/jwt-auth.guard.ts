@@ -12,7 +12,7 @@ export class WsJwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const client = context.switchToWs().getClient<ChatSocket>();
     const jwtPayload = await this.authService.authenticateSocket(client);
-    console.log('WsJwtAuthGuard', client.data);
+    // console.log('WsJwtAuthGuard', client.data);
     client.data.user = jwtPayload;
     return true;
   }

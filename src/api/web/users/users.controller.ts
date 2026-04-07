@@ -13,7 +13,7 @@ import { JwtRequest } from 'src/types/api/base-types';
 export class UserController {
   constructor(
     private authService: AuthService,
-    private prisma: PrismaService
+    private prisma: PrismaService,
   ) {}
 
   // @Get()
