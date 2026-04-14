@@ -4,13 +4,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
-import { ChatModule } from '../chat/chat.module';
+import { ChatModule } from '../api/chat/chat.module';
 import { APP_FILTER, APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import {
   CoreModule,
   HttpExceptionFilter,
   RESPONSE_INTERCEPTOR_CONFIG,
-  ResponseInterceptor
+  ResponseInterceptor,
 } from '../core';
 import { CommonModule, RequestContextMiddleware } from '../common';
 import { AdminModule } from 'src/api/web/admin.module';
@@ -19,7 +19,7 @@ import { AdminModule } from 'src/api/web/admin.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV}`,
-      isGlobal: true
+      isGlobal: true,
     }),
 
     CoreModule,
@@ -27,7 +27,7 @@ import { AdminModule } from 'src/api/web/admin.module';
     CommonModule,
     ChatModule,
 
-    AdminModule
+    AdminModule,
 
     // RouterModule.register([{ path: 'web', module: AdminModule }])
   ],
@@ -36,11 +36,11 @@ import { AdminModule } from 'src/api/web/admin.module';
     AppService,
     {
       provide: RESPONSE_INTERCEPTOR_CONFIG,
-      useValue: { useStatusCodeAsCode: true, excludePaths: [] }
+      useValue: { useStatusCodeAsCode: true, excludePaths: [] },
     },
     { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },
-    { provide: APP_FILTER, useClass: HttpExceptionFilter }
-  ]
+    { provide: APP_FILTER, useClass: HttpExceptionFilter },
+  ],
 })
 export class AppModule implements NestModule {
   /**  */

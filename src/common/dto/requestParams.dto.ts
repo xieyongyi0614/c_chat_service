@@ -15,3 +15,8 @@ export class PaginationDto {
   @Transform(({ value }) => (value ? Number(value) : 10), { toClassOnly: true })
   pageSize = 10;
 }
+export class RequestListParams {
+  pagination?: PaginationDto;
+  @IsOptional()
+  word = '';
+}

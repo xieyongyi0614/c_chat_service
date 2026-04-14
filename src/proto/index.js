@@ -9,29 +9,24 @@ var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.ut
 // Exported root namespace
 var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
-$root.Command = (function() {
+$root.CreateConversationRequest = (function() {
 
     /**
-     * Properties of a Command.
-     * @exports ICommand
-     * @interface ICommand
-     * @property {string|null} [event] Command event
-     * @property {string|null} [userId] Command userId
-     * @property {string|null} [client] Command client
-     * @property {string|null} [requestId] Command requestId
-     * @property {Array.<Uint8Array>|null} [payload] Command payload
+     * Properties of a CreateConversationRequest.
+     * @exports ICreateConversationRequest
+     * @interface ICreateConversationRequest
+     * @property {string|null} [targetId] CreateConversationRequest targetId
      */
 
     /**
-     * Constructs a new Command.
-     * @exports Command
-     * @classdesc Represents a Command.
-     * @implements ICommand
+     * Constructs a new CreateConversationRequest.
+     * @exports CreateConversationRequest
+     * @classdesc Represents a CreateConversationRequest.
+     * @implements ICreateConversationRequest
      * @constructor
-     * @param {ICommand=} [properties] Properties to set
+     * @param {ICreateConversationRequest=} [properties] Properties to set
      */
-    function Command(properties) {
-        this.payload = [];
+    function CreateConversationRequest(properties) {
         if (properties)
             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -39,136 +34,77 @@ $root.Command = (function() {
     }
 
     /**
-     * Command event.
-     * @member {string} event
-     * @memberof Command
+     * CreateConversationRequest targetId.
+     * @member {string} targetId
+     * @memberof CreateConversationRequest
      * @instance
      */
-    Command.prototype.event = "";
+    CreateConversationRequest.prototype.targetId = "";
 
     /**
-     * Command userId.
-     * @member {string} userId
-     * @memberof Command
-     * @instance
-     */
-    Command.prototype.userId = "";
-
-    /**
-     * Command client.
-     * @member {string} client
-     * @memberof Command
-     * @instance
-     */
-    Command.prototype.client = "";
-
-    /**
-     * Command requestId.
-     * @member {string} requestId
-     * @memberof Command
-     * @instance
-     */
-    Command.prototype.requestId = "";
-
-    /**
-     * Command payload.
-     * @member {Array.<Uint8Array>} payload
-     * @memberof Command
-     * @instance
-     */
-    Command.prototype.payload = $util.emptyArray;
-
-    /**
-     * Creates a new Command instance using the specified properties.
+     * Creates a new CreateConversationRequest instance using the specified properties.
      * @function create
-     * @memberof Command
+     * @memberof CreateConversationRequest
      * @static
-     * @param {ICommand=} [properties] Properties to set
-     * @returns {Command} Command instance
+     * @param {ICreateConversationRequest=} [properties] Properties to set
+     * @returns {CreateConversationRequest} CreateConversationRequest instance
      */
-    Command.create = function create(properties) {
-        return new Command(properties);
+    CreateConversationRequest.create = function create(properties) {
+        return new CreateConversationRequest(properties);
     };
 
     /**
-     * Encodes the specified Command message. Does not implicitly {@link Command.verify|verify} messages.
+     * Encodes the specified CreateConversationRequest message. Does not implicitly {@link CreateConversationRequest.verify|verify} messages.
      * @function encode
-     * @memberof Command
+     * @memberof CreateConversationRequest
      * @static
-     * @param {ICommand} message Command message or plain object to encode
+     * @param {ICreateConversationRequest} message CreateConversationRequest message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Command.encode = function encode(message, writer) {
+    CreateConversationRequest.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.event != null && Object.hasOwnProperty.call(message, "event"))
-            writer.uint32(/* id 1, wireType 2 =*/10).string(message.event);
-        if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-            writer.uint32(/* id 2, wireType 2 =*/18).string(message.userId);
-        if (message.client != null && Object.hasOwnProperty.call(message, "client"))
-            writer.uint32(/* id 3, wireType 2 =*/26).string(message.client);
-        if (message.requestId != null && Object.hasOwnProperty.call(message, "requestId"))
-            writer.uint32(/* id 4, wireType 2 =*/34).string(message.requestId);
-        if (message.payload != null && message.payload.length)
-            for (var i = 0; i < message.payload.length; ++i)
-                writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.payload[i]);
+        if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.targetId);
         return writer;
     };
 
     /**
-     * Encodes the specified Command message, length delimited. Does not implicitly {@link Command.verify|verify} messages.
+     * Encodes the specified CreateConversationRequest message, length delimited. Does not implicitly {@link CreateConversationRequest.verify|verify} messages.
      * @function encodeDelimited
-     * @memberof Command
+     * @memberof CreateConversationRequest
      * @static
-     * @param {ICommand} message Command message or plain object to encode
+     * @param {ICreateConversationRequest} message CreateConversationRequest message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Command.encodeDelimited = function encodeDelimited(message, writer) {
+    CreateConversationRequest.encodeDelimited = function encodeDelimited(message, writer) {
         return this.encode(message, writer).ldelim();
     };
 
     /**
-     * Decodes a Command message from the specified reader or buffer.
+     * Decodes a CreateConversationRequest message from the specified reader or buffer.
      * @function decode
-     * @memberof Command
+     * @memberof CreateConversationRequest
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {Command} Command
+     * @returns {CreateConversationRequest} CreateConversationRequest
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Command.decode = function decode(reader, length, error) {
+    CreateConversationRequest.decode = function decode(reader, length, error) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Command();
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.CreateConversationRequest();
         while (reader.pos < end) {
             var tag = reader.uint32();
             if (tag === error)
                 break;
             switch (tag >>> 3) {
             case 1: {
-                    message.event = reader.string();
-                    break;
-                }
-            case 2: {
-                    message.userId = reader.string();
-                    break;
-                }
-            case 3: {
-                    message.client = reader.string();
-                    break;
-                }
-            case 4: {
-                    message.requestId = reader.string();
-                    break;
-                }
-            case 5: {
-                    if (!(message.payload && message.payload.length))
-                        message.payload = [];
-                    message.payload.push(reader.bytes());
+                    message.targetId = reader.string();
                     break;
                 }
             default:
@@ -180,151 +116,2132 @@ $root.Command = (function() {
     };
 
     /**
-     * Decodes a Command message from the specified reader or buffer, length delimited.
+     * Decodes a CreateConversationRequest message from the specified reader or buffer, length delimited.
      * @function decodeDelimited
-     * @memberof Command
+     * @memberof CreateConversationRequest
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Command} Command
+     * @returns {CreateConversationRequest} CreateConversationRequest
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Command.decodeDelimited = function decodeDelimited(reader) {
+    CreateConversationRequest.decodeDelimited = function decodeDelimited(reader) {
         if (!(reader instanceof $Reader))
             reader = new $Reader(reader);
         return this.decode(reader, reader.uint32());
     };
 
     /**
-     * Verifies a Command message.
+     * Verifies a CreateConversationRequest message.
      * @function verify
-     * @memberof Command
+     * @memberof CreateConversationRequest
      * @static
      * @param {Object.<string,*>} message Plain object to verify
      * @returns {string|null} `null` if valid, otherwise the reason why it is not
      */
-    Command.verify = function verify(message) {
+    CreateConversationRequest.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.event != null && message.hasOwnProperty("event"))
-            if (!$util.isString(message.event))
-                return "event: string expected";
-        if (message.userId != null && message.hasOwnProperty("userId"))
-            if (!$util.isString(message.userId))
-                return "userId: string expected";
-        if (message.client != null && message.hasOwnProperty("client"))
-            if (!$util.isString(message.client))
-                return "client: string expected";
-        if (message.requestId != null && message.hasOwnProperty("requestId"))
-            if (!$util.isString(message.requestId))
-                return "requestId: string expected";
-        if (message.payload != null && message.hasOwnProperty("payload")) {
-            if (!Array.isArray(message.payload))
-                return "payload: array expected";
-            for (var i = 0; i < message.payload.length; ++i)
-                if (!(message.payload[i] && typeof message.payload[i].length === "number" || $util.isString(message.payload[i])))
-                    return "payload: buffer[] expected";
-        }
+        if (message.targetId != null && message.hasOwnProperty("targetId"))
+            if (!$util.isString(message.targetId))
+                return "targetId: string expected";
         return null;
     };
 
     /**
-     * Creates a Command message from a plain object. Also converts values to their respective internal types.
+     * Creates a CreateConversationRequest message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof Command
+     * @memberof CreateConversationRequest
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {Command} Command
+     * @returns {CreateConversationRequest} CreateConversationRequest
      */
-    Command.fromObject = function fromObject(object) {
-        if (object instanceof $root.Command)
+    CreateConversationRequest.fromObject = function fromObject(object) {
+        if (object instanceof $root.CreateConversationRequest)
             return object;
-        var message = new $root.Command();
-        if (object.event != null)
-            message.event = String(object.event);
-        if (object.userId != null)
-            message.userId = String(object.userId);
-        if (object.client != null)
-            message.client = String(object.client);
-        if (object.requestId != null)
-            message.requestId = String(object.requestId);
-        if (object.payload) {
-            if (!Array.isArray(object.payload))
-                throw TypeError(".Command.payload: array expected");
-            message.payload = [];
-            for (var i = 0; i < object.payload.length; ++i)
-                if (typeof object.payload[i] === "string")
-                    $util.base64.decode(object.payload[i], message.payload[i] = $util.newBuffer($util.base64.length(object.payload[i])), 0);
-                else if (object.payload[i].length >= 0)
-                    message.payload[i] = object.payload[i];
+        var message = new $root.CreateConversationRequest();
+        if (object.targetId != null)
+            message.targetId = String(object.targetId);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a CreateConversationRequest message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof CreateConversationRequest
+     * @static
+     * @param {CreateConversationRequest} message CreateConversationRequest
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    CreateConversationRequest.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults)
+            object.targetId = "";
+        if (message.targetId != null && message.hasOwnProperty("targetId"))
+            object.targetId = message.targetId;
+        return object;
+    };
+
+    /**
+     * Converts this CreateConversationRequest to JSON.
+     * @function toJSON
+     * @memberof CreateConversationRequest
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    CreateConversationRequest.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for CreateConversationRequest
+     * @function getTypeUrl
+     * @memberof CreateConversationRequest
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    CreateConversationRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/CreateConversationRequest";
+    };
+
+    return CreateConversationRequest;
+})();
+
+$root.ConversationInfo = (function() {
+
+    /**
+     * Properties of a ConversationInfo.
+     * @exports IConversationInfo
+     * @interface IConversationInfo
+     * @property {string|null} [id] ConversationInfo id
+     * @property {number|null} [type] ConversationInfo type
+     * @property {string|null} [targetId] ConversationInfo targetId
+     * @property {string|null} [lastMsgContent] ConversationInfo lastMsgContent
+     * @property {number|Long|null} [lastMsgTime] ConversationInfo lastMsgTime
+     * @property {number|Long|null} [updateTime] ConversationInfo updateTime
+     * @property {number|Long|null} [createTime] ConversationInfo createTime
+     */
+
+    /**
+     * Constructs a new ConversationInfo.
+     * @exports ConversationInfo
+     * @classdesc Represents a ConversationInfo.
+     * @implements IConversationInfo
+     * @constructor
+     * @param {IConversationInfo=} [properties] Properties to set
+     */
+    function ConversationInfo(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * ConversationInfo id.
+     * @member {string} id
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.id = "";
+
+    /**
+     * ConversationInfo type.
+     * @member {number} type
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.type = 0;
+
+    /**
+     * ConversationInfo targetId.
+     * @member {string} targetId
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.targetId = "";
+
+    /**
+     * ConversationInfo lastMsgContent.
+     * @member {string|null|undefined} lastMsgContent
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.lastMsgContent = null;
+
+    /**
+     * ConversationInfo lastMsgTime.
+     * @member {number|Long|null|undefined} lastMsgTime
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.lastMsgTime = null;
+
+    /**
+     * ConversationInfo updateTime.
+     * @member {number|Long} updateTime
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.updateTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * ConversationInfo createTime.
+     * @member {number|Long} createTime
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.createTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ConversationInfo.prototype, "_lastMsgContent", {
+        get: $util.oneOfGetter($oneOfFields = ["lastMsgContent"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ConversationInfo.prototype, "_lastMsgTime", {
+        get: $util.oneOfGetter($oneOfFields = ["lastMsgTime"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
+     * Creates a new ConversationInfo instance using the specified properties.
+     * @function create
+     * @memberof ConversationInfo
+     * @static
+     * @param {IConversationInfo=} [properties] Properties to set
+     * @returns {ConversationInfo} ConversationInfo instance
+     */
+    ConversationInfo.create = function create(properties) {
+        return new ConversationInfo(properties);
+    };
+
+    /**
+     * Encodes the specified ConversationInfo message. Does not implicitly {@link ConversationInfo.verify|verify} messages.
+     * @function encode
+     * @memberof ConversationInfo
+     * @static
+     * @param {IConversationInfo} message ConversationInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ConversationInfo.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.type);
+        if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.targetId);
+        if (message.lastMsgContent != null && Object.hasOwnProperty.call(message, "lastMsgContent"))
+            writer.uint32(/* id 4, wireType 2 =*/34).string(message.lastMsgContent);
+        if (message.lastMsgTime != null && Object.hasOwnProperty.call(message, "lastMsgTime"))
+            writer.uint32(/* id 5, wireType 0 =*/40).int64(message.lastMsgTime);
+        if (message.updateTime != null && Object.hasOwnProperty.call(message, "updateTime"))
+            writer.uint32(/* id 6, wireType 0 =*/48).int64(message.updateTime);
+        if (message.createTime != null && Object.hasOwnProperty.call(message, "createTime"))
+            writer.uint32(/* id 7, wireType 0 =*/56).int64(message.createTime);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified ConversationInfo message, length delimited. Does not implicitly {@link ConversationInfo.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof ConversationInfo
+     * @static
+     * @param {IConversationInfo} message ConversationInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ConversationInfo.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a ConversationInfo message from the specified reader or buffer.
+     * @function decode
+     * @memberof ConversationInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {ConversationInfo} ConversationInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ConversationInfo.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ConversationInfo();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.id = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.type = reader.int32();
+                    break;
+                }
+            case 3: {
+                    message.targetId = reader.string();
+                    break;
+                }
+            case 4: {
+                    message.lastMsgContent = reader.string();
+                    break;
+                }
+            case 5: {
+                    message.lastMsgTime = reader.int64();
+                    break;
+                }
+            case 6: {
+                    message.updateTime = reader.int64();
+                    break;
+                }
+            case 7: {
+                    message.createTime = reader.int64();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
         }
         return message;
     };
 
     /**
-     * Creates a plain object from a Command message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof Command
+     * Decodes a ConversationInfo message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof ConversationInfo
      * @static
-     * @param {Command} message Command
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {ConversationInfo} ConversationInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ConversationInfo.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a ConversationInfo message.
+     * @function verify
+     * @memberof ConversationInfo
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    ConversationInfo.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        var properties = {};
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (!$util.isString(message.id))
+                return "id: string expected";
+        if (message.type != null && message.hasOwnProperty("type"))
+            if (!$util.isInteger(message.type))
+                return "type: integer expected";
+        if (message.targetId != null && message.hasOwnProperty("targetId"))
+            if (!$util.isString(message.targetId))
+                return "targetId: string expected";
+        if (message.lastMsgContent != null && message.hasOwnProperty("lastMsgContent")) {
+            properties._lastMsgContent = 1;
+            if (!$util.isString(message.lastMsgContent))
+                return "lastMsgContent: string expected";
+        }
+        if (message.lastMsgTime != null && message.hasOwnProperty("lastMsgTime")) {
+            properties._lastMsgTime = 1;
+            if (!$util.isInteger(message.lastMsgTime) && !(message.lastMsgTime && $util.isInteger(message.lastMsgTime.low) && $util.isInteger(message.lastMsgTime.high)))
+                return "lastMsgTime: integer|Long expected";
+        }
+        if (message.updateTime != null && message.hasOwnProperty("updateTime"))
+            if (!$util.isInteger(message.updateTime) && !(message.updateTime && $util.isInteger(message.updateTime.low) && $util.isInteger(message.updateTime.high)))
+                return "updateTime: integer|Long expected";
+        if (message.createTime != null && message.hasOwnProperty("createTime"))
+            if (!$util.isInteger(message.createTime) && !(message.createTime && $util.isInteger(message.createTime.low) && $util.isInteger(message.createTime.high)))
+                return "createTime: integer|Long expected";
+        return null;
+    };
+
+    /**
+     * Creates a ConversationInfo message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof ConversationInfo
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {ConversationInfo} ConversationInfo
+     */
+    ConversationInfo.fromObject = function fromObject(object) {
+        if (object instanceof $root.ConversationInfo)
+            return object;
+        var message = new $root.ConversationInfo();
+        if (object.id != null)
+            message.id = String(object.id);
+        if (object.type != null)
+            message.type = object.type | 0;
+        if (object.targetId != null)
+            message.targetId = String(object.targetId);
+        if (object.lastMsgContent != null)
+            message.lastMsgContent = String(object.lastMsgContent);
+        if (object.lastMsgTime != null)
+            if ($util.Long)
+                (message.lastMsgTime = $util.Long.fromValue(object.lastMsgTime)).unsigned = false;
+            else if (typeof object.lastMsgTime === "string")
+                message.lastMsgTime = parseInt(object.lastMsgTime, 10);
+            else if (typeof object.lastMsgTime === "number")
+                message.lastMsgTime = object.lastMsgTime;
+            else if (typeof object.lastMsgTime === "object")
+                message.lastMsgTime = new $util.LongBits(object.lastMsgTime.low >>> 0, object.lastMsgTime.high >>> 0).toNumber();
+        if (object.updateTime != null)
+            if ($util.Long)
+                (message.updateTime = $util.Long.fromValue(object.updateTime)).unsigned = false;
+            else if (typeof object.updateTime === "string")
+                message.updateTime = parseInt(object.updateTime, 10);
+            else if (typeof object.updateTime === "number")
+                message.updateTime = object.updateTime;
+            else if (typeof object.updateTime === "object")
+                message.updateTime = new $util.LongBits(object.updateTime.low >>> 0, object.updateTime.high >>> 0).toNumber();
+        if (object.createTime != null)
+            if ($util.Long)
+                (message.createTime = $util.Long.fromValue(object.createTime)).unsigned = false;
+            else if (typeof object.createTime === "string")
+                message.createTime = parseInt(object.createTime, 10);
+            else if (typeof object.createTime === "number")
+                message.createTime = object.createTime;
+            else if (typeof object.createTime === "object")
+                message.createTime = new $util.LongBits(object.createTime.low >>> 0, object.createTime.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a ConversationInfo message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof ConversationInfo
+     * @static
+     * @param {ConversationInfo} message ConversationInfo
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    Command.toObject = function toObject(message, options) {
+    ConversationInfo.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.id = "";
+            object.type = 0;
+            object.targetId = "";
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.updateTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.updateTime = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.createTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.createTime = options.longs === String ? "0" : 0;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            object.id = message.id;
+        if (message.type != null && message.hasOwnProperty("type"))
+            object.type = message.type;
+        if (message.targetId != null && message.hasOwnProperty("targetId"))
+            object.targetId = message.targetId;
+        if (message.lastMsgContent != null && message.hasOwnProperty("lastMsgContent")) {
+            object.lastMsgContent = message.lastMsgContent;
+            if (options.oneofs)
+                object._lastMsgContent = "lastMsgContent";
+        }
+        if (message.lastMsgTime != null && message.hasOwnProperty("lastMsgTime")) {
+            if (typeof message.lastMsgTime === "number")
+                object.lastMsgTime = options.longs === String ? String(message.lastMsgTime) : message.lastMsgTime;
+            else
+                object.lastMsgTime = options.longs === String ? $util.Long.prototype.toString.call(message.lastMsgTime) : options.longs === Number ? new $util.LongBits(message.lastMsgTime.low >>> 0, message.lastMsgTime.high >>> 0).toNumber() : message.lastMsgTime;
+            if (options.oneofs)
+                object._lastMsgTime = "lastMsgTime";
+        }
+        if (message.updateTime != null && message.hasOwnProperty("updateTime"))
+            if (typeof message.updateTime === "number")
+                object.updateTime = options.longs === String ? String(message.updateTime) : message.updateTime;
+            else
+                object.updateTime = options.longs === String ? $util.Long.prototype.toString.call(message.updateTime) : options.longs === Number ? new $util.LongBits(message.updateTime.low >>> 0, message.updateTime.high >>> 0).toNumber() : message.updateTime;
+        if (message.createTime != null && message.hasOwnProperty("createTime"))
+            if (typeof message.createTime === "number")
+                object.createTime = options.longs === String ? String(message.createTime) : message.createTime;
+            else
+                object.createTime = options.longs === String ? $util.Long.prototype.toString.call(message.createTime) : options.longs === Number ? new $util.LongBits(message.createTime.low >>> 0, message.createTime.high >>> 0).toNumber() : message.createTime;
+        return object;
+    };
+
+    /**
+     * Converts this ConversationInfo to JSON.
+     * @function toJSON
+     * @memberof ConversationInfo
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    ConversationInfo.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for ConversationInfo
+     * @function getTypeUrl
+     * @memberof ConversationInfo
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ConversationInfo.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ConversationInfo";
+    };
+
+    return ConversationInfo;
+})();
+
+$root.SendMessageRequest = (function() {
+
+    /**
+     * Properties of a SendMessageRequest.
+     * @exports ISendMessageRequest
+     * @interface ISendMessageRequest
+     * @property {string|null} [conversationId] SendMessageRequest conversationId
+     * @property {string|null} [content] SendMessageRequest content
+     * @property {number|null} [type] SendMessageRequest type
+     */
+
+    /**
+     * Constructs a new SendMessageRequest.
+     * @exports SendMessageRequest
+     * @classdesc Represents a SendMessageRequest.
+     * @implements ISendMessageRequest
+     * @constructor
+     * @param {ISendMessageRequest=} [properties] Properties to set
+     */
+    function SendMessageRequest(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * SendMessageRequest conversationId.
+     * @member {string} conversationId
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.conversationId = "";
+
+    /**
+     * SendMessageRequest content.
+     * @member {string} content
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.content = "";
+
+    /**
+     * SendMessageRequest type.
+     * @member {number} type
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.type = 0;
+
+    /**
+     * Creates a new SendMessageRequest instance using the specified properties.
+     * @function create
+     * @memberof SendMessageRequest
+     * @static
+     * @param {ISendMessageRequest=} [properties] Properties to set
+     * @returns {SendMessageRequest} SendMessageRequest instance
+     */
+    SendMessageRequest.create = function create(properties) {
+        return new SendMessageRequest(properties);
+    };
+
+    /**
+     * Encodes the specified SendMessageRequest message. Does not implicitly {@link SendMessageRequest.verify|verify} messages.
+     * @function encode
+     * @memberof SendMessageRequest
+     * @static
+     * @param {ISendMessageRequest} message SendMessageRequest message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    SendMessageRequest.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.conversationId != null && Object.hasOwnProperty.call(message, "conversationId"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.conversationId);
+        if (message.content != null && Object.hasOwnProperty.call(message, "content"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.content);
+        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.type);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified SendMessageRequest message, length delimited. Does not implicitly {@link SendMessageRequest.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof SendMessageRequest
+     * @static
+     * @param {ISendMessageRequest} message SendMessageRequest message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    SendMessageRequest.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a SendMessageRequest message from the specified reader or buffer.
+     * @function decode
+     * @memberof SendMessageRequest
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {SendMessageRequest} SendMessageRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    SendMessageRequest.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.SendMessageRequest();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.conversationId = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.content = reader.string();
+                    break;
+                }
+            case 3: {
+                    message.type = reader.int32();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a SendMessageRequest message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof SendMessageRequest
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {SendMessageRequest} SendMessageRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    SendMessageRequest.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a SendMessageRequest message.
+     * @function verify
+     * @memberof SendMessageRequest
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    SendMessageRequest.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            if (!$util.isString(message.conversationId))
+                return "conversationId: string expected";
+        if (message.content != null && message.hasOwnProperty("content"))
+            if (!$util.isString(message.content))
+                return "content: string expected";
+        if (message.type != null && message.hasOwnProperty("type"))
+            if (!$util.isInteger(message.type))
+                return "type: integer expected";
+        return null;
+    };
+
+    /**
+     * Creates a SendMessageRequest message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof SendMessageRequest
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {SendMessageRequest} SendMessageRequest
+     */
+    SendMessageRequest.fromObject = function fromObject(object) {
+        if (object instanceof $root.SendMessageRequest)
+            return object;
+        var message = new $root.SendMessageRequest();
+        if (object.conversationId != null)
+            message.conversationId = String(object.conversationId);
+        if (object.content != null)
+            message.content = String(object.content);
+        if (object.type != null)
+            message.type = object.type | 0;
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a SendMessageRequest message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof SendMessageRequest
+     * @static
+     * @param {SendMessageRequest} message SendMessageRequest
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    SendMessageRequest.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.conversationId = "";
+            object.content = "";
+            object.type = 0;
+        }
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            object.conversationId = message.conversationId;
+        if (message.content != null && message.hasOwnProperty("content"))
+            object.content = message.content;
+        if (message.type != null && message.hasOwnProperty("type"))
+            object.type = message.type;
+        return object;
+    };
+
+    /**
+     * Converts this SendMessageRequest to JSON.
+     * @function toJSON
+     * @memberof SendMessageRequest
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    SendMessageRequest.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for SendMessageRequest
+     * @function getTypeUrl
+     * @memberof SendMessageRequest
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    SendMessageRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/SendMessageRequest";
+    };
+
+    return SendMessageRequest;
+})();
+
+$root.MessageInfo = (function() {
+
+    /**
+     * Properties of a MessageInfo.
+     * @exports IMessageInfo
+     * @interface IMessageInfo
+     * @property {string|null} [id] MessageInfo id
+     * @property {string|null} [senderId] MessageInfo senderId
+     * @property {string|null} [conversationId] MessageInfo conversationId
+     * @property {string|null} [content] MessageInfo content
+     * @property {number|null} [type] MessageInfo type
+     * @property {boolean|null} [isRead] MessageInfo isRead
+     * @property {number|null} [state] MessageInfo state
+     * @property {number|Long|null} [createTime] MessageInfo createTime
+     * @property {number|Long|null} [updateTime] MessageInfo updateTime
+     */
+
+    /**
+     * Constructs a new MessageInfo.
+     * @exports MessageInfo
+     * @classdesc Represents a MessageInfo.
+     * @implements IMessageInfo
+     * @constructor
+     * @param {IMessageInfo=} [properties] Properties to set
+     */
+    function MessageInfo(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * MessageInfo id.
+     * @member {string} id
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.id = "";
+
+    /**
+     * MessageInfo senderId.
+     * @member {string} senderId
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.senderId = "";
+
+    /**
+     * MessageInfo conversationId.
+     * @member {string} conversationId
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.conversationId = "";
+
+    /**
+     * MessageInfo content.
+     * @member {string} content
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.content = "";
+
+    /**
+     * MessageInfo type.
+     * @member {number} type
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.type = 0;
+
+    /**
+     * MessageInfo isRead.
+     * @member {boolean} isRead
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.isRead = false;
+
+    /**
+     * MessageInfo state.
+     * @member {number} state
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.state = 0;
+
+    /**
+     * MessageInfo createTime.
+     * @member {number|Long} createTime
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.createTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * MessageInfo updateTime.
+     * @member {number|Long} updateTime
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.updateTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Creates a new MessageInfo instance using the specified properties.
+     * @function create
+     * @memberof MessageInfo
+     * @static
+     * @param {IMessageInfo=} [properties] Properties to set
+     * @returns {MessageInfo} MessageInfo instance
+     */
+    MessageInfo.create = function create(properties) {
+        return new MessageInfo(properties);
+    };
+
+    /**
+     * Encodes the specified MessageInfo message. Does not implicitly {@link MessageInfo.verify|verify} messages.
+     * @function encode
+     * @memberof MessageInfo
+     * @static
+     * @param {IMessageInfo} message MessageInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    MessageInfo.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+        if (message.senderId != null && Object.hasOwnProperty.call(message, "senderId"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.senderId);
+        if (message.conversationId != null && Object.hasOwnProperty.call(message, "conversationId"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.conversationId);
+        if (message.content != null && Object.hasOwnProperty.call(message, "content"))
+            writer.uint32(/* id 4, wireType 2 =*/34).string(message.content);
+        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+            writer.uint32(/* id 5, wireType 0 =*/40).int32(message.type);
+        if (message.isRead != null && Object.hasOwnProperty.call(message, "isRead"))
+            writer.uint32(/* id 6, wireType 0 =*/48).bool(message.isRead);
+        if (message.state != null && Object.hasOwnProperty.call(message, "state"))
+            writer.uint32(/* id 7, wireType 0 =*/56).int32(message.state);
+        if (message.createTime != null && Object.hasOwnProperty.call(message, "createTime"))
+            writer.uint32(/* id 8, wireType 0 =*/64).int64(message.createTime);
+        if (message.updateTime != null && Object.hasOwnProperty.call(message, "updateTime"))
+            writer.uint32(/* id 9, wireType 0 =*/72).int64(message.updateTime);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified MessageInfo message, length delimited. Does not implicitly {@link MessageInfo.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof MessageInfo
+     * @static
+     * @param {IMessageInfo} message MessageInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    MessageInfo.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a MessageInfo message from the specified reader or buffer.
+     * @function decode
+     * @memberof MessageInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {MessageInfo} MessageInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    MessageInfo.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.MessageInfo();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.id = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.senderId = reader.string();
+                    break;
+                }
+            case 3: {
+                    message.conversationId = reader.string();
+                    break;
+                }
+            case 4: {
+                    message.content = reader.string();
+                    break;
+                }
+            case 5: {
+                    message.type = reader.int32();
+                    break;
+                }
+            case 6: {
+                    message.isRead = reader.bool();
+                    break;
+                }
+            case 7: {
+                    message.state = reader.int32();
+                    break;
+                }
+            case 8: {
+                    message.createTime = reader.int64();
+                    break;
+                }
+            case 9: {
+                    message.updateTime = reader.int64();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a MessageInfo message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof MessageInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {MessageInfo} MessageInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    MessageInfo.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a MessageInfo message.
+     * @function verify
+     * @memberof MessageInfo
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    MessageInfo.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (!$util.isString(message.id))
+                return "id: string expected";
+        if (message.senderId != null && message.hasOwnProperty("senderId"))
+            if (!$util.isString(message.senderId))
+                return "senderId: string expected";
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            if (!$util.isString(message.conversationId))
+                return "conversationId: string expected";
+        if (message.content != null && message.hasOwnProperty("content"))
+            if (!$util.isString(message.content))
+                return "content: string expected";
+        if (message.type != null && message.hasOwnProperty("type"))
+            if (!$util.isInteger(message.type))
+                return "type: integer expected";
+        if (message.isRead != null && message.hasOwnProperty("isRead"))
+            if (typeof message.isRead !== "boolean")
+                return "isRead: boolean expected";
+        if (message.state != null && message.hasOwnProperty("state"))
+            if (!$util.isInteger(message.state))
+                return "state: integer expected";
+        if (message.createTime != null && message.hasOwnProperty("createTime"))
+            if (!$util.isInteger(message.createTime) && !(message.createTime && $util.isInteger(message.createTime.low) && $util.isInteger(message.createTime.high)))
+                return "createTime: integer|Long expected";
+        if (message.updateTime != null && message.hasOwnProperty("updateTime"))
+            if (!$util.isInteger(message.updateTime) && !(message.updateTime && $util.isInteger(message.updateTime.low) && $util.isInteger(message.updateTime.high)))
+                return "updateTime: integer|Long expected";
+        return null;
+    };
+
+    /**
+     * Creates a MessageInfo message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof MessageInfo
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {MessageInfo} MessageInfo
+     */
+    MessageInfo.fromObject = function fromObject(object) {
+        if (object instanceof $root.MessageInfo)
+            return object;
+        var message = new $root.MessageInfo();
+        if (object.id != null)
+            message.id = String(object.id);
+        if (object.senderId != null)
+            message.senderId = String(object.senderId);
+        if (object.conversationId != null)
+            message.conversationId = String(object.conversationId);
+        if (object.content != null)
+            message.content = String(object.content);
+        if (object.type != null)
+            message.type = object.type | 0;
+        if (object.isRead != null)
+            message.isRead = Boolean(object.isRead);
+        if (object.state != null)
+            message.state = object.state | 0;
+        if (object.createTime != null)
+            if ($util.Long)
+                (message.createTime = $util.Long.fromValue(object.createTime)).unsigned = false;
+            else if (typeof object.createTime === "string")
+                message.createTime = parseInt(object.createTime, 10);
+            else if (typeof object.createTime === "number")
+                message.createTime = object.createTime;
+            else if (typeof object.createTime === "object")
+                message.createTime = new $util.LongBits(object.createTime.low >>> 0, object.createTime.high >>> 0).toNumber();
+        if (object.updateTime != null)
+            if ($util.Long)
+                (message.updateTime = $util.Long.fromValue(object.updateTime)).unsigned = false;
+            else if (typeof object.updateTime === "string")
+                message.updateTime = parseInt(object.updateTime, 10);
+            else if (typeof object.updateTime === "number")
+                message.updateTime = object.updateTime;
+            else if (typeof object.updateTime === "object")
+                message.updateTime = new $util.LongBits(object.updateTime.low >>> 0, object.updateTime.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a MessageInfo message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof MessageInfo
+     * @static
+     * @param {MessageInfo} message MessageInfo
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    MessageInfo.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.id = "";
+            object.senderId = "";
+            object.conversationId = "";
+            object.content = "";
+            object.type = 0;
+            object.isRead = false;
+            object.state = 0;
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.createTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.createTime = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.updateTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.updateTime = options.longs === String ? "0" : 0;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            object.id = message.id;
+        if (message.senderId != null && message.hasOwnProperty("senderId"))
+            object.senderId = message.senderId;
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            object.conversationId = message.conversationId;
+        if (message.content != null && message.hasOwnProperty("content"))
+            object.content = message.content;
+        if (message.type != null && message.hasOwnProperty("type"))
+            object.type = message.type;
+        if (message.isRead != null && message.hasOwnProperty("isRead"))
+            object.isRead = message.isRead;
+        if (message.state != null && message.hasOwnProperty("state"))
+            object.state = message.state;
+        if (message.createTime != null && message.hasOwnProperty("createTime"))
+            if (typeof message.createTime === "number")
+                object.createTime = options.longs === String ? String(message.createTime) : message.createTime;
+            else
+                object.createTime = options.longs === String ? $util.Long.prototype.toString.call(message.createTime) : options.longs === Number ? new $util.LongBits(message.createTime.low >>> 0, message.createTime.high >>> 0).toNumber() : message.createTime;
+        if (message.updateTime != null && message.hasOwnProperty("updateTime"))
+            if (typeof message.updateTime === "number")
+                object.updateTime = options.longs === String ? String(message.updateTime) : message.updateTime;
+            else
+                object.updateTime = options.longs === String ? $util.Long.prototype.toString.call(message.updateTime) : options.longs === Number ? new $util.LongBits(message.updateTime.low >>> 0, message.updateTime.high >>> 0).toNumber() : message.updateTime;
+        return object;
+    };
+
+    /**
+     * Converts this MessageInfo to JSON.
+     * @function toJSON
+     * @memberof MessageInfo
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    MessageInfo.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for MessageInfo
+     * @function getTypeUrl
+     * @memberof MessageInfo
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    MessageInfo.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/MessageInfo";
+    };
+
+    return MessageInfo;
+})();
+
+$root.GetConversationListRequest = (function() {
+
+    /**
+     * Properties of a GetConversationListRequest.
+     * @exports IGetConversationListRequest
+     * @interface IGetConversationListRequest
+     * @property {Common.IPaginationRequest|null} [pagination] GetConversationListRequest pagination
+     */
+
+    /**
+     * Constructs a new GetConversationListRequest.
+     * @exports GetConversationListRequest
+     * @classdesc Represents a GetConversationListRequest.
+     * @implements IGetConversationListRequest
+     * @constructor
+     * @param {IGetConversationListRequest=} [properties] Properties to set
+     */
+    function GetConversationListRequest(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GetConversationListRequest pagination.
+     * @member {Common.IPaginationRequest|null|undefined} pagination
+     * @memberof GetConversationListRequest
+     * @instance
+     */
+    GetConversationListRequest.prototype.pagination = null;
+
+    /**
+     * Creates a new GetConversationListRequest instance using the specified properties.
+     * @function create
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {IGetConversationListRequest=} [properties] Properties to set
+     * @returns {GetConversationListRequest} GetConversationListRequest instance
+     */
+    GetConversationListRequest.create = function create(properties) {
+        return new GetConversationListRequest(properties);
+    };
+
+    /**
+     * Encodes the specified GetConversationListRequest message. Does not implicitly {@link GetConversationListRequest.verify|verify} messages.
+     * @function encode
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {IGetConversationListRequest} message GetConversationListRequest message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GetConversationListRequest.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.pagination != null && Object.hasOwnProperty.call(message, "pagination"))
+            $root.Common.PaginationRequest.encode(message.pagination, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GetConversationListRequest message, length delimited. Does not implicitly {@link GetConversationListRequest.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {IGetConversationListRequest} message GetConversationListRequest message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GetConversationListRequest.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GetConversationListRequest message from the specified reader or buffer.
+     * @function decode
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GetConversationListRequest} GetConversationListRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GetConversationListRequest.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GetConversationListRequest();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.pagination = $root.Common.PaginationRequest.decode(reader, reader.uint32());
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GetConversationListRequest message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GetConversationListRequest} GetConversationListRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GetConversationListRequest.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GetConversationListRequest message.
+     * @function verify
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GetConversationListRequest.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.pagination != null && message.hasOwnProperty("pagination")) {
+            var error = $root.Common.PaginationRequest.verify(message.pagination);
+            if (error)
+                return "pagination." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a GetConversationListRequest message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GetConversationListRequest} GetConversationListRequest
+     */
+    GetConversationListRequest.fromObject = function fromObject(object) {
+        if (object instanceof $root.GetConversationListRequest)
+            return object;
+        var message = new $root.GetConversationListRequest();
+        if (object.pagination != null) {
+            if (typeof object.pagination !== "object")
+                throw TypeError(".GetConversationListRequest.pagination: object expected");
+            message.pagination = $root.Common.PaginationRequest.fromObject(object.pagination);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GetConversationListRequest message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {GetConversationListRequest} message GetConversationListRequest
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GetConversationListRequest.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults)
+            object.pagination = null;
+        if (message.pagination != null && message.hasOwnProperty("pagination"))
+            object.pagination = $root.Common.PaginationRequest.toObject(message.pagination, options);
+        return object;
+    };
+
+    /**
+     * Converts this GetConversationListRequest to JSON.
+     * @function toJSON
+     * @memberof GetConversationListRequest
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GetConversationListRequest.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for GetConversationListRequest
+     * @function getTypeUrl
+     * @memberof GetConversationListRequest
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GetConversationListRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GetConversationListRequest";
+    };
+
+    return GetConversationListRequest;
+})();
+
+$root.GetConversationListResponse = (function() {
+
+    /**
+     * Properties of a GetConversationListResponse.
+     * @exports IGetConversationListResponse
+     * @interface IGetConversationListResponse
+     * @property {Common.IPaginationResponse|null} [pagination] GetConversationListResponse pagination
+     * @property {Array.<IConversationInfo>|null} [list] GetConversationListResponse list
+     */
+
+    /**
+     * Constructs a new GetConversationListResponse.
+     * @exports GetConversationListResponse
+     * @classdesc Represents a GetConversationListResponse.
+     * @implements IGetConversationListResponse
+     * @constructor
+     * @param {IGetConversationListResponse=} [properties] Properties to set
+     */
+    function GetConversationListResponse(properties) {
+        this.list = [];
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GetConversationListResponse pagination.
+     * @member {Common.IPaginationResponse|null|undefined} pagination
+     * @memberof GetConversationListResponse
+     * @instance
+     */
+    GetConversationListResponse.prototype.pagination = null;
+
+    /**
+     * GetConversationListResponse list.
+     * @member {Array.<IConversationInfo>} list
+     * @memberof GetConversationListResponse
+     * @instance
+     */
+    GetConversationListResponse.prototype.list = $util.emptyArray;
+
+    /**
+     * Creates a new GetConversationListResponse instance using the specified properties.
+     * @function create
+     * @memberof GetConversationListResponse
+     * @static
+     * @param {IGetConversationListResponse=} [properties] Properties to set
+     * @returns {GetConversationListResponse} GetConversationListResponse instance
+     */
+    GetConversationListResponse.create = function create(properties) {
+        return new GetConversationListResponse(properties);
+    };
+
+    /**
+     * Encodes the specified GetConversationListResponse message. Does not implicitly {@link GetConversationListResponse.verify|verify} messages.
+     * @function encode
+     * @memberof GetConversationListResponse
+     * @static
+     * @param {IGetConversationListResponse} message GetConversationListResponse message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GetConversationListResponse.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.pagination != null && Object.hasOwnProperty.call(message, "pagination"))
+            $root.Common.PaginationResponse.encode(message.pagination, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.list != null && message.list.length)
+            for (var i = 0; i < message.list.length; ++i)
+                $root.ConversationInfo.encode(message.list[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GetConversationListResponse message, length delimited. Does not implicitly {@link GetConversationListResponse.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GetConversationListResponse
+     * @static
+     * @param {IGetConversationListResponse} message GetConversationListResponse message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GetConversationListResponse.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GetConversationListResponse message from the specified reader or buffer.
+     * @function decode
+     * @memberof GetConversationListResponse
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GetConversationListResponse} GetConversationListResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GetConversationListResponse.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GetConversationListResponse();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.pagination = $root.Common.PaginationResponse.decode(reader, reader.uint32());
+                    break;
+                }
+            case 2: {
+                    if (!(message.list && message.list.length))
+                        message.list = [];
+                    message.list.push($root.ConversationInfo.decode(reader, reader.uint32()));
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GetConversationListResponse message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GetConversationListResponse
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GetConversationListResponse} GetConversationListResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GetConversationListResponse.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GetConversationListResponse message.
+     * @function verify
+     * @memberof GetConversationListResponse
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GetConversationListResponse.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.pagination != null && message.hasOwnProperty("pagination")) {
+            var error = $root.Common.PaginationResponse.verify(message.pagination);
+            if (error)
+                return "pagination." + error;
+        }
+        if (message.list != null && message.hasOwnProperty("list")) {
+            if (!Array.isArray(message.list))
+                return "list: array expected";
+            for (var i = 0; i < message.list.length; ++i) {
+                var error = $root.ConversationInfo.verify(message.list[i]);
+                if (error)
+                    return "list." + error;
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Creates a GetConversationListResponse message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GetConversationListResponse
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GetConversationListResponse} GetConversationListResponse
+     */
+    GetConversationListResponse.fromObject = function fromObject(object) {
+        if (object instanceof $root.GetConversationListResponse)
+            return object;
+        var message = new $root.GetConversationListResponse();
+        if (object.pagination != null) {
+            if (typeof object.pagination !== "object")
+                throw TypeError(".GetConversationListResponse.pagination: object expected");
+            message.pagination = $root.Common.PaginationResponse.fromObject(object.pagination);
+        }
+        if (object.list) {
+            if (!Array.isArray(object.list))
+                throw TypeError(".GetConversationListResponse.list: array expected");
+            message.list = [];
+            for (var i = 0; i < object.list.length; ++i) {
+                if (typeof object.list[i] !== "object")
+                    throw TypeError(".GetConversationListResponse.list: object expected");
+                message.list[i] = $root.ConversationInfo.fromObject(object.list[i]);
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GetConversationListResponse message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GetConversationListResponse
+     * @static
+     * @param {GetConversationListResponse} message GetConversationListResponse
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GetConversationListResponse.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         var object = {};
         if (options.arrays || options.defaults)
-            object.payload = [];
-        if (options.defaults) {
-            object.event = "";
-            object.userId = "";
-            object.client = "";
-            object.requestId = "";
-        }
-        if (message.event != null && message.hasOwnProperty("event"))
-            object.event = message.event;
-        if (message.userId != null && message.hasOwnProperty("userId"))
-            object.userId = message.userId;
-        if (message.client != null && message.hasOwnProperty("client"))
-            object.client = message.client;
-        if (message.requestId != null && message.hasOwnProperty("requestId"))
-            object.requestId = message.requestId;
-        if (message.payload && message.payload.length) {
-            object.payload = [];
-            for (var j = 0; j < message.payload.length; ++j)
-                object.payload[j] = options.bytes === String ? $util.base64.encode(message.payload[j], 0, message.payload[j].length) : options.bytes === Array ? Array.prototype.slice.call(message.payload[j]) : message.payload[j];
+            object.list = [];
+        if (options.defaults)
+            object.pagination = null;
+        if (message.pagination != null && message.hasOwnProperty("pagination"))
+            object.pagination = $root.Common.PaginationResponse.toObject(message.pagination, options);
+        if (message.list && message.list.length) {
+            object.list = [];
+            for (var j = 0; j < message.list.length; ++j)
+                object.list[j] = $root.ConversationInfo.toObject(message.list[j], options);
         }
         return object;
     };
 
     /**
-     * Converts this Command to JSON.
+     * Converts this GetConversationListResponse to JSON.
      * @function toJSON
-     * @memberof Command
+     * @memberof GetConversationListResponse
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    Command.prototype.toJSON = function toJSON() {
+    GetConversationListResponse.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
     /**
-     * Gets the default type url for Command
+     * Gets the default type url for GetConversationListResponse
      * @function getTypeUrl
-     * @memberof Command
+     * @memberof GetConversationListResponse
      * @static
      * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns {string} The default type url
      */
-    Command.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+    GetConversationListResponse.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
         if (typeUrlPrefix === undefined) {
             typeUrlPrefix = "type.googleapis.com";
         }
-        return typeUrlPrefix + "/Command";
+        return typeUrlPrefix + "/GetConversationListResponse";
     };
 
-    return Command;
+    return GetConversationListResponse;
+})();
+
+$root.GetMessageHistoryRequest = (function() {
+
+    /**
+     * Properties of a GetMessageHistoryRequest.
+     * @exports IGetMessageHistoryRequest
+     * @interface IGetMessageHistoryRequest
+     * @property {string|null} [conversationId] GetMessageHistoryRequest conversationId
+     * @property {Common.IPaginationRequest|null} [pagination] GetMessageHistoryRequest pagination
+     */
+
+    /**
+     * Constructs a new GetMessageHistoryRequest.
+     * @exports GetMessageHistoryRequest
+     * @classdesc Represents a GetMessageHistoryRequest.
+     * @implements IGetMessageHistoryRequest
+     * @constructor
+     * @param {IGetMessageHistoryRequest=} [properties] Properties to set
+     */
+    function GetMessageHistoryRequest(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GetMessageHistoryRequest conversationId.
+     * @member {string} conversationId
+     * @memberof GetMessageHistoryRequest
+     * @instance
+     */
+    GetMessageHistoryRequest.prototype.conversationId = "";
+
+    /**
+     * GetMessageHistoryRequest pagination.
+     * @member {Common.IPaginationRequest|null|undefined} pagination
+     * @memberof GetMessageHistoryRequest
+     * @instance
+     */
+    GetMessageHistoryRequest.prototype.pagination = null;
+
+    /**
+     * Creates a new GetMessageHistoryRequest instance using the specified properties.
+     * @function create
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {IGetMessageHistoryRequest=} [properties] Properties to set
+     * @returns {GetMessageHistoryRequest} GetMessageHistoryRequest instance
+     */
+    GetMessageHistoryRequest.create = function create(properties) {
+        return new GetMessageHistoryRequest(properties);
+    };
+
+    /**
+     * Encodes the specified GetMessageHistoryRequest message. Does not implicitly {@link GetMessageHistoryRequest.verify|verify} messages.
+     * @function encode
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {IGetMessageHistoryRequest} message GetMessageHistoryRequest message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GetMessageHistoryRequest.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.conversationId != null && Object.hasOwnProperty.call(message, "conversationId"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.conversationId);
+        if (message.pagination != null && Object.hasOwnProperty.call(message, "pagination"))
+            $root.Common.PaginationRequest.encode(message.pagination, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GetMessageHistoryRequest message, length delimited. Does not implicitly {@link GetMessageHistoryRequest.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {IGetMessageHistoryRequest} message GetMessageHistoryRequest message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GetMessageHistoryRequest.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GetMessageHistoryRequest message from the specified reader or buffer.
+     * @function decode
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GetMessageHistoryRequest} GetMessageHistoryRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GetMessageHistoryRequest.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GetMessageHistoryRequest();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.conversationId = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.pagination = $root.Common.PaginationRequest.decode(reader, reader.uint32());
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GetMessageHistoryRequest message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GetMessageHistoryRequest} GetMessageHistoryRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GetMessageHistoryRequest.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GetMessageHistoryRequest message.
+     * @function verify
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GetMessageHistoryRequest.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            if (!$util.isString(message.conversationId))
+                return "conversationId: string expected";
+        if (message.pagination != null && message.hasOwnProperty("pagination")) {
+            var error = $root.Common.PaginationRequest.verify(message.pagination);
+            if (error)
+                return "pagination." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a GetMessageHistoryRequest message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GetMessageHistoryRequest} GetMessageHistoryRequest
+     */
+    GetMessageHistoryRequest.fromObject = function fromObject(object) {
+        if (object instanceof $root.GetMessageHistoryRequest)
+            return object;
+        var message = new $root.GetMessageHistoryRequest();
+        if (object.conversationId != null)
+            message.conversationId = String(object.conversationId);
+        if (object.pagination != null) {
+            if (typeof object.pagination !== "object")
+                throw TypeError(".GetMessageHistoryRequest.pagination: object expected");
+            message.pagination = $root.Common.PaginationRequest.fromObject(object.pagination);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GetMessageHistoryRequest message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {GetMessageHistoryRequest} message GetMessageHistoryRequest
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GetMessageHistoryRequest.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.conversationId = "";
+            object.pagination = null;
+        }
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            object.conversationId = message.conversationId;
+        if (message.pagination != null && message.hasOwnProperty("pagination"))
+            object.pagination = $root.Common.PaginationRequest.toObject(message.pagination, options);
+        return object;
+    };
+
+    /**
+     * Converts this GetMessageHistoryRequest to JSON.
+     * @function toJSON
+     * @memberof GetMessageHistoryRequest
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GetMessageHistoryRequest.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for GetMessageHistoryRequest
+     * @function getTypeUrl
+     * @memberof GetMessageHistoryRequest
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GetMessageHistoryRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GetMessageHistoryRequest";
+    };
+
+    return GetMessageHistoryRequest;
+})();
+
+$root.GetMessageHistoryResponse = (function() {
+
+    /**
+     * Properties of a GetMessageHistoryResponse.
+     * @exports IGetMessageHistoryResponse
+     * @interface IGetMessageHistoryResponse
+     * @property {Common.IPaginationResponse|null} [pagination] GetMessageHistoryResponse pagination
+     * @property {Array.<IMessageInfo>|null} [list] GetMessageHistoryResponse list
+     */
+
+    /**
+     * Constructs a new GetMessageHistoryResponse.
+     * @exports GetMessageHistoryResponse
+     * @classdesc Represents a GetMessageHistoryResponse.
+     * @implements IGetMessageHistoryResponse
+     * @constructor
+     * @param {IGetMessageHistoryResponse=} [properties] Properties to set
+     */
+    function GetMessageHistoryResponse(properties) {
+        this.list = [];
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GetMessageHistoryResponse pagination.
+     * @member {Common.IPaginationResponse|null|undefined} pagination
+     * @memberof GetMessageHistoryResponse
+     * @instance
+     */
+    GetMessageHistoryResponse.prototype.pagination = null;
+
+    /**
+     * GetMessageHistoryResponse list.
+     * @member {Array.<IMessageInfo>} list
+     * @memberof GetMessageHistoryResponse
+     * @instance
+     */
+    GetMessageHistoryResponse.prototype.list = $util.emptyArray;
+
+    /**
+     * Creates a new GetMessageHistoryResponse instance using the specified properties.
+     * @function create
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {IGetMessageHistoryResponse=} [properties] Properties to set
+     * @returns {GetMessageHistoryResponse} GetMessageHistoryResponse instance
+     */
+    GetMessageHistoryResponse.create = function create(properties) {
+        return new GetMessageHistoryResponse(properties);
+    };
+
+    /**
+     * Encodes the specified GetMessageHistoryResponse message. Does not implicitly {@link GetMessageHistoryResponse.verify|verify} messages.
+     * @function encode
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {IGetMessageHistoryResponse} message GetMessageHistoryResponse message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GetMessageHistoryResponse.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.pagination != null && Object.hasOwnProperty.call(message, "pagination"))
+            $root.Common.PaginationResponse.encode(message.pagination, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.list != null && message.list.length)
+            for (var i = 0; i < message.list.length; ++i)
+                $root.MessageInfo.encode(message.list[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GetMessageHistoryResponse message, length delimited. Does not implicitly {@link GetMessageHistoryResponse.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {IGetMessageHistoryResponse} message GetMessageHistoryResponse message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GetMessageHistoryResponse.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GetMessageHistoryResponse message from the specified reader or buffer.
+     * @function decode
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GetMessageHistoryResponse} GetMessageHistoryResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GetMessageHistoryResponse.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GetMessageHistoryResponse();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.pagination = $root.Common.PaginationResponse.decode(reader, reader.uint32());
+                    break;
+                }
+            case 2: {
+                    if (!(message.list && message.list.length))
+                        message.list = [];
+                    message.list.push($root.MessageInfo.decode(reader, reader.uint32()));
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GetMessageHistoryResponse message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GetMessageHistoryResponse} GetMessageHistoryResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GetMessageHistoryResponse.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GetMessageHistoryResponse message.
+     * @function verify
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GetMessageHistoryResponse.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.pagination != null && message.hasOwnProperty("pagination")) {
+            var error = $root.Common.PaginationResponse.verify(message.pagination);
+            if (error)
+                return "pagination." + error;
+        }
+        if (message.list != null && message.hasOwnProperty("list")) {
+            if (!Array.isArray(message.list))
+                return "list: array expected";
+            for (var i = 0; i < message.list.length; ++i) {
+                var error = $root.MessageInfo.verify(message.list[i]);
+                if (error)
+                    return "list." + error;
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Creates a GetMessageHistoryResponse message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GetMessageHistoryResponse} GetMessageHistoryResponse
+     */
+    GetMessageHistoryResponse.fromObject = function fromObject(object) {
+        if (object instanceof $root.GetMessageHistoryResponse)
+            return object;
+        var message = new $root.GetMessageHistoryResponse();
+        if (object.pagination != null) {
+            if (typeof object.pagination !== "object")
+                throw TypeError(".GetMessageHistoryResponse.pagination: object expected");
+            message.pagination = $root.Common.PaginationResponse.fromObject(object.pagination);
+        }
+        if (object.list) {
+            if (!Array.isArray(object.list))
+                throw TypeError(".GetMessageHistoryResponse.list: array expected");
+            message.list = [];
+            for (var i = 0; i < object.list.length; ++i) {
+                if (typeof object.list[i] !== "object")
+                    throw TypeError(".GetMessageHistoryResponse.list: object expected");
+                message.list[i] = $root.MessageInfo.fromObject(object.list[i]);
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GetMessageHistoryResponse message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {GetMessageHistoryResponse} message GetMessageHistoryResponse
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GetMessageHistoryResponse.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.arrays || options.defaults)
+            object.list = [];
+        if (options.defaults)
+            object.pagination = null;
+        if (message.pagination != null && message.hasOwnProperty("pagination"))
+            object.pagination = $root.Common.PaginationResponse.toObject(message.pagination, options);
+        if (message.list && message.list.length) {
+            object.list = [];
+            for (var j = 0; j < message.list.length; ++j)
+                object.list[j] = $root.MessageInfo.toObject(message.list[j], options);
+        }
+        return object;
+    };
+
+    /**
+     * Converts this GetMessageHistoryResponse to JSON.
+     * @function toJSON
+     * @memberof GetMessageHistoryResponse
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GetMessageHistoryResponse.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for GetMessageHistoryResponse
+     * @function getTypeUrl
+     * @memberof GetMessageHistoryResponse
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GetMessageHistoryResponse.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GetMessageHistoryResponse";
+    };
+
+    return GetMessageHistoryResponse;
 })();
 
 $root.Common = (function() {
@@ -1689,6 +3606,553 @@ $root.GetUserListResponse = (function() {
     };
 
     return GetUserListResponse;
+})();
+
+$root.Command = (function() {
+
+    /**
+     * Properties of a Command.
+     * @exports ICommand
+     * @interface ICommand
+     * @property {string|null} [event] Command event
+     * @property {string|null} [userId] Command userId
+     * @property {string|null} [client] Command client
+     * @property {string|null} [requestId] Command requestId
+     * @property {Array.<Uint8Array>|null} [payload] Command payload
+     */
+
+    /**
+     * Constructs a new Command.
+     * @exports Command
+     * @classdesc Represents a Command.
+     * @implements ICommand
+     * @constructor
+     * @param {ICommand=} [properties] Properties to set
+     */
+    function Command(properties) {
+        this.payload = [];
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Command event.
+     * @member {string} event
+     * @memberof Command
+     * @instance
+     */
+    Command.prototype.event = "";
+
+    /**
+     * Command userId.
+     * @member {string} userId
+     * @memberof Command
+     * @instance
+     */
+    Command.prototype.userId = "";
+
+    /**
+     * Command client.
+     * @member {string} client
+     * @memberof Command
+     * @instance
+     */
+    Command.prototype.client = "";
+
+    /**
+     * Command requestId.
+     * @member {string} requestId
+     * @memberof Command
+     * @instance
+     */
+    Command.prototype.requestId = "";
+
+    /**
+     * Command payload.
+     * @member {Array.<Uint8Array>} payload
+     * @memberof Command
+     * @instance
+     */
+    Command.prototype.payload = $util.emptyArray;
+
+    /**
+     * Creates a new Command instance using the specified properties.
+     * @function create
+     * @memberof Command
+     * @static
+     * @param {ICommand=} [properties] Properties to set
+     * @returns {Command} Command instance
+     */
+    Command.create = function create(properties) {
+        return new Command(properties);
+    };
+
+    /**
+     * Encodes the specified Command message. Does not implicitly {@link Command.verify|verify} messages.
+     * @function encode
+     * @memberof Command
+     * @static
+     * @param {ICommand} message Command message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Command.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.event != null && Object.hasOwnProperty.call(message, "event"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.event);
+        if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.userId);
+        if (message.client != null && Object.hasOwnProperty.call(message, "client"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.client);
+        if (message.requestId != null && Object.hasOwnProperty.call(message, "requestId"))
+            writer.uint32(/* id 4, wireType 2 =*/34).string(message.requestId);
+        if (message.payload != null && message.payload.length)
+            for (var i = 0; i < message.payload.length; ++i)
+                writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.payload[i]);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Command message, length delimited. Does not implicitly {@link Command.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Command
+     * @static
+     * @param {ICommand} message Command message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Command.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Command message from the specified reader or buffer.
+     * @function decode
+     * @memberof Command
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Command} Command
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Command.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Command();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.event = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.userId = reader.string();
+                    break;
+                }
+            case 3: {
+                    message.client = reader.string();
+                    break;
+                }
+            case 4: {
+                    message.requestId = reader.string();
+                    break;
+                }
+            case 5: {
+                    if (!(message.payload && message.payload.length))
+                        message.payload = [];
+                    message.payload.push(reader.bytes());
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a Command message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Command
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Command} Command
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Command.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Command message.
+     * @function verify
+     * @memberof Command
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Command.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.event != null && message.hasOwnProperty("event"))
+            if (!$util.isString(message.event))
+                return "event: string expected";
+        if (message.userId != null && message.hasOwnProperty("userId"))
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+        if (message.client != null && message.hasOwnProperty("client"))
+            if (!$util.isString(message.client))
+                return "client: string expected";
+        if (message.requestId != null && message.hasOwnProperty("requestId"))
+            if (!$util.isString(message.requestId))
+                return "requestId: string expected";
+        if (message.payload != null && message.hasOwnProperty("payload")) {
+            if (!Array.isArray(message.payload))
+                return "payload: array expected";
+            for (var i = 0; i < message.payload.length; ++i)
+                if (!(message.payload[i] && typeof message.payload[i].length === "number" || $util.isString(message.payload[i])))
+                    return "payload: buffer[] expected";
+        }
+        return null;
+    };
+
+    /**
+     * Creates a Command message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Command
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Command} Command
+     */
+    Command.fromObject = function fromObject(object) {
+        if (object instanceof $root.Command)
+            return object;
+        var message = new $root.Command();
+        if (object.event != null)
+            message.event = String(object.event);
+        if (object.userId != null)
+            message.userId = String(object.userId);
+        if (object.client != null)
+            message.client = String(object.client);
+        if (object.requestId != null)
+            message.requestId = String(object.requestId);
+        if (object.payload) {
+            if (!Array.isArray(object.payload))
+                throw TypeError(".Command.payload: array expected");
+            message.payload = [];
+            for (var i = 0; i < object.payload.length; ++i)
+                if (typeof object.payload[i] === "string")
+                    $util.base64.decode(object.payload[i], message.payload[i] = $util.newBuffer($util.base64.length(object.payload[i])), 0);
+                else if (object.payload[i].length >= 0)
+                    message.payload[i] = object.payload[i];
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Command message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Command
+     * @static
+     * @param {Command} message Command
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Command.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.arrays || options.defaults)
+            object.payload = [];
+        if (options.defaults) {
+            object.event = "";
+            object.userId = "";
+            object.client = "";
+            object.requestId = "";
+        }
+        if (message.event != null && message.hasOwnProperty("event"))
+            object.event = message.event;
+        if (message.userId != null && message.hasOwnProperty("userId"))
+            object.userId = message.userId;
+        if (message.client != null && message.hasOwnProperty("client"))
+            object.client = message.client;
+        if (message.requestId != null && message.hasOwnProperty("requestId"))
+            object.requestId = message.requestId;
+        if (message.payload && message.payload.length) {
+            object.payload = [];
+            for (var j = 0; j < message.payload.length; ++j)
+                object.payload[j] = options.bytes === String ? $util.base64.encode(message.payload[j], 0, message.payload[j].length) : options.bytes === Array ? Array.prototype.slice.call(message.payload[j]) : message.payload[j];
+        }
+        return object;
+    };
+
+    /**
+     * Converts this Command to JSON.
+     * @function toJSON
+     * @memberof Command
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Command.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for Command
+     * @function getTypeUrl
+     * @memberof Command
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Command.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Command";
+    };
+
+    return Command;
+})();
+
+$root.ErrorResult = (function() {
+
+    /**
+     * Properties of an ErrorResult.
+     * @exports IErrorResult
+     * @interface IErrorResult
+     * @property {string|null} [errorMessage] ErrorResult errorMessage
+     * @property {string|null} [timestamp] ErrorResult timestamp
+     */
+
+    /**
+     * Constructs a new ErrorResult.
+     * @exports ErrorResult
+     * @classdesc Represents an ErrorResult.
+     * @implements IErrorResult
+     * @constructor
+     * @param {IErrorResult=} [properties] Properties to set
+     */
+    function ErrorResult(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * ErrorResult errorMessage.
+     * @member {string} errorMessage
+     * @memberof ErrorResult
+     * @instance
+     */
+    ErrorResult.prototype.errorMessage = "";
+
+    /**
+     * ErrorResult timestamp.
+     * @member {string} timestamp
+     * @memberof ErrorResult
+     * @instance
+     */
+    ErrorResult.prototype.timestamp = "";
+
+    /**
+     * Creates a new ErrorResult instance using the specified properties.
+     * @function create
+     * @memberof ErrorResult
+     * @static
+     * @param {IErrorResult=} [properties] Properties to set
+     * @returns {ErrorResult} ErrorResult instance
+     */
+    ErrorResult.create = function create(properties) {
+        return new ErrorResult(properties);
+    };
+
+    /**
+     * Encodes the specified ErrorResult message. Does not implicitly {@link ErrorResult.verify|verify} messages.
+     * @function encode
+     * @memberof ErrorResult
+     * @static
+     * @param {IErrorResult} message ErrorResult message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ErrorResult.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.errorMessage != null && Object.hasOwnProperty.call(message, "errorMessage"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.errorMessage);
+        if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.timestamp);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified ErrorResult message, length delimited. Does not implicitly {@link ErrorResult.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof ErrorResult
+     * @static
+     * @param {IErrorResult} message ErrorResult message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ErrorResult.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes an ErrorResult message from the specified reader or buffer.
+     * @function decode
+     * @memberof ErrorResult
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {ErrorResult} ErrorResult
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ErrorResult.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ErrorResult();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.errorMessage = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.timestamp = reader.string();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes an ErrorResult message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof ErrorResult
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {ErrorResult} ErrorResult
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ErrorResult.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies an ErrorResult message.
+     * @function verify
+     * @memberof ErrorResult
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    ErrorResult.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.errorMessage != null && message.hasOwnProperty("errorMessage"))
+            if (!$util.isString(message.errorMessage))
+                return "errorMessage: string expected";
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            if (!$util.isString(message.timestamp))
+                return "timestamp: string expected";
+        return null;
+    };
+
+    /**
+     * Creates an ErrorResult message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof ErrorResult
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {ErrorResult} ErrorResult
+     */
+    ErrorResult.fromObject = function fromObject(object) {
+        if (object instanceof $root.ErrorResult)
+            return object;
+        var message = new $root.ErrorResult();
+        if (object.errorMessage != null)
+            message.errorMessage = String(object.errorMessage);
+        if (object.timestamp != null)
+            message.timestamp = String(object.timestamp);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from an ErrorResult message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof ErrorResult
+     * @static
+     * @param {ErrorResult} message ErrorResult
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    ErrorResult.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.errorMessage = "";
+            object.timestamp = "";
+        }
+        if (message.errorMessage != null && message.hasOwnProperty("errorMessage"))
+            object.errorMessage = message.errorMessage;
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            object.timestamp = message.timestamp;
+        return object;
+    };
+
+    /**
+     * Converts this ErrorResult to JSON.
+     * @function toJSON
+     * @memberof ErrorResult
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    ErrorResult.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for ErrorResult
+     * @function getTypeUrl
+     * @memberof ErrorResult
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ErrorResult.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ErrorResult";
+    };
+
+    return ErrorResult;
 })();
 
 module.exports = $root;

@@ -8,20 +8,8 @@
 
 ```plaintext
 src
-├── api                   # 业务接口层
-│   ├── chat
-│   │   ├── chat.controller.ts
-│   │   ├── chat.service.ts
-│   │   ├── chat.module.ts
-│   │   ├── dto           # 数据传输对象
-│   │   │   ├── create-message.dto.ts
-│   │   │   ├── join-room.dto.ts
-│   └── user
-│       ├── user.controller.ts
-│       ├── user.service.ts
-│       ├── user.module.ts
-│       └── dto
-│           └── create-user.dto.ts
+├── api
+│   ├── chat  # 业务接口层 /chat socket 接口
 ├── core                  # 核心模块
 │   ├── auth              # 身份验证模块
 │   │   ├── auth.service.ts
