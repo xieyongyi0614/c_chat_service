@@ -1,120 +1,889 @@
 import * as $protobuf from "protobufjs";
 import Long = require("long");
-/** Properties of a Command. */
-export interface ICommand {
+/** Properties of a CreateConversationRequest. */
+export interface ICreateConversationRequest {
 
-    /** Command event */
-    event?: (string|null);
-
-    /** Command userId */
-    userId?: (string|null);
-
-    /** Command client */
-    client?: (string|null);
-
-    /** Command requestId */
-    requestId?: (string|null);
-
-    /** Command payload */
-    payload?: (Uint8Array[]|null);
+    /** CreateConversationRequest targetId */
+    targetId?: (string|null);
 }
 
-/** Represents a Command. */
-export class Command implements ICommand {
+/** Represents a CreateConversationRequest. */
+export class CreateConversationRequest implements ICreateConversationRequest {
 
     /**
-     * Constructs a new Command.
+     * Constructs a new CreateConversationRequest.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ICommand);
+    constructor(properties?: ICreateConversationRequest);
 
-    /** Command event. */
-    public event: string;
-
-    /** Command userId. */
-    public userId: string;
-
-    /** Command client. */
-    public client: string;
-
-    /** Command requestId. */
-    public requestId: string;
-
-    /** Command payload. */
-    public payload: Uint8Array[];
+    /** CreateConversationRequest targetId. */
+    public targetId: string;
 
     /**
-     * Creates a new Command instance using the specified properties.
+     * Creates a new CreateConversationRequest instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns Command instance
+     * @returns CreateConversationRequest instance
      */
-    public static create(properties?: ICommand): Command;
+    public static create(properties?: ICreateConversationRequest): CreateConversationRequest;
 
     /**
-     * Encodes the specified Command message. Does not implicitly {@link Command.verify|verify} messages.
-     * @param message Command message or plain object to encode
+     * Encodes the specified CreateConversationRequest message. Does not implicitly {@link CreateConversationRequest.verify|verify} messages.
+     * @param message CreateConversationRequest message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ICommand, writer?: $protobuf.Writer): $protobuf.Writer;
+    public static encode(message: ICreateConversationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Command message, length delimited. Does not implicitly {@link Command.verify|verify} messages.
-     * @param message Command message or plain object to encode
+     * Encodes the specified CreateConversationRequest message, length delimited. Does not implicitly {@link CreateConversationRequest.verify|verify} messages.
+     * @param message CreateConversationRequest message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ICommand, writer?: $protobuf.Writer): $protobuf.Writer;
+    public static encodeDelimited(message: ICreateConversationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Decodes a Command message from the specified reader or buffer.
+     * Decodes a CreateConversationRequest message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns Command
+     * @returns CreateConversationRequest
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Command;
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): CreateConversationRequest;
 
     /**
-     * Decodes a Command message from the specified reader or buffer, length delimited.
+     * Decodes a CreateConversationRequest message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns Command
+     * @returns CreateConversationRequest
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Command;
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): CreateConversationRequest;
 
     /**
-     * Verifies a Command message.
+     * Verifies a CreateConversationRequest message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a Command message from a plain object. Also converts values to their respective internal types.
+     * Creates a CreateConversationRequest message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns Command
+     * @returns CreateConversationRequest
      */
-    public static fromObject(object: { [k: string]: any }): Command;
+    public static fromObject(object: { [k: string]: any }): CreateConversationRequest;
 
     /**
-     * Creates a plain object from a Command message. Also converts values to other types if specified.
-     * @param message Command
+     * Creates a plain object from a CreateConversationRequest message. Also converts values to other types if specified.
+     * @param message CreateConversationRequest
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: Command, options?: $protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: CreateConversationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this Command to JSON.
+     * Converts this CreateConversationRequest to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 
     /**
-     * Gets the default type url for Command
+     * Gets the default type url for CreateConversationRequest
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a ConversationInfo. */
+export interface IConversationInfo {
+
+    /** ConversationInfo id */
+    id?: (string|null);
+
+    /** ConversationInfo type */
+    type?: (number|null);
+
+    /** ConversationInfo targetId */
+    targetId?: (string|null);
+
+    /** ConversationInfo lastMsgContent */
+    lastMsgContent?: (string|null);
+
+    /** ConversationInfo lastMsgTime */
+    lastMsgTime?: (number|Long|null);
+
+    /** ConversationInfo updateTime */
+    updateTime?: (number|Long|null);
+
+    /** ConversationInfo createTime */
+    createTime?: (number|Long|null);
+}
+
+/** Represents a ConversationInfo. */
+export class ConversationInfo implements IConversationInfo {
+
+    /**
+     * Constructs a new ConversationInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IConversationInfo);
+
+    /** ConversationInfo id. */
+    public id: string;
+
+    /** ConversationInfo type. */
+    public type: number;
+
+    /** ConversationInfo targetId. */
+    public targetId: string;
+
+    /** ConversationInfo lastMsgContent. */
+    public lastMsgContent?: (string|null);
+
+    /** ConversationInfo lastMsgTime. */
+    public lastMsgTime?: (number|Long|null);
+
+    /** ConversationInfo updateTime. */
+    public updateTime: (number|Long);
+
+    /** ConversationInfo createTime. */
+    public createTime: (number|Long);
+
+    /**
+     * Creates a new ConversationInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ConversationInfo instance
+     */
+    public static create(properties?: IConversationInfo): ConversationInfo;
+
+    /**
+     * Encodes the specified ConversationInfo message. Does not implicitly {@link ConversationInfo.verify|verify} messages.
+     * @param message ConversationInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IConversationInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified ConversationInfo message, length delimited. Does not implicitly {@link ConversationInfo.verify|verify} messages.
+     * @param message ConversationInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IConversationInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a ConversationInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ConversationInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ConversationInfo;
+
+    /**
+     * Decodes a ConversationInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ConversationInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ConversationInfo;
+
+    /**
+     * Verifies a ConversationInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ConversationInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ConversationInfo
+     */
+    public static fromObject(object: { [k: string]: any }): ConversationInfo;
+
+    /**
+     * Creates a plain object from a ConversationInfo message. Also converts values to other types if specified.
+     * @param message ConversationInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ConversationInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ConversationInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for ConversationInfo
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a SendMessageRequest. */
+export interface ISendMessageRequest {
+
+    /** SendMessageRequest conversationId */
+    conversationId?: (string|null);
+
+    /** SendMessageRequest content */
+    content?: (string|null);
+
+    /** SendMessageRequest type */
+    type?: (number|null);
+}
+
+/** Represents a SendMessageRequest. */
+export class SendMessageRequest implements ISendMessageRequest {
+
+    /**
+     * Constructs a new SendMessageRequest.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISendMessageRequest);
+
+    /** SendMessageRequest conversationId. */
+    public conversationId: string;
+
+    /** SendMessageRequest content. */
+    public content: string;
+
+    /** SendMessageRequest type. */
+    public type: number;
+
+    /**
+     * Creates a new SendMessageRequest instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns SendMessageRequest instance
+     */
+    public static create(properties?: ISendMessageRequest): SendMessageRequest;
+
+    /**
+     * Encodes the specified SendMessageRequest message. Does not implicitly {@link SendMessageRequest.verify|verify} messages.
+     * @param message SendMessageRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISendMessageRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified SendMessageRequest message, length delimited. Does not implicitly {@link SendMessageRequest.verify|verify} messages.
+     * @param message SendMessageRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ISendMessageRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a SendMessageRequest message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns SendMessageRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): SendMessageRequest;
+
+    /**
+     * Decodes a SendMessageRequest message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns SendMessageRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): SendMessageRequest;
+
+    /**
+     * Verifies a SendMessageRequest message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a SendMessageRequest message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns SendMessageRequest
+     */
+    public static fromObject(object: { [k: string]: any }): SendMessageRequest;
+
+    /**
+     * Creates a plain object from a SendMessageRequest message. Also converts values to other types if specified.
+     * @param message SendMessageRequest
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: SendMessageRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this SendMessageRequest to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for SendMessageRequest
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a MessageInfo. */
+export interface IMessageInfo {
+
+    /** MessageInfo id */
+    id?: (string|null);
+
+    /** MessageInfo senderId */
+    senderId?: (string|null);
+
+    /** MessageInfo conversationId */
+    conversationId?: (string|null);
+
+    /** MessageInfo content */
+    content?: (string|null);
+
+    /** MessageInfo type */
+    type?: (number|null);
+
+    /** MessageInfo isRead */
+    isRead?: (boolean|null);
+
+    /** MessageInfo state */
+    state?: (number|null);
+
+    /** MessageInfo createTime */
+    createTime?: (number|Long|null);
+
+    /** MessageInfo updateTime */
+    updateTime?: (number|Long|null);
+}
+
+/** Represents a MessageInfo. */
+export class MessageInfo implements IMessageInfo {
+
+    /**
+     * Constructs a new MessageInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMessageInfo);
+
+    /** MessageInfo id. */
+    public id: string;
+
+    /** MessageInfo senderId. */
+    public senderId: string;
+
+    /** MessageInfo conversationId. */
+    public conversationId: string;
+
+    /** MessageInfo content. */
+    public content: string;
+
+    /** MessageInfo type. */
+    public type: number;
+
+    /** MessageInfo isRead. */
+    public isRead: boolean;
+
+    /** MessageInfo state. */
+    public state: number;
+
+    /** MessageInfo createTime. */
+    public createTime: (number|Long);
+
+    /** MessageInfo updateTime. */
+    public updateTime: (number|Long);
+
+    /**
+     * Creates a new MessageInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns MessageInfo instance
+     */
+    public static create(properties?: IMessageInfo): MessageInfo;
+
+    /**
+     * Encodes the specified MessageInfo message. Does not implicitly {@link MessageInfo.verify|verify} messages.
+     * @param message MessageInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMessageInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified MessageInfo message, length delimited. Does not implicitly {@link MessageInfo.verify|verify} messages.
+     * @param message MessageInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMessageInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a MessageInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns MessageInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): MessageInfo;
+
+    /**
+     * Decodes a MessageInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns MessageInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): MessageInfo;
+
+    /**
+     * Verifies a MessageInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a MessageInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns MessageInfo
+     */
+    public static fromObject(object: { [k: string]: any }): MessageInfo;
+
+    /**
+     * Creates a plain object from a MessageInfo message. Also converts values to other types if specified.
+     * @param message MessageInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: MessageInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this MessageInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for MessageInfo
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a GetConversationListRequest. */
+export interface IGetConversationListRequest {
+
+    /** GetConversationListRequest pagination */
+    pagination?: (Common.IPaginationRequest|null);
+}
+
+/** Represents a GetConversationListRequest. */
+export class GetConversationListRequest implements IGetConversationListRequest {
+
+    /**
+     * Constructs a new GetConversationListRequest.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IGetConversationListRequest);
+
+    /** GetConversationListRequest pagination. */
+    public pagination?: (Common.IPaginationRequest|null);
+
+    /**
+     * Creates a new GetConversationListRequest instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns GetConversationListRequest instance
+     */
+    public static create(properties?: IGetConversationListRequest): GetConversationListRequest;
+
+    /**
+     * Encodes the specified GetConversationListRequest message. Does not implicitly {@link GetConversationListRequest.verify|verify} messages.
+     * @param message GetConversationListRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IGetConversationListRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified GetConversationListRequest message, length delimited. Does not implicitly {@link GetConversationListRequest.verify|verify} messages.
+     * @param message GetConversationListRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IGetConversationListRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a GetConversationListRequest message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns GetConversationListRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetConversationListRequest;
+
+    /**
+     * Decodes a GetConversationListRequest message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns GetConversationListRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GetConversationListRequest;
+
+    /**
+     * Verifies a GetConversationListRequest message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a GetConversationListRequest message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns GetConversationListRequest
+     */
+    public static fromObject(object: { [k: string]: any }): GetConversationListRequest;
+
+    /**
+     * Creates a plain object from a GetConversationListRequest message. Also converts values to other types if specified.
+     * @param message GetConversationListRequest
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: GetConversationListRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this GetConversationListRequest to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for GetConversationListRequest
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a GetConversationListResponse. */
+export interface IGetConversationListResponse {
+
+    /** GetConversationListResponse pagination */
+    pagination?: (Common.IPaginationResponse|null);
+
+    /** GetConversationListResponse list */
+    list?: (IConversationInfo[]|null);
+}
+
+/** Represents a GetConversationListResponse. */
+export class GetConversationListResponse implements IGetConversationListResponse {
+
+    /**
+     * Constructs a new GetConversationListResponse.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IGetConversationListResponse);
+
+    /** GetConversationListResponse pagination. */
+    public pagination?: (Common.IPaginationResponse|null);
+
+    /** GetConversationListResponse list. */
+    public list: IConversationInfo[];
+
+    /**
+     * Creates a new GetConversationListResponse instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns GetConversationListResponse instance
+     */
+    public static create(properties?: IGetConversationListResponse): GetConversationListResponse;
+
+    /**
+     * Encodes the specified GetConversationListResponse message. Does not implicitly {@link GetConversationListResponse.verify|verify} messages.
+     * @param message GetConversationListResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IGetConversationListResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified GetConversationListResponse message, length delimited. Does not implicitly {@link GetConversationListResponse.verify|verify} messages.
+     * @param message GetConversationListResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IGetConversationListResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a GetConversationListResponse message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns GetConversationListResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetConversationListResponse;
+
+    /**
+     * Decodes a GetConversationListResponse message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns GetConversationListResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GetConversationListResponse;
+
+    /**
+     * Verifies a GetConversationListResponse message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a GetConversationListResponse message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns GetConversationListResponse
+     */
+    public static fromObject(object: { [k: string]: any }): GetConversationListResponse;
+
+    /**
+     * Creates a plain object from a GetConversationListResponse message. Also converts values to other types if specified.
+     * @param message GetConversationListResponse
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: GetConversationListResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this GetConversationListResponse to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for GetConversationListResponse
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a GetMessageHistoryRequest. */
+export interface IGetMessageHistoryRequest {
+
+    /** GetMessageHistoryRequest conversationId */
+    conversationId?: (string|null);
+
+    /** GetMessageHistoryRequest pagination */
+    pagination?: (Common.IPaginationRequest|null);
+}
+
+/** Represents a GetMessageHistoryRequest. */
+export class GetMessageHistoryRequest implements IGetMessageHistoryRequest {
+
+    /**
+     * Constructs a new GetMessageHistoryRequest.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IGetMessageHistoryRequest);
+
+    /** GetMessageHistoryRequest conversationId. */
+    public conversationId: string;
+
+    /** GetMessageHistoryRequest pagination. */
+    public pagination?: (Common.IPaginationRequest|null);
+
+    /**
+     * Creates a new GetMessageHistoryRequest instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns GetMessageHistoryRequest instance
+     */
+    public static create(properties?: IGetMessageHistoryRequest): GetMessageHistoryRequest;
+
+    /**
+     * Encodes the specified GetMessageHistoryRequest message. Does not implicitly {@link GetMessageHistoryRequest.verify|verify} messages.
+     * @param message GetMessageHistoryRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IGetMessageHistoryRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified GetMessageHistoryRequest message, length delimited. Does not implicitly {@link GetMessageHistoryRequest.verify|verify} messages.
+     * @param message GetMessageHistoryRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IGetMessageHistoryRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a GetMessageHistoryRequest message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns GetMessageHistoryRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetMessageHistoryRequest;
+
+    /**
+     * Decodes a GetMessageHistoryRequest message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns GetMessageHistoryRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GetMessageHistoryRequest;
+
+    /**
+     * Verifies a GetMessageHistoryRequest message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a GetMessageHistoryRequest message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns GetMessageHistoryRequest
+     */
+    public static fromObject(object: { [k: string]: any }): GetMessageHistoryRequest;
+
+    /**
+     * Creates a plain object from a GetMessageHistoryRequest message. Also converts values to other types if specified.
+     * @param message GetMessageHistoryRequest
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: GetMessageHistoryRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this GetMessageHistoryRequest to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for GetMessageHistoryRequest
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a GetMessageHistoryResponse. */
+export interface IGetMessageHistoryResponse {
+
+    /** GetMessageHistoryResponse pagination */
+    pagination?: (Common.IPaginationResponse|null);
+
+    /** GetMessageHistoryResponse list */
+    list?: (IMessageInfo[]|null);
+}
+
+/** Represents a GetMessageHistoryResponse. */
+export class GetMessageHistoryResponse implements IGetMessageHistoryResponse {
+
+    /**
+     * Constructs a new GetMessageHistoryResponse.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IGetMessageHistoryResponse);
+
+    /** GetMessageHistoryResponse pagination. */
+    public pagination?: (Common.IPaginationResponse|null);
+
+    /** GetMessageHistoryResponse list. */
+    public list: IMessageInfo[];
+
+    /**
+     * Creates a new GetMessageHistoryResponse instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns GetMessageHistoryResponse instance
+     */
+    public static create(properties?: IGetMessageHistoryResponse): GetMessageHistoryResponse;
+
+    /**
+     * Encodes the specified GetMessageHistoryResponse message. Does not implicitly {@link GetMessageHistoryResponse.verify|verify} messages.
+     * @param message GetMessageHistoryResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IGetMessageHistoryResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified GetMessageHistoryResponse message, length delimited. Does not implicitly {@link GetMessageHistoryResponse.verify|verify} messages.
+     * @param message GetMessageHistoryResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IGetMessageHistoryResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a GetMessageHistoryResponse message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns GetMessageHistoryResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetMessageHistoryResponse;
+
+    /**
+     * Decodes a GetMessageHistoryResponse message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns GetMessageHistoryResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GetMessageHistoryResponse;
+
+    /**
+     * Verifies a GetMessageHistoryResponse message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a GetMessageHistoryResponse message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns GetMessageHistoryResponse
+     */
+    public static fromObject(object: { [k: string]: any }): GetMessageHistoryResponse;
+
+    /**
+     * Creates a plain object from a GetMessageHistoryResponse message. Also converts values to other types if specified.
+     * @param message GetMessageHistoryResponse
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: GetMessageHistoryResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this GetMessageHistoryResponse to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for GetMessageHistoryResponse
      * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns The default type url
      */
@@ -670,6 +1439,230 @@ export class GetUserListResponse implements IGetUserListResponse {
 
     /**
      * Gets the default type url for GetUserListResponse
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a Command. */
+export interface ICommand {
+
+    /** Command event */
+    event?: (string|null);
+
+    /** Command userId */
+    userId?: (string|null);
+
+    /** Command client */
+    client?: (string|null);
+
+    /** Command requestId */
+    requestId?: (string|null);
+
+    /** Command payload */
+    payload?: (Uint8Array[]|null);
+}
+
+/** Represents a Command. */
+export class Command implements ICommand {
+
+    /**
+     * Constructs a new Command.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ICommand);
+
+    /** Command event. */
+    public event: string;
+
+    /** Command userId. */
+    public userId: string;
+
+    /** Command client. */
+    public client: string;
+
+    /** Command requestId. */
+    public requestId: string;
+
+    /** Command payload. */
+    public payload: Uint8Array[];
+
+    /**
+     * Creates a new Command instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Command instance
+     */
+    public static create(properties?: ICommand): Command;
+
+    /**
+     * Encodes the specified Command message. Does not implicitly {@link Command.verify|verify} messages.
+     * @param message Command message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ICommand, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified Command message, length delimited. Does not implicitly {@link Command.verify|verify} messages.
+     * @param message Command message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ICommand, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Command message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Command
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Command;
+
+    /**
+     * Decodes a Command message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Command
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Command;
+
+    /**
+     * Verifies a Command message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a Command message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Command
+     */
+    public static fromObject(object: { [k: string]: any }): Command;
+
+    /**
+     * Creates a plain object from a Command message. Also converts values to other types if specified.
+     * @param message Command
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Command, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Command to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for Command
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of an ErrorResult. */
+export interface IErrorResult {
+
+    /** ErrorResult errorMessage */
+    errorMessage?: (string|null);
+
+    /** ErrorResult timestamp */
+    timestamp?: (string|null);
+}
+
+/** Represents an ErrorResult. */
+export class ErrorResult implements IErrorResult {
+
+    /**
+     * Constructs a new ErrorResult.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IErrorResult);
+
+    /** ErrorResult errorMessage. */
+    public errorMessage: string;
+
+    /** ErrorResult timestamp. */
+    public timestamp: string;
+
+    /**
+     * Creates a new ErrorResult instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ErrorResult instance
+     */
+    public static create(properties?: IErrorResult): ErrorResult;
+
+    /**
+     * Encodes the specified ErrorResult message. Does not implicitly {@link ErrorResult.verify|verify} messages.
+     * @param message ErrorResult message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IErrorResult, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified ErrorResult message, length delimited. Does not implicitly {@link ErrorResult.verify|verify} messages.
+     * @param message ErrorResult message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IErrorResult, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes an ErrorResult message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ErrorResult
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ErrorResult;
+
+    /**
+     * Decodes an ErrorResult message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ErrorResult
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ErrorResult;
+
+    /**
+     * Verifies an ErrorResult message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates an ErrorResult message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ErrorResult
+     */
+    public static fromObject(object: { [k: string]: any }): ErrorResult;
+
+    /**
+     * Creates a plain object from an ErrorResult message. Also converts values to other types if specified.
+     * @param message ErrorResult
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ErrorResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ErrorResult to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for ErrorResult
      * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns The default type url
      */

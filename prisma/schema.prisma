@@ -29,36 +29,136 @@ model User {
   update_time     DateTime  @updatedAt // 更新时间
   create_time     DateTime  @default(now()) // 创建时间
 
-  messages             MessageHistory[] // 消息记录
-  chatRoomParticipants ChatRoomParticipant[] // 聊天室参与者
+  messages                 MessageHistory[] // 消息记录
+  // chatRoomParticipants ChatRoomParticipant[] // 聊天室参与者
+  conversationParticipants ConversationParticipant[] // 群组拥有者 (可选)
+  ownedGroups              Group[]                   @relation("GroupOwner")
 
   friendUser           Friend[]      @relation("friendUser") // 作为用户的好友关系
   friendFriend         Friend[]      @relation("friendFriend")
   friendApplyRequester FriendApply[] @relation("friendApplyRequester")
   friendApplyResponder FriendApply[] @relation("friendApplyResponder")
+  groupMembers         GroupMember[]
+  // chatRoomParticipants ChatRoomParticipant[]
+}
+
+// ==========================================
+// 2. 群组模块 (原 ChatRoom 拆分)
+// ==========================================
+// 专门存储群聊的公共信息（头像、公告、群名）
+model Group {
+  id          String   @id @default(cuid())
+  name        String // 群名称
+  avatar_url  String? // 群头像
+  notice      String?  @db.Text // 群公告
+  owner_id    String // 群主ID
+  state       Int      @default(0) // -1:解散, 0:正常
+  update_time DateTime @updatedAt
+  create_time DateTime @default(now())
+
+  // 关系
+  owner   User          @relation("GroupOwner", fields: [owner_id], references: [id])
+  members GroupMember[]
+
+  // 索引：快速查询某人创建的群
+  @@index([owner_id])
+}
+
+// 群成员表 (原 ChatRoomParticipant)
+model GroupMember {
+  id          String   @id @default(cuid())
+  group_id    String
+  user_id     String
+  role        Int      @default(2) // 0:群主, 1:管理员, 2:普通成员
+  alias       String? // 群昵称
+  state       Int      @default(0) // -1:退出/被踢, 0:正常
+  update_time DateTime @updatedAt
+  create_time DateTime @default(now())
+
+  group Group @relation(fields: [group_id], references: [id])
+  user  User  @relation(fields: [user_id], references: [id])
+
+  // 确保一个人在同一个群只有一条记录
+  @@unique([group_id, user_id])
+  @@index([user_id]) // 查询“我加入了哪些群”
+}
+
+// ==========================================
+// 3. 会话模块 (核心改动：统一私聊与群聊入口)
+// ==========================================
+model Conversation {
+  id        String @id @default(cuid())
+  type      Int // 1: 私聊, 2: 群聊
+  // 目标ID：如果是私聊，存对方UserID；如果是群聊，存GroupID
+  target_id String
+
+  // 冗余字段：用于聊天列表快速展示，避免连表查最新消息
+  last_msg_content String?   @db.Text
+  last_msg_time    DateTime?
+
+  update_time DateTime @updatedAt
+  create_time DateTime @default(now())
+
+  // 关联
+  messages     MessageHistory[]
+  participants ConversationParticipant[]
+  // 注意：私聊的唯一性建议在代码层控制 (如 A-B 和 B-A 生成同一个 Conversation ID)
+
+  // 索引优化
+  @@index([type, target_id])
+}
+
+// 会话参与者表 (用于存储：置顶、免打扰、删除会话等个性化设置)
+model ConversationParticipant {
+  id              String @id @default(cuid())
+  conversation_id String
+  user_id         String
+
+  is_top     Boolean @default(false) // 是否置顶
+  is_disturb Boolean @default(false) // 是否免打扰
+  remark     String? // 针对该会话的备注（仅对自己生效）
+  is_deleted Boolean @default(false) // 是否删除了该会话（软删除）
+
+  update_time DateTime @updatedAt
+  create_time DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversation_id], references: [id])
+  user         User         @relation(fields: [user_id], references: [id])
+
+  @@unique([conversation_id, user_id])
 }
 
 model MessageHistory {
-  id          String   @id @default(cuid())
-  sender_id   String // 发送者唯一标识
-  content     String // 聊天内容
-  type        Int // 消息类型 `0：文本, 1：图片, 2：文件, 3：音频, 4：视频`
-  is_read     Int // 是否已读 `0：未读, 1：已读`
-  state       Int // 消息状态 `-2：已撤回, -1：已删除, 0：正常，1:已编辑`
-  room_id     String? // 房间唯一标识
-  update_time DateTime @updatedAt // 更新时间
-  create_time DateTime @default(now()) // 创建时间
+  id              String @id @default(cuid())
+  sender_id       String
+  // 关联改为 Conversation，不再直接关联 Room
+  conversation_id String
 
-  user User @relation(fields: [sender_id], references: [id]) // 用户关系
+  content String  @db.Text
+  type    Int // 0:文本, 1:图片, 2:文件, 3:音频, 4:视频
+  is_read Boolean @default(false) // 建议改为 Boolean
+  state   Int     @default(0) // -2:撤回, -1:删除, 0:正常, 1:编辑
+
+  create_time DateTime @default(now())
+  update_time DateTime @updatedAt
+
+  user         User         @relation(fields: [sender_id], references: [id])
+  conversation Conversation @relation(fields: [conversation_id], references: [id])
+
+  // 核心索引：加载聊天记录必须
+  @@index([conversation_id, create_time])
 }
 
+// ==========================================
+// 5. 好友模块
+// ==========================================
 model Friend {
   id        String   @id @default(cuid())
   user_id   String
   friend_id String
-  state     Int      @default(0) // 0: 好友关系正常, 1: 等待、-1: 删除状态
-  createdAt DateTime @default(now()) // 记录创建时间
-  updatedAt DateTime @updatedAt // 记录更新时间
+  state     Int      @default(0) // 0: 正常, 1: 黑名单/拉黑, -1: 删除
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user   User @relation("friendUser", fields: [user_id], references: [id])
   friend User @relation("friendFriend", fields: [friend_id], references: [id])
@@ -66,35 +166,10 @@ model Friend {
   @@unique([user_id, friend_id])
 }
 
-model ChatRoom {
-  id          String   @id @default(cuid())
-  room_name   String? // 房间名称
-  type        Int // 聊天室类型 `0：私聊，1：群聊`
-  state       Int // 聊天室状态 `-1：解散，0：正常`
-  update_time DateTime @updatedAt // 更新时间
-  create_time DateTime @default(now()) // 创建时间
-
-  participants ChatRoomParticipant[] // 聊天室参与者
-}
-
-model ChatRoomParticipant {
-  id            String   @id @default(cuid())
-  room_id       String // 聊天室唯一标识
-  user_id       String // 参与者唯一标识
-  room_identity Int // 聊天室身份 `0：群主，1：管理员，2：普通成员`
-  remarks       String? // 房间内备注名称
-  state         Int // 参与者状态 `-1：退出，0：正常`
-  update_time   DateTime @updatedAt // 更新时间
-  create_time   DateTime @default(now()) // 创建时间
-
-  room ChatRoom @relation(fields: [room_id], references: [id]) // 聊天室关系
-  user User     @relation(fields: [user_id], references: [id]) // 用户关系
-}
-
 model FriendApply {
   id           String   @id @default(cuid())
-  requester_id String // 申请人ID（用户A）
-  responder_id String // 被申请人ID（用户B）
+  requester_id String
+  responder_id String
   state        Int      @default(0) // 0: 待审核, 1: 已接受, -1: 已拒绝
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

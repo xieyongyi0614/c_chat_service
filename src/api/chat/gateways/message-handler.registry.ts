@@ -1,18 +1,27 @@
-import { Command } from 'src/proto';
-import { serviceDecodeProtoMap, SocketProtoEventType } from 'src/proto/protoMap';
+import { Command, ErrorResult } from 'src/proto';
+import {
+  serviceDecodeProtoMap,
+  SOCKET_PROTO_EVENT,
+  ServiceDecodeProtoMapKey,
+  ClientDecodeProtoMapKey,
+} from 'src/proto/protoMap';
 import { ChatSocket } from 'src/types/socket.types';
+import { Server, Socket } from 'socket.io';
 
 /** 消息命令处理器注册中心 */
 export abstract class MessageHandlerRegistry {
+  public abstract server: Server;
+  protected abstract userSockets: Map<string, Set<string>>;
+
   protected readonly handlers = new Map<
-    SocketProtoEventType,
+    ServiceDecodeProtoMapKey,
     (client: ChatSocket, payload?: unknown, requestId?: string) => void | Promise<void>
   >();
 
   protected abstract initializeHandlers(): void;
 
   public dispatch(command: Command, client: ChatSocket) {
-    const event = command.event as SocketProtoEventType;
+    const event = command.event as ServiceDecodeProtoMapKey;
     console.log(`收到消息：Event=${command.event}`);
     const handler = this.handlers.get(event);
 
@@ -42,7 +51,7 @@ export abstract class MessageHandlerRegistry {
 
   sendMessageToClient(
     socketClient: ChatSocket,
-    event: SocketProtoEventType,
+    event: ClientDecodeProtoMapKey,
     payload?: Uint8Array | Uint8Array[],
     requestId?: string,
   ) {
@@ -55,5 +64,52 @@ export abstract class MessageHandlerRegistry {
     const responseBuffer = Command.encode(sendCommand).finish();
     socketClient.emit('message', responseBuffer);
     console.log('✅ 已发送到客户端', sendCommand);
+  }
+  sendErrorMessageToClient(socketClient: ChatSocket, errorMessage: string) {
+    this.sendMessageToClient(
+      socketClient,
+      SOCKET_PROTO_EVENT.error,
+      ErrorResult.encode(ErrorResult.create({ errorMessage })).finish(),
+    );
+  }
+
+  /**
+   * 广播消息到指定房间
+   */
+  broadcastToRoom(
+    roomId: string,
+    event: ServiceDecodeProtoMapKey,
+    payload: Uint8Array | Uint8Array[],
+    senderId?: string,
+  ) {
+    const sendCommand = Command.create({
+      event,
+      userId: senderId,
+      payload: Array.isArray(payload) ? payload : [payload],
+    });
+    const responseBuffer = Command.encode(sendCommand).finish();
+    this.server.to(roomId).emit('message', responseBuffer);
+    console.log(`✅ 已广播到房间 ${roomId}`, sendCommand);
+  }
+
+  /**
+   * 将某个用户的所有连接加入指定 Socket.io 房间
+   */
+  protected async joinUserToRoom(
+    server: Server,
+    userSockets: Map<string, Set<string>>,
+    userId: string,
+    roomId: string,
+  ) {
+    const socketIds = userSockets.get(userId);
+    if (socketIds && server) {
+      for (const socketId of socketIds) {
+        const socket = (server.sockets as unknown as Map<string, Socket>).get(socketId);
+        if (socket) {
+          await socket.join(roomId);
+          console.log(`Socket ${socketId} (User: ${userId}) joined room ${roomId}`);
+        }
+      }
+    }
   }
 }
