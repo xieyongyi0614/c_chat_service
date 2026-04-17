@@ -20,6 +20,8 @@ import { SOCKET_PROTO_EVENT } from 'src/proto/protoMap';
 import { Command, ErrorResult, UserInfo } from 'src/proto';
 import { MessageHandler } from './message.handler';
 import { UsersService } from 'src/api/web/users/users.service';
+import { PrismaService } from 'src/core/database';
+import { SOCKET_ERROR_CODE } from 'src/constants/errorCode';
 
 @WebSocketGateway({
   namespace: '/chat',
@@ -62,8 +64,9 @@ export class ChatGateway
     protected chatService: ChatService,
     private authService: AuthService,
     userService: UsersService,
+    prisma: PrismaService,
   ) {
-    super(userService, messageService, chatService);
+    super(userService, messageService, chatService, prisma);
   }
 
   /**
@@ -106,7 +109,10 @@ export class ChatGateway
     } catch (error) {
       const errorMessage = (error as Error)?.message;
       this.logger.warn(`🔐 认证失败: ${errorMessage}`, error);
-      this.sendErrorMessageToClient(client, errorMessage);
+      this.sendErrorMessageToClient(client, {
+        errorMessage: '认证失败，请重新登录',
+        errorCode: SOCKET_ERROR_CODE.UNAUTHORIZED,
+      });
       // this.sendMessageToClient(
       //   client,
       //   SOCKET_PROTO_EVENT.error,

@@ -120,6 +120,15 @@ export interface IConversationInfo {
 
     /** ConversationInfo createTime */
     createTime?: (number|Long|null);
+
+    /** ConversationInfo user */
+    user?: (IUserInfo|null);
+
+    /** ConversationInfo groupName */
+    groupName?: (string|null);
+
+    /** ConversationInfo groupAvatar */
+    groupAvatar?: (string|null);
 }
 
 /** Represents a ConversationInfo. */
@@ -151,6 +160,15 @@ export class ConversationInfo implements IConversationInfo {
 
     /** ConversationInfo createTime. */
     public createTime: (number|Long);
+
+    /** ConversationInfo user. */
+    public user?: (IUserInfo|null);
+
+    /** ConversationInfo groupName. */
+    public groupName?: (string|null);
+
+    /** ConversationInfo groupAvatar. */
+    public groupAvatar?: (string|null);
 
     /**
      * Creates a new ConversationInfo instance using the specified properties.
@@ -241,6 +259,9 @@ export interface ISendMessageRequest {
 
     /** SendMessageRequest type */
     type?: (number|null);
+
+    /** SendMessageRequest targetId */
+    targetId?: (string|null);
 }
 
 /** Represents a SendMessageRequest. */
@@ -260,6 +281,9 @@ export class SendMessageRequest implements ISendMessageRequest {
 
     /** SendMessageRequest type. */
     public type: number;
+
+    /** SendMessageRequest targetId. */
+    public targetId?: (string|null);
 
     /**
      * Creates a new SendMessageRequest instance using the specified properties.
@@ -1569,6 +1593,9 @@ export class Command implements ICommand {
 /** Properties of an ErrorResult. */
 export interface IErrorResult {
 
+    /** ErrorResult errorCode */
+    errorCode?: (number|null);
+
     /** ErrorResult errorMessage */
     errorMessage?: (string|null);
 
@@ -1584,6 +1611,9 @@ export class ErrorResult implements IErrorResult {
      * @param [properties] Properties to set
      */
     constructor(properties?: IErrorResult);
+
+    /** ErrorResult errorCode. */
+    public errorCode: number;
 
     /** ErrorResult errorMessage. */
     public errorMessage: string;

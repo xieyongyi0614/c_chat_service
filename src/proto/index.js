@@ -227,6 +227,9 @@ $root.ConversationInfo = (function() {
      * @property {number|Long|null} [lastMsgTime] ConversationInfo lastMsgTime
      * @property {number|Long|null} [updateTime] ConversationInfo updateTime
      * @property {number|Long|null} [createTime] ConversationInfo createTime
+     * @property {IUserInfo|null} [user] ConversationInfo user
+     * @property {string|null} [groupName] ConversationInfo groupName
+     * @property {string|null} [groupAvatar] ConversationInfo groupAvatar
      */
 
     /**
@@ -300,6 +303,30 @@ $root.ConversationInfo = (function() {
      */
     ConversationInfo.prototype.createTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
+    /**
+     * ConversationInfo user.
+     * @member {IUserInfo|null|undefined} user
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.user = null;
+
+    /**
+     * ConversationInfo groupName.
+     * @member {string|null|undefined} groupName
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.groupName = null;
+
+    /**
+     * ConversationInfo groupAvatar.
+     * @member {string|null|undefined} groupAvatar
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.groupAvatar = null;
+
     // OneOf field names bound to virtual getters and setters
     var $oneOfFields;
 
@@ -312,6 +339,24 @@ $root.ConversationInfo = (function() {
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(ConversationInfo.prototype, "_lastMsgTime", {
         get: $util.oneOfGetter($oneOfFields = ["lastMsgTime"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ConversationInfo.prototype, "_user", {
+        get: $util.oneOfGetter($oneOfFields = ["user"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ConversationInfo.prototype, "_groupName", {
+        get: $util.oneOfGetter($oneOfFields = ["groupName"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ConversationInfo.prototype, "_groupAvatar", {
+        get: $util.oneOfGetter($oneOfFields = ["groupAvatar"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -353,6 +398,12 @@ $root.ConversationInfo = (function() {
             writer.uint32(/* id 6, wireType 0 =*/48).int64(message.updateTime);
         if (message.createTime != null && Object.hasOwnProperty.call(message, "createTime"))
             writer.uint32(/* id 7, wireType 0 =*/56).int64(message.createTime);
+        if (message.user != null && Object.hasOwnProperty.call(message, "user"))
+            $root.UserInfo.encode(message.user, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+        if (message.groupName != null && Object.hasOwnProperty.call(message, "groupName"))
+            writer.uint32(/* id 9, wireType 2 =*/74).string(message.groupName);
+        if (message.groupAvatar != null && Object.hasOwnProperty.call(message, "groupAvatar"))
+            writer.uint32(/* id 10, wireType 2 =*/82).string(message.groupAvatar);
         return writer;
     };
 
@@ -417,6 +468,18 @@ $root.ConversationInfo = (function() {
                     message.createTime = reader.int64();
                     break;
                 }
+            case 8: {
+                    message.user = $root.UserInfo.decode(reader, reader.uint32());
+                    break;
+                }
+            case 9: {
+                    message.groupName = reader.string();
+                    break;
+                }
+            case 10: {
+                    message.groupAvatar = reader.string();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -478,6 +541,24 @@ $root.ConversationInfo = (function() {
         if (message.createTime != null && message.hasOwnProperty("createTime"))
             if (!$util.isInteger(message.createTime) && !(message.createTime && $util.isInteger(message.createTime.low) && $util.isInteger(message.createTime.high)))
                 return "createTime: integer|Long expected";
+        if (message.user != null && message.hasOwnProperty("user")) {
+            properties._user = 1;
+            {
+                var error = $root.UserInfo.verify(message.user);
+                if (error)
+                    return "user." + error;
+            }
+        }
+        if (message.groupName != null && message.hasOwnProperty("groupName")) {
+            properties._groupName = 1;
+            if (!$util.isString(message.groupName))
+                return "groupName: string expected";
+        }
+        if (message.groupAvatar != null && message.hasOwnProperty("groupAvatar")) {
+            properties._groupAvatar = 1;
+            if (!$util.isString(message.groupAvatar))
+                return "groupAvatar: string expected";
+        }
         return null;
     };
 
@@ -528,6 +609,15 @@ $root.ConversationInfo = (function() {
                 message.createTime = object.createTime;
             else if (typeof object.createTime === "object")
                 message.createTime = new $util.LongBits(object.createTime.low >>> 0, object.createTime.high >>> 0).toNumber();
+        if (object.user != null) {
+            if (typeof object.user !== "object")
+                throw TypeError(".ConversationInfo.user: object expected");
+            message.user = $root.UserInfo.fromObject(object.user);
+        }
+        if (object.groupName != null)
+            message.groupName = String(object.groupName);
+        if (object.groupAvatar != null)
+            message.groupAvatar = String(object.groupAvatar);
         return message;
     };
 
@@ -588,6 +678,21 @@ $root.ConversationInfo = (function() {
                 object.createTime = options.longs === String ? String(message.createTime) : message.createTime;
             else
                 object.createTime = options.longs === String ? $util.Long.prototype.toString.call(message.createTime) : options.longs === Number ? new $util.LongBits(message.createTime.low >>> 0, message.createTime.high >>> 0).toNumber() : message.createTime;
+        if (message.user != null && message.hasOwnProperty("user")) {
+            object.user = $root.UserInfo.toObject(message.user, options);
+            if (options.oneofs)
+                object._user = "user";
+        }
+        if (message.groupName != null && message.hasOwnProperty("groupName")) {
+            object.groupName = message.groupName;
+            if (options.oneofs)
+                object._groupName = "groupName";
+        }
+        if (message.groupAvatar != null && message.hasOwnProperty("groupAvatar")) {
+            object.groupAvatar = message.groupAvatar;
+            if (options.oneofs)
+                object._groupAvatar = "groupAvatar";
+        }
         return object;
     };
 
@@ -629,6 +734,7 @@ $root.SendMessageRequest = (function() {
      * @property {string|null} [conversationId] SendMessageRequest conversationId
      * @property {string|null} [content] SendMessageRequest content
      * @property {number|null} [type] SendMessageRequest type
+     * @property {string|null} [targetId] SendMessageRequest targetId
      */
 
     /**
@@ -671,6 +777,23 @@ $root.SendMessageRequest = (function() {
     SendMessageRequest.prototype.type = 0;
 
     /**
+     * SendMessageRequest targetId.
+     * @member {string|null|undefined} targetId
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.targetId = null;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(SendMessageRequest.prototype, "_targetId", {
+        get: $util.oneOfGetter($oneOfFields = ["targetId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
      * Creates a new SendMessageRequest instance using the specified properties.
      * @function create
      * @memberof SendMessageRequest
@@ -700,6 +823,8 @@ $root.SendMessageRequest = (function() {
             writer.uint32(/* id 2, wireType 2 =*/18).string(message.content);
         if (message.type != null && Object.hasOwnProperty.call(message, "type"))
             writer.uint32(/* id 3, wireType 0 =*/24).int32(message.type);
+        if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
+            writer.uint32(/* id 4, wireType 2 =*/34).string(message.targetId);
         return writer;
     };
 
@@ -748,6 +873,10 @@ $root.SendMessageRequest = (function() {
                     message.type = reader.int32();
                     break;
                 }
+            case 4: {
+                    message.targetId = reader.string();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -783,6 +912,7 @@ $root.SendMessageRequest = (function() {
     SendMessageRequest.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        var properties = {};
         if (message.conversationId != null && message.hasOwnProperty("conversationId"))
             if (!$util.isString(message.conversationId))
                 return "conversationId: string expected";
@@ -792,6 +922,11 @@ $root.SendMessageRequest = (function() {
         if (message.type != null && message.hasOwnProperty("type"))
             if (!$util.isInteger(message.type))
                 return "type: integer expected";
+        if (message.targetId != null && message.hasOwnProperty("targetId")) {
+            properties._targetId = 1;
+            if (!$util.isString(message.targetId))
+                return "targetId: string expected";
+        }
         return null;
     };
 
@@ -813,6 +948,8 @@ $root.SendMessageRequest = (function() {
             message.content = String(object.content);
         if (object.type != null)
             message.type = object.type | 0;
+        if (object.targetId != null)
+            message.targetId = String(object.targetId);
         return message;
     };
 
@@ -840,6 +977,11 @@ $root.SendMessageRequest = (function() {
             object.content = message.content;
         if (message.type != null && message.hasOwnProperty("type"))
             object.type = message.type;
+        if (message.targetId != null && message.hasOwnProperty("targetId")) {
+            object.targetId = message.targetId;
+            if (options.oneofs)
+                object._targetId = "targetId";
+        }
         return object;
     };
 
@@ -3932,6 +4074,7 @@ $root.ErrorResult = (function() {
      * Properties of an ErrorResult.
      * @exports IErrorResult
      * @interface IErrorResult
+     * @property {number|null} [errorCode] ErrorResult errorCode
      * @property {string|null} [errorMessage] ErrorResult errorMessage
      * @property {string|null} [timestamp] ErrorResult timestamp
      */
@@ -3950,6 +4093,14 @@ $root.ErrorResult = (function() {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * ErrorResult errorCode.
+     * @member {number} errorCode
+     * @memberof ErrorResult
+     * @instance
+     */
+    ErrorResult.prototype.errorCode = 0;
 
     /**
      * ErrorResult errorMessage.
@@ -3991,10 +4142,12 @@ $root.ErrorResult = (function() {
     ErrorResult.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
+        if (message.errorCode != null && Object.hasOwnProperty.call(message, "errorCode"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.errorCode);
         if (message.errorMessage != null && Object.hasOwnProperty.call(message, "errorMessage"))
-            writer.uint32(/* id 1, wireType 2 =*/10).string(message.errorMessage);
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.errorMessage);
         if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
-            writer.uint32(/* id 2, wireType 2 =*/18).string(message.timestamp);
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.timestamp);
         return writer;
     };
 
@@ -4032,10 +4185,14 @@ $root.ErrorResult = (function() {
                 break;
             switch (tag >>> 3) {
             case 1: {
-                    message.errorMessage = reader.string();
+                    message.errorCode = reader.int32();
                     break;
                 }
             case 2: {
+                    message.errorMessage = reader.string();
+                    break;
+                }
+            case 3: {
                     message.timestamp = reader.string();
                     break;
                 }
@@ -4074,6 +4231,9 @@ $root.ErrorResult = (function() {
     ErrorResult.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        if (message.errorCode != null && message.hasOwnProperty("errorCode"))
+            if (!$util.isInteger(message.errorCode))
+                return "errorCode: integer expected";
         if (message.errorMessage != null && message.hasOwnProperty("errorMessage"))
             if (!$util.isString(message.errorMessage))
                 return "errorMessage: string expected";
@@ -4095,6 +4255,8 @@ $root.ErrorResult = (function() {
         if (object instanceof $root.ErrorResult)
             return object;
         var message = new $root.ErrorResult();
+        if (object.errorCode != null)
+            message.errorCode = object.errorCode | 0;
         if (object.errorMessage != null)
             message.errorMessage = String(object.errorMessage);
         if (object.timestamp != null)
@@ -4116,9 +4278,12 @@ $root.ErrorResult = (function() {
             options = {};
         var object = {};
         if (options.defaults) {
+            object.errorCode = 0;
             object.errorMessage = "";
             object.timestamp = "";
         }
+        if (message.errorCode != null && message.hasOwnProperty("errorCode"))
+            object.errorCode = message.errorCode;
         if (message.errorMessage != null && message.hasOwnProperty("errorMessage"))
             object.errorMessage = message.errorMessage;
         if (message.timestamp != null && message.hasOwnProperty("timestamp"))

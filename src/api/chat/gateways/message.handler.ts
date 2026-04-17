@@ -3,6 +3,7 @@ import { MessageHandlerRegistry } from './message-handler.registry';
 import { SOCKET_PROTO_EVENT } from 'src/proto/protoMap';
 import { ChatSocket } from 'src/types/socket.types';
 import { UsersService } from 'src/api/web/users/users.service';
+import { PrismaService } from 'src/core/database';
 import {
   GetUserList,
   GetUserListResponse,
@@ -14,11 +15,13 @@ import {
   GetConversationListResponse,
   GetMessageHistoryRequest,
   GetMessageHistoryResponse,
+  UserInfo,
 } from 'src/proto';
 import { MessageService } from '../services/message.service';
 import { ChatService } from '../services/chat.service';
 import { Server } from 'socket.io';
 import { RequestListParams } from 'src/common';
+import { transformPaginationParams } from 'src/utils';
 
 @Injectable()
 export abstract class MessageHandler extends MessageHandlerRegistry {
@@ -29,6 +32,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     private userService: UsersService,
     protected messageService: MessageService,
     protected chatService: ChatService,
+    protected prisma: PrismaService,
   ) {
     super();
   }
@@ -65,7 +69,6 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
   ) => {
     const search = this.getListSearchDto(payload as RequestListParams);
     const { list, ...rest } = await this.userService.list(search);
-    console.log('handleGetUserList', search, payload, list, rest);
 
     const response = GetUserListResponse.encode(
       GetUserListResponse.create({ pagination: rest, list }),
@@ -90,28 +93,63 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
 
     const { list, total } = await this.chatService.getUserConversations(userId, page, pageSize);
 
-    const encodedList = list.map((c) =>
-      ConversationInfo.create({
-        id: c.id,
-        type: c.type,
-        targetId: c.target_id,
-        lastMsgContent: c.last_msg_content ?? undefined,
-        lastMsgTime: c.last_msg_time ? new Date(c.last_msg_time).getTime() : undefined,
-        updateTime: new Date(c.update_time).getTime(),
-        createTime: new Date(c.create_time).getTime(),
+    const encodedList = await Promise.all(
+      list.map(async (c) => {
+        let userInfo: UserInfo | undefined = undefined;
+        let groupName: string | undefined;
+        let groupAvatar: string | undefined;
+
+        if (c.type === 1) {
+          const targetUser = await this.userService.getUserById(c.targetId);
+          if (targetUser) {
+            userInfo = UserInfo.create({
+              ...targetUser,
+              // id: targetUser.id,
+              // email: targetUser.email,
+              // nickname: targetUser.nickname || undefined,
+              // avatarUrl: targetUser.avatarUrl,
+              // state: targetUser.state,
+              // updateTime: new Date(targetUser.updateTime).getTime(),
+            });
+          }
+        } else if (c.type === 2) {
+          const group = await this.prisma.group.findUnique({
+            where: { id: c.targetId },
+            select: { name: true, avatarUrl: true },
+          });
+          groupName = group?.name;
+          groupAvatar = group?.avatarUrl ?? '';
+        }
+
+        return ConversationInfo.create({
+          id: c.id,
+          type: c.type,
+          targetId: c.targetId,
+          lastMsgContent: c.lastMsgContent ?? undefined,
+          lastMsgTime: c.lastMsgTime ? new Date(c.lastMsgTime).getTime() : undefined,
+          updateTime: new Date(c.updateTime).getTime(),
+          createTime: new Date(c.createTime).getTime(),
+          user: userInfo,
+          groupName,
+          groupAvatar,
+        });
       }),
     );
+
+    const responseData = {
+      pagination: {
+        total,
+        page,
+        pageSize,
+        totalPage: Math.ceil(total / pageSize),
+      },
+      list: encodedList ?? [],
+    };
+
     const response = GetConversationListResponse.encode(
-      GetConversationListResponse.create({
-        pagination: {
-          total,
-          page,
-          pageSize,
-          totalPage: Math.ceil(total / pageSize),
-        },
-        list: encodedList,
-      }),
+      GetConversationListResponse.create(responseData),
     ).finish();
+    console.log(responseData, 'responseData');
 
     this.sendMessageToClient(client, SOCKET_PROTO_EVENT.getConversationList, response, requestId);
   };
@@ -125,9 +163,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     requestId?: string,
   ) => {
     if (!payload?.conversationId) return;
-    const page = payload?.pagination?.page != null ? Number(payload.pagination.page) : 1;
-    const pageSize =
-      payload?.pagination?.pageSize != null ? Number(payload.pagination.pageSize) : 10;
+    const { page, pageSize } = transformPaginationParams(payload.pagination);
 
     const { list, total } = await this.messageService.getConversationMessages(
       payload.conversationId,
@@ -137,26 +173,15 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
 
     const encodedList = list.map((m) =>
       MessageInfo.create({
-        id: m.id,
-        senderId: m.sender_id,
-        conversationId: m.conversation_id,
-        content: m.content,
-        type: m.type,
-        isRead: m.is_read,
-        state: m.state,
-        createTime: new Date(m.create_time).getTime(),
-        updateTime: new Date(m.update_time).getTime(),
+        ...m,
+        createTime: m.createTime.getTime(),
+        updateTime: m.updateTime.getTime(),
       }),
     );
 
     const response = GetMessageHistoryResponse.encode(
       GetMessageHistoryResponse.create({
-        pagination: {
-          total,
-          page,
-          pageSize,
-          totalPage: Math.ceil(total / pageSize),
-        },
+        pagination: { total, page, pageSize, totalPage: Math.ceil(total / pageSize) },
         list: encodedList,
       }),
     ).finish();
@@ -188,11 +213,11 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       ConversationInfo.create({
         id: conversation.id,
         type: conversation.type,
-        targetId: conversation.target_id,
-        lastMsgContent: conversation.last_msg_content ?? undefined,
-        lastMsgTime: conversation.last_msg_time?.getTime(),
-        updateTime: conversation.update_time.getTime(),
-        createTime: conversation.create_time.getTime(),
+        targetId: conversation.targetId,
+        lastMsgContent: conversation.lastMsgContent ?? undefined,
+        lastMsgTime: conversation.lastMsgTime?.getTime(),
+        updateTime: conversation.updateTime.getTime(),
+        createTime: conversation.createTime.getTime(),
       }),
     ).finish();
 
@@ -222,14 +247,14 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     const response = MessageInfo.encode(
       MessageInfo.create({
         id: message.id,
-        senderId: message.sender_id,
-        conversationId: message.conversation_id,
+        senderId: message.senderId,
+        conversationId: message.conversationId,
         content: message.content,
         type: message.type,
-        isRead: message.is_read,
+        isRead: message.isRead,
         state: message.state,
-        createTime: message.create_time.getTime(),
-        updateTime: message.update_time.getTime(),
+        createTime: message.createTime.getTime(),
+        updateTime: message.updateTime.getTime(),
       }),
     ).finish();
 

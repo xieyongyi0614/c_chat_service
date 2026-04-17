@@ -7,6 +7,7 @@ import {
 } from 'src/proto/protoMap';
 import { ChatSocket } from 'src/types/socket.types';
 import { Server, Socket } from 'socket.io';
+import { SOCKET_ERROR_CODE } from 'src/constants/errorCode';
 
 /** 消息命令处理器注册中心 */
 export abstract class MessageHandlerRegistry {
@@ -65,11 +66,19 @@ export abstract class MessageHandlerRegistry {
     socketClient.emit('message', responseBuffer);
     console.log('✅ 已发送到客户端', sendCommand);
   }
-  sendErrorMessageToClient(socketClient: ChatSocket, errorMessage: string) {
+  sendErrorMessageToClient(
+    socketClient: ChatSocket,
+    errorResult: Pick<ErrorResult, 'errorCode' | 'errorMessage'>,
+  ) {
+    const {
+      errorCode = SOCKET_ERROR_CODE.INTERNAL_ERROR,
+      errorMessage = '未知错误，请联系管理员',
+    } = errorResult;
+
     this.sendMessageToClient(
       socketClient,
       SOCKET_PROTO_EVENT.error,
-      ErrorResult.encode(ErrorResult.create({ errorMessage })).finish(),
+      ErrorResult.encode(ErrorResult.create({ errorCode, errorMessage })).finish(),
     );
   }
 
