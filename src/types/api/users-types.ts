@@ -71,7 +71,7 @@ export namespace UsersTypes {
 
   export type GetUserInfoResponse = Pick<
     UsersItem,
-    'id' | 'email' | 'nickname' | 'avatar_url' | 'state'
+    'id' | 'email' | 'nickname' | 'avatarUrl' | 'state'
   >;
 }
 

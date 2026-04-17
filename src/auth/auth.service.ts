@@ -104,9 +104,9 @@ export class AuthService {
         id: true,
         email: true,
         nickname: true,
-        avatar_url: true,
+        avatarUrl: true,
         state: true,
-        update_time: true,
+        updateTime: true,
       },
     });
     if (!user || user.state !== 0) {

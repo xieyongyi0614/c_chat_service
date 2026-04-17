@@ -50,20 +50,34 @@ export class UsersService {
       this.prisma.user.findMany({
         ...pagination,
         where: where,
-        orderBy: { create_time: 'desc' },
+        orderBy: { createTime: 'desc' },
         select: {
           id: true,
           email: true,
           nickname: true,
-          avatar_url: true,
+          avatarUrl: true,
           state: true,
-          update_time: true,
+          updateTime: true,
         },
       }),
       this.prisma.user.count({ where }),
     ]);
 
     return { list: res, total, page, pageSize, totalPage: Math.ceil(total / pageSize) };
+  }
+
+  async getUserById(id: string) {
+    return this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        avatarUrl: true,
+        state: true,
+        updateTime: true,
+      },
+    });
   }
 
   // async getById(id: string): Promise<TagTypes.PrismaTag> {
