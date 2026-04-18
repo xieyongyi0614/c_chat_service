@@ -90,6 +90,7 @@ export abstract class MessageHandlerRegistry {
     event: ServiceDecodeProtoMapKey,
     payload: Uint8Array | Uint8Array[],
     senderId?: string,
+    exceptSocketId?: string,
   ) {
     const sendCommand = Command.create({
       event,
@@ -97,7 +98,12 @@ export abstract class MessageHandlerRegistry {
       payload: Array.isArray(payload) ? payload : [payload],
     });
     const responseBuffer = Command.encode(sendCommand).finish();
-    this.server.to(roomId).emit('message', responseBuffer);
+    if (exceptSocketId) {
+      this.server.to(roomId).except(exceptSocketId).emit('message', responseBuffer);
+    } else {
+      this.server.to(roomId).emit('message', responseBuffer);
+    }
+
     console.log(`✅ 已广播到房间 ${roomId}`, sendCommand);
   }
 

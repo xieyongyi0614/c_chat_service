@@ -44,6 +44,10 @@ export class UsersService {
     if (word) {
       where.AND = [{ nickname: { contains: word } }, { email: { contains: word } }];
     }
+    if (userSearchDto.excludeUserId) {
+      where.id = { not: userSearchDto.excludeUserId };
+    }
+
     const pagination = paginationTrans(page, pageSize);
 
     const [res, total] = await Promise.all([

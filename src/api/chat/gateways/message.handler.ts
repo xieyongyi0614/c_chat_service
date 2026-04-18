@@ -40,6 +40,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
   onModuleInit() {
     this.initializeHandlers();
   }
+  /** 初始化消息处理器 */
   protected initializeHandlers(): void {
     this.handlers.set(SOCKET_PROTO_EVENT.ping, (client) => this.handlePing(client));
     this.handlers.set(SOCKET_PROTO_EVENT.getUserList, this.handleGetUserList);
@@ -68,7 +69,10 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     requestId?: string,
   ) => {
     const search = this.getListSearchDto(payload as RequestListParams);
-    const { list, ...rest } = await this.userService.list(search);
+    const { list, ...rest } = await this.userService.list({
+      ...search,
+      excludeUserId: client.data.user.id,
+    });
 
     const response = GetUserListResponse.encode(
       GetUserListResponse.create({ pagination: rest, list }),
@@ -267,6 +271,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       SOCKET_PROTO_EVENT.sendMessage,
       response,
       senderId,
+      client.id,
     );
   };
 }
