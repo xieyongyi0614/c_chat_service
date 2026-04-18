@@ -13,4 +13,8 @@ export class UserSearchDto extends PaginationDto {
   @IsOptional()
   @IsString()
   word?: string;
+
+  @IsOptional()
+  @IsString()
+  excludeUserId?: string;
 }
