@@ -87,10 +87,10 @@ model GroupMember {
 // 3. 会话模块 (核心改动：统一私聊与群聊入口)
 // ==========================================
 model Conversation {
-  id       String @id @default(cuid())
-  type     Int // 1: 私聊, 2: 群聊
-  // 目标ID：如果是私聊，存对方UserID；如果是群聊，存GroupID
-  targetId String @map("target_id")
+  id      String  @id @default(cuid())
+  type    Int // 1: 私聊, 2: 群聊
+  // 群聊时存储groupId
+  groupId String? @map("group_id")
 
   // 冗余字段：用于聊天列表快速展示，避免连表查最新消息
   lastMsgContent String?   @map("last_msg_content") @db.Text
@@ -105,7 +105,7 @@ model Conversation {
   // 注意：私聊的唯一性建议在代码层控制 (如 A-B 和 B-A 生成同一个 Conversation ID)
 
   // 索引优化
-  @@index([type, targetId])
+  @@index([type, groupId])
 }
 
 // 会话参与者表 (用于存储：置顶、免打扰、删除会话等个性化设置)
@@ -114,10 +114,11 @@ model ConversationParticipant {
   conversationId String @map("conversation_id")
   userId         String @map("user_id")
 
-  isTop     Boolean @default(false) @map("is_top") // 是否置顶
-  isDisturb Boolean @default(false) @map("is_disturb") // 是否免打扰
-  remark    String? // 针对该会话的备注（仅对自己生效）
-  isDeleted Boolean @default(false) @map("is_deleted") // 是否删除了该会话（软删除）
+  isTop             Boolean @default(false) @map("is_top") // 是否置顶
+  isDisturb         Boolean @default(false) @map("is_disturb") // 是否免打扰
+  remark            String? // 针对该会话的备注（仅对自己生效）
+  isDeleted         Boolean @default(false) @map("is_deleted") // 是否删除了该会话（软删除）
+  lastReadMessageId Int     @default(0) @map("last_read_message_id") // 当前用户在该会话已读到的最新消息 msgId
 
   updateTime DateTime @updatedAt @map("update_time")
   createTime DateTime @default(now()) @map("create_time")
@@ -133,11 +134,11 @@ model MessageHistory {
   senderId       String @map("sender_id")
   // 关联改为 Conversation，不再直接关联 Room
   conversationId String @map("conversation_id")
+  msgId          Int    @map("msg_id") // 会话内自增消息ID（按conversation维度）
 
-  content String  @db.Text
+  content String @db.Text
   type    Int // 0:文本, 1:图片, 2:文件, 3:音频, 4:视频
-  isRead  Boolean @default(false) @map("is_read") // 建议改为 Boolean
-  state   Int     @default(0) // -2:撤回, -1:删除, 0:正常, 1:编辑
+  state   Int    @default(0) // -2:撤回, -1:删除, 0:正常, 1:编辑
 
   createTime DateTime @default(now()) @map("create_time")
   updateTime DateTime @updatedAt @map("update_time")
@@ -146,7 +147,8 @@ model MessageHistory {
   conversation Conversation @relation(fields: [conversationId], references: [id])
 
   // 核心索引：加载聊天记录必须
-  @@index([conversationId, createTime])
+  @@unique([conversationId, msgId])
+  @@index([conversationId, msgId, createTime])
 }
 
 // ==========================================

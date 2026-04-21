@@ -230,6 +230,8 @@ $root.ConversationInfo = (function() {
      * @property {IUserInfo|null} [user] ConversationInfo user
      * @property {string|null} [groupName] ConversationInfo groupName
      * @property {string|null} [groupAvatar] ConversationInfo groupAvatar
+     * @property {number|null} [unreadCount] ConversationInfo unreadCount
+     * @property {number|null} [lastReadMessageId] ConversationInfo lastReadMessageId
      */
 
     /**
@@ -327,6 +329,22 @@ $root.ConversationInfo = (function() {
      */
     ConversationInfo.prototype.groupAvatar = null;
 
+    /**
+     * ConversationInfo unreadCount.
+     * @member {number|null|undefined} unreadCount
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.unreadCount = null;
+
+    /**
+     * ConversationInfo lastReadMessageId.
+     * @member {number|null|undefined} lastReadMessageId
+     * @memberof ConversationInfo
+     * @instance
+     */
+    ConversationInfo.prototype.lastReadMessageId = null;
+
     // OneOf field names bound to virtual getters and setters
     var $oneOfFields;
 
@@ -357,6 +375,18 @@ $root.ConversationInfo = (function() {
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(ConversationInfo.prototype, "_groupAvatar", {
         get: $util.oneOfGetter($oneOfFields = ["groupAvatar"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ConversationInfo.prototype, "_unreadCount", {
+        get: $util.oneOfGetter($oneOfFields = ["unreadCount"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ConversationInfo.prototype, "_lastReadMessageId", {
+        get: $util.oneOfGetter($oneOfFields = ["lastReadMessageId"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -404,6 +434,10 @@ $root.ConversationInfo = (function() {
             writer.uint32(/* id 9, wireType 2 =*/74).string(message.groupName);
         if (message.groupAvatar != null && Object.hasOwnProperty.call(message, "groupAvatar"))
             writer.uint32(/* id 10, wireType 2 =*/82).string(message.groupAvatar);
+        if (message.unreadCount != null && Object.hasOwnProperty.call(message, "unreadCount"))
+            writer.uint32(/* id 11, wireType 0 =*/88).int32(message.unreadCount);
+        if (message.lastReadMessageId != null && Object.hasOwnProperty.call(message, "lastReadMessageId"))
+            writer.uint32(/* id 12, wireType 0 =*/96).int32(message.lastReadMessageId);
         return writer;
     };
 
@@ -478,6 +512,14 @@ $root.ConversationInfo = (function() {
                 }
             case 10: {
                     message.groupAvatar = reader.string();
+                    break;
+                }
+            case 11: {
+                    message.unreadCount = reader.int32();
+                    break;
+                }
+            case 12: {
+                    message.lastReadMessageId = reader.int32();
                     break;
                 }
             default:
@@ -559,6 +601,16 @@ $root.ConversationInfo = (function() {
             if (!$util.isString(message.groupAvatar))
                 return "groupAvatar: string expected";
         }
+        if (message.unreadCount != null && message.hasOwnProperty("unreadCount")) {
+            properties._unreadCount = 1;
+            if (!$util.isInteger(message.unreadCount))
+                return "unreadCount: integer expected";
+        }
+        if (message.lastReadMessageId != null && message.hasOwnProperty("lastReadMessageId")) {
+            properties._lastReadMessageId = 1;
+            if (!$util.isInteger(message.lastReadMessageId))
+                return "lastReadMessageId: integer expected";
+        }
         return null;
     };
 
@@ -618,6 +670,10 @@ $root.ConversationInfo = (function() {
             message.groupName = String(object.groupName);
         if (object.groupAvatar != null)
             message.groupAvatar = String(object.groupAvatar);
+        if (object.unreadCount != null)
+            message.unreadCount = object.unreadCount | 0;
+        if (object.lastReadMessageId != null)
+            message.lastReadMessageId = object.lastReadMessageId | 0;
         return message;
     };
 
@@ -692,6 +748,16 @@ $root.ConversationInfo = (function() {
             object.groupAvatar = message.groupAvatar;
             if (options.oneofs)
                 object._groupAvatar = "groupAvatar";
+        }
+        if (message.unreadCount != null && message.hasOwnProperty("unreadCount")) {
+            object.unreadCount = message.unreadCount;
+            if (options.oneofs)
+                object._unreadCount = "unreadCount";
+        }
+        if (message.lastReadMessageId != null && message.hasOwnProperty("lastReadMessageId")) {
+            object.lastReadMessageId = message.lastReadMessageId;
+            if (options.oneofs)
+                object._lastReadMessageId = "lastReadMessageId";
         }
         return object;
     };
@@ -1021,11 +1087,11 @@ $root.MessageInfo = (function() {
      * @exports IMessageInfo
      * @interface IMessageInfo
      * @property {string|null} [id] MessageInfo id
+     * @property {number|null} [msgId] MessageInfo msgId
      * @property {string|null} [senderId] MessageInfo senderId
      * @property {string|null} [conversationId] MessageInfo conversationId
      * @property {string|null} [content] MessageInfo content
      * @property {number|null} [type] MessageInfo type
-     * @property {boolean|null} [isRead] MessageInfo isRead
      * @property {number|null} [state] MessageInfo state
      * @property {number|Long|null} [createTime] MessageInfo createTime
      * @property {number|Long|null} [updateTime] MessageInfo updateTime
@@ -1053,6 +1119,14 @@ $root.MessageInfo = (function() {
      * @instance
      */
     MessageInfo.prototype.id = "";
+
+    /**
+     * MessageInfo msgId.
+     * @member {number} msgId
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.msgId = 0;
 
     /**
      * MessageInfo senderId.
@@ -1085,14 +1159,6 @@ $root.MessageInfo = (function() {
      * @instance
      */
     MessageInfo.prototype.type = 0;
-
-    /**
-     * MessageInfo isRead.
-     * @member {boolean} isRead
-     * @memberof MessageInfo
-     * @instance
-     */
-    MessageInfo.prototype.isRead = false;
 
     /**
      * MessageInfo state.
@@ -1144,16 +1210,16 @@ $root.MessageInfo = (function() {
             writer = $Writer.create();
         if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+        if (message.msgId != null && Object.hasOwnProperty.call(message, "msgId"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.msgId);
         if (message.senderId != null && Object.hasOwnProperty.call(message, "senderId"))
-            writer.uint32(/* id 2, wireType 2 =*/18).string(message.senderId);
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.senderId);
         if (message.conversationId != null && Object.hasOwnProperty.call(message, "conversationId"))
-            writer.uint32(/* id 3, wireType 2 =*/26).string(message.conversationId);
+            writer.uint32(/* id 4, wireType 2 =*/34).string(message.conversationId);
         if (message.content != null && Object.hasOwnProperty.call(message, "content"))
-            writer.uint32(/* id 4, wireType 2 =*/34).string(message.content);
+            writer.uint32(/* id 5, wireType 2 =*/42).string(message.content);
         if (message.type != null && Object.hasOwnProperty.call(message, "type"))
-            writer.uint32(/* id 5, wireType 0 =*/40).int32(message.type);
-        if (message.isRead != null && Object.hasOwnProperty.call(message, "isRead"))
-            writer.uint32(/* id 6, wireType 0 =*/48).bool(message.isRead);
+            writer.uint32(/* id 6, wireType 0 =*/48).int32(message.type);
         if (message.state != null && Object.hasOwnProperty.call(message, "state"))
             writer.uint32(/* id 7, wireType 0 =*/56).int32(message.state);
         if (message.createTime != null && Object.hasOwnProperty.call(message, "createTime"))
@@ -1201,23 +1267,23 @@ $root.MessageInfo = (function() {
                     break;
                 }
             case 2: {
-                    message.senderId = reader.string();
+                    message.msgId = reader.int32();
                     break;
                 }
             case 3: {
-                    message.conversationId = reader.string();
+                    message.senderId = reader.string();
                     break;
                 }
             case 4: {
-                    message.content = reader.string();
+                    message.conversationId = reader.string();
                     break;
                 }
             case 5: {
-                    message.type = reader.int32();
+                    message.content = reader.string();
                     break;
                 }
             case 6: {
-                    message.isRead = reader.bool();
+                    message.type = reader.int32();
                     break;
                 }
             case 7: {
@@ -1270,6 +1336,9 @@ $root.MessageInfo = (function() {
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isString(message.id))
                 return "id: string expected";
+        if (message.msgId != null && message.hasOwnProperty("msgId"))
+            if (!$util.isInteger(message.msgId))
+                return "msgId: integer expected";
         if (message.senderId != null && message.hasOwnProperty("senderId"))
             if (!$util.isString(message.senderId))
                 return "senderId: string expected";
@@ -1282,9 +1351,6 @@ $root.MessageInfo = (function() {
         if (message.type != null && message.hasOwnProperty("type"))
             if (!$util.isInteger(message.type))
                 return "type: integer expected";
-        if (message.isRead != null && message.hasOwnProperty("isRead"))
-            if (typeof message.isRead !== "boolean")
-                return "isRead: boolean expected";
         if (message.state != null && message.hasOwnProperty("state"))
             if (!$util.isInteger(message.state))
                 return "state: integer expected";
@@ -1311,6 +1377,8 @@ $root.MessageInfo = (function() {
         var message = new $root.MessageInfo();
         if (object.id != null)
             message.id = String(object.id);
+        if (object.msgId != null)
+            message.msgId = object.msgId | 0;
         if (object.senderId != null)
             message.senderId = String(object.senderId);
         if (object.conversationId != null)
@@ -1319,8 +1387,6 @@ $root.MessageInfo = (function() {
             message.content = String(object.content);
         if (object.type != null)
             message.type = object.type | 0;
-        if (object.isRead != null)
-            message.isRead = Boolean(object.isRead);
         if (object.state != null)
             message.state = object.state | 0;
         if (object.createTime != null)
@@ -1359,11 +1425,11 @@ $root.MessageInfo = (function() {
         var object = {};
         if (options.defaults) {
             object.id = "";
+            object.msgId = 0;
             object.senderId = "";
             object.conversationId = "";
             object.content = "";
             object.type = 0;
-            object.isRead = false;
             object.state = 0;
             if ($util.Long) {
                 var long = new $util.Long(0, 0, false);
@@ -1378,6 +1444,8 @@ $root.MessageInfo = (function() {
         }
         if (message.id != null && message.hasOwnProperty("id"))
             object.id = message.id;
+        if (message.msgId != null && message.hasOwnProperty("msgId"))
+            object.msgId = message.msgId;
         if (message.senderId != null && message.hasOwnProperty("senderId"))
             object.senderId = message.senderId;
         if (message.conversationId != null && message.hasOwnProperty("conversationId"))
@@ -1386,8 +1454,6 @@ $root.MessageInfo = (function() {
             object.content = message.content;
         if (message.type != null && message.hasOwnProperty("type"))
             object.type = message.type;
-        if (message.isRead != null && message.hasOwnProperty("isRead"))
-            object.isRead = message.isRead;
         if (message.state != null && message.hasOwnProperty("state"))
             object.state = message.state;
         if (message.createTime != null && message.hasOwnProperty("createTime"))
@@ -2384,6 +2450,514 @@ $root.GetMessageHistoryResponse = (function() {
     };
 
     return GetMessageHistoryResponse;
+})();
+
+$root.ReadMessageRequest = (function() {
+
+    /**
+     * Properties of a ReadMessageRequest.
+     * @exports IReadMessageRequest
+     * @interface IReadMessageRequest
+     * @property {string|null} [conversationId] ReadMessageRequest conversationId
+     * @property {string|null} [messageId] ReadMessageRequest messageId
+     */
+
+    /**
+     * Constructs a new ReadMessageRequest.
+     * @exports ReadMessageRequest
+     * @classdesc Represents a ReadMessageRequest.
+     * @implements IReadMessageRequest
+     * @constructor
+     * @param {IReadMessageRequest=} [properties] Properties to set
+     */
+    function ReadMessageRequest(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * ReadMessageRequest conversationId.
+     * @member {string} conversationId
+     * @memberof ReadMessageRequest
+     * @instance
+     */
+    ReadMessageRequest.prototype.conversationId = "";
+
+    /**
+     * ReadMessageRequest messageId.
+     * @member {string|null|undefined} messageId
+     * @memberof ReadMessageRequest
+     * @instance
+     */
+    ReadMessageRequest.prototype.messageId = null;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ReadMessageRequest.prototype, "_messageId", {
+        get: $util.oneOfGetter($oneOfFields = ["messageId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
+     * Creates a new ReadMessageRequest instance using the specified properties.
+     * @function create
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {IReadMessageRequest=} [properties] Properties to set
+     * @returns {ReadMessageRequest} ReadMessageRequest instance
+     */
+    ReadMessageRequest.create = function create(properties) {
+        return new ReadMessageRequest(properties);
+    };
+
+    /**
+     * Encodes the specified ReadMessageRequest message. Does not implicitly {@link ReadMessageRequest.verify|verify} messages.
+     * @function encode
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {IReadMessageRequest} message ReadMessageRequest message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ReadMessageRequest.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.conversationId != null && Object.hasOwnProperty.call(message, "conversationId"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.conversationId);
+        if (message.messageId != null && Object.hasOwnProperty.call(message, "messageId"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.messageId);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified ReadMessageRequest message, length delimited. Does not implicitly {@link ReadMessageRequest.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {IReadMessageRequest} message ReadMessageRequest message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ReadMessageRequest.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a ReadMessageRequest message from the specified reader or buffer.
+     * @function decode
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {ReadMessageRequest} ReadMessageRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ReadMessageRequest.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ReadMessageRequest();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.conversationId = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.messageId = reader.string();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a ReadMessageRequest message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {ReadMessageRequest} ReadMessageRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ReadMessageRequest.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a ReadMessageRequest message.
+     * @function verify
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    ReadMessageRequest.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        var properties = {};
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            if (!$util.isString(message.conversationId))
+                return "conversationId: string expected";
+        if (message.messageId != null && message.hasOwnProperty("messageId")) {
+            properties._messageId = 1;
+            if (!$util.isString(message.messageId))
+                return "messageId: string expected";
+        }
+        return null;
+    };
+
+    /**
+     * Creates a ReadMessageRequest message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {ReadMessageRequest} ReadMessageRequest
+     */
+    ReadMessageRequest.fromObject = function fromObject(object) {
+        if (object instanceof $root.ReadMessageRequest)
+            return object;
+        var message = new $root.ReadMessageRequest();
+        if (object.conversationId != null)
+            message.conversationId = String(object.conversationId);
+        if (object.messageId != null)
+            message.messageId = String(object.messageId);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a ReadMessageRequest message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {ReadMessageRequest} message ReadMessageRequest
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    ReadMessageRequest.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults)
+            object.conversationId = "";
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            object.conversationId = message.conversationId;
+        if (message.messageId != null && message.hasOwnProperty("messageId")) {
+            object.messageId = message.messageId;
+            if (options.oneofs)
+                object._messageId = "messageId";
+        }
+        return object;
+    };
+
+    /**
+     * Converts this ReadMessageRequest to JSON.
+     * @function toJSON
+     * @memberof ReadMessageRequest
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    ReadMessageRequest.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for ReadMessageRequest
+     * @function getTypeUrl
+     * @memberof ReadMessageRequest
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ReadMessageRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ReadMessageRequest";
+    };
+
+    return ReadMessageRequest;
+})();
+
+$root.ReadMessageResponse = (function() {
+
+    /**
+     * Properties of a ReadMessageResponse.
+     * @exports IReadMessageResponse
+     * @interface IReadMessageResponse
+     * @property {string|null} [conversationId] ReadMessageResponse conversationId
+     * @property {string|null} [messageId] ReadMessageResponse messageId
+     * @property {number|null} [unreadCount] ReadMessageResponse unreadCount
+     */
+
+    /**
+     * Constructs a new ReadMessageResponse.
+     * @exports ReadMessageResponse
+     * @classdesc Represents a ReadMessageResponse.
+     * @implements IReadMessageResponse
+     * @constructor
+     * @param {IReadMessageResponse=} [properties] Properties to set
+     */
+    function ReadMessageResponse(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * ReadMessageResponse conversationId.
+     * @member {string} conversationId
+     * @memberof ReadMessageResponse
+     * @instance
+     */
+    ReadMessageResponse.prototype.conversationId = "";
+
+    /**
+     * ReadMessageResponse messageId.
+     * @member {string|null|undefined} messageId
+     * @memberof ReadMessageResponse
+     * @instance
+     */
+    ReadMessageResponse.prototype.messageId = null;
+
+    /**
+     * ReadMessageResponse unreadCount.
+     * @member {number} unreadCount
+     * @memberof ReadMessageResponse
+     * @instance
+     */
+    ReadMessageResponse.prototype.unreadCount = 0;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ReadMessageResponse.prototype, "_messageId", {
+        get: $util.oneOfGetter($oneOfFields = ["messageId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
+     * Creates a new ReadMessageResponse instance using the specified properties.
+     * @function create
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {IReadMessageResponse=} [properties] Properties to set
+     * @returns {ReadMessageResponse} ReadMessageResponse instance
+     */
+    ReadMessageResponse.create = function create(properties) {
+        return new ReadMessageResponse(properties);
+    };
+
+    /**
+     * Encodes the specified ReadMessageResponse message. Does not implicitly {@link ReadMessageResponse.verify|verify} messages.
+     * @function encode
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {IReadMessageResponse} message ReadMessageResponse message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ReadMessageResponse.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.conversationId != null && Object.hasOwnProperty.call(message, "conversationId"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.conversationId);
+        if (message.messageId != null && Object.hasOwnProperty.call(message, "messageId"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.messageId);
+        if (message.unreadCount != null && Object.hasOwnProperty.call(message, "unreadCount"))
+            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.unreadCount);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified ReadMessageResponse message, length delimited. Does not implicitly {@link ReadMessageResponse.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {IReadMessageResponse} message ReadMessageResponse message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ReadMessageResponse.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a ReadMessageResponse message from the specified reader or buffer.
+     * @function decode
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {ReadMessageResponse} ReadMessageResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ReadMessageResponse.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ReadMessageResponse();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.conversationId = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.messageId = reader.string();
+                    break;
+                }
+            case 3: {
+                    message.unreadCount = reader.int32();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a ReadMessageResponse message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {ReadMessageResponse} ReadMessageResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ReadMessageResponse.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a ReadMessageResponse message.
+     * @function verify
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    ReadMessageResponse.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        var properties = {};
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            if (!$util.isString(message.conversationId))
+                return "conversationId: string expected";
+        if (message.messageId != null && message.hasOwnProperty("messageId")) {
+            properties._messageId = 1;
+            if (!$util.isString(message.messageId))
+                return "messageId: string expected";
+        }
+        if (message.unreadCount != null && message.hasOwnProperty("unreadCount"))
+            if (!$util.isInteger(message.unreadCount))
+                return "unreadCount: integer expected";
+        return null;
+    };
+
+    /**
+     * Creates a ReadMessageResponse message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {ReadMessageResponse} ReadMessageResponse
+     */
+    ReadMessageResponse.fromObject = function fromObject(object) {
+        if (object instanceof $root.ReadMessageResponse)
+            return object;
+        var message = new $root.ReadMessageResponse();
+        if (object.conversationId != null)
+            message.conversationId = String(object.conversationId);
+        if (object.messageId != null)
+            message.messageId = String(object.messageId);
+        if (object.unreadCount != null)
+            message.unreadCount = object.unreadCount | 0;
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a ReadMessageResponse message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {ReadMessageResponse} message ReadMessageResponse
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    ReadMessageResponse.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.conversationId = "";
+            object.unreadCount = 0;
+        }
+        if (message.conversationId != null && message.hasOwnProperty("conversationId"))
+            object.conversationId = message.conversationId;
+        if (message.messageId != null && message.hasOwnProperty("messageId")) {
+            object.messageId = message.messageId;
+            if (options.oneofs)
+                object._messageId = "messageId";
+        }
+        if (message.unreadCount != null && message.hasOwnProperty("unreadCount"))
+            object.unreadCount = message.unreadCount;
+        return object;
+    };
+
+    /**
+     * Converts this ReadMessageResponse to JSON.
+     * @function toJSON
+     * @memberof ReadMessageResponse
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    ReadMessageResponse.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for ReadMessageResponse
+     * @function getTypeUrl
+     * @memberof ReadMessageResponse
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ReadMessageResponse.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ReadMessageResponse";
+    };
+
+    return ReadMessageResponse;
 })();
 
 $root.Common = (function() {

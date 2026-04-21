@@ -129,6 +129,12 @@ export interface IConversationInfo {
 
     /** ConversationInfo groupAvatar */
     groupAvatar?: (string|null);
+
+    /** ConversationInfo unreadCount */
+    unreadCount?: (number|null);
+
+    /** ConversationInfo lastReadMessageId */
+    lastReadMessageId?: (number|null);
 }
 
 /** Represents a ConversationInfo. */
@@ -169,6 +175,12 @@ export class ConversationInfo implements IConversationInfo {
 
     /** ConversationInfo groupAvatar. */
     public groupAvatar?: (string|null);
+
+    /** ConversationInfo unreadCount. */
+    public unreadCount?: (number|null);
+
+    /** ConversationInfo lastReadMessageId. */
+    public lastReadMessageId?: (number|null);
 
     /**
      * Creates a new ConversationInfo instance using the specified properties.
@@ -369,6 +381,9 @@ export interface IMessageInfo {
     /** MessageInfo id */
     id?: (string|null);
 
+    /** MessageInfo msgId */
+    msgId?: (number|null);
+
     /** MessageInfo senderId */
     senderId?: (string|null);
 
@@ -380,9 +395,6 @@ export interface IMessageInfo {
 
     /** MessageInfo type */
     type?: (number|null);
-
-    /** MessageInfo isRead */
-    isRead?: (boolean|null);
 
     /** MessageInfo state */
     state?: (number|null);
@@ -406,6 +418,9 @@ export class MessageInfo implements IMessageInfo {
     /** MessageInfo id. */
     public id: string;
 
+    /** MessageInfo msgId. */
+    public msgId: number;
+
     /** MessageInfo senderId. */
     public senderId: string;
 
@@ -417,9 +432,6 @@ export class MessageInfo implements IMessageInfo {
 
     /** MessageInfo type. */
     public type: number;
-
-    /** MessageInfo isRead. */
-    public isRead: boolean;
 
     /** MessageInfo state. */
     public state: number;
@@ -908,6 +920,218 @@ export class GetMessageHistoryResponse implements IGetMessageHistoryResponse {
 
     /**
      * Gets the default type url for GetMessageHistoryResponse
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a ReadMessageRequest. */
+export interface IReadMessageRequest {
+
+    /** ReadMessageRequest conversationId */
+    conversationId?: (string|null);
+
+    /** ReadMessageRequest messageId */
+    messageId?: (string|null);
+}
+
+/** Represents a ReadMessageRequest. */
+export class ReadMessageRequest implements IReadMessageRequest {
+
+    /**
+     * Constructs a new ReadMessageRequest.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IReadMessageRequest);
+
+    /** ReadMessageRequest conversationId. */
+    public conversationId: string;
+
+    /** ReadMessageRequest messageId. */
+    public messageId?: (string|null);
+
+    /**
+     * Creates a new ReadMessageRequest instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ReadMessageRequest instance
+     */
+    public static create(properties?: IReadMessageRequest): ReadMessageRequest;
+
+    /**
+     * Encodes the specified ReadMessageRequest message. Does not implicitly {@link ReadMessageRequest.verify|verify} messages.
+     * @param message ReadMessageRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IReadMessageRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified ReadMessageRequest message, length delimited. Does not implicitly {@link ReadMessageRequest.verify|verify} messages.
+     * @param message ReadMessageRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IReadMessageRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a ReadMessageRequest message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ReadMessageRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ReadMessageRequest;
+
+    /**
+     * Decodes a ReadMessageRequest message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ReadMessageRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ReadMessageRequest;
+
+    /**
+     * Verifies a ReadMessageRequest message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ReadMessageRequest message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ReadMessageRequest
+     */
+    public static fromObject(object: { [k: string]: any }): ReadMessageRequest;
+
+    /**
+     * Creates a plain object from a ReadMessageRequest message. Also converts values to other types if specified.
+     * @param message ReadMessageRequest
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ReadMessageRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ReadMessageRequest to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for ReadMessageRequest
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a ReadMessageResponse. */
+export interface IReadMessageResponse {
+
+    /** ReadMessageResponse conversationId */
+    conversationId?: (string|null);
+
+    /** ReadMessageResponse messageId */
+    messageId?: (string|null);
+
+    /** ReadMessageResponse unreadCount */
+    unreadCount?: (number|null);
+}
+
+/** Represents a ReadMessageResponse. */
+export class ReadMessageResponse implements IReadMessageResponse {
+
+    /**
+     * Constructs a new ReadMessageResponse.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IReadMessageResponse);
+
+    /** ReadMessageResponse conversationId. */
+    public conversationId: string;
+
+    /** ReadMessageResponse messageId. */
+    public messageId?: (string|null);
+
+    /** ReadMessageResponse unreadCount. */
+    public unreadCount: number;
+
+    /**
+     * Creates a new ReadMessageResponse instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ReadMessageResponse instance
+     */
+    public static create(properties?: IReadMessageResponse): ReadMessageResponse;
+
+    /**
+     * Encodes the specified ReadMessageResponse message. Does not implicitly {@link ReadMessageResponse.verify|verify} messages.
+     * @param message ReadMessageResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IReadMessageResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified ReadMessageResponse message, length delimited. Does not implicitly {@link ReadMessageResponse.verify|verify} messages.
+     * @param message ReadMessageResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IReadMessageResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a ReadMessageResponse message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ReadMessageResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ReadMessageResponse;
+
+    /**
+     * Decodes a ReadMessageResponse message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ReadMessageResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ReadMessageResponse;
+
+    /**
+     * Verifies a ReadMessageResponse message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ReadMessageResponse message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ReadMessageResponse
+     */
+    public static fromObject(object: { [k: string]: any }): ReadMessageResponse;
+
+    /**
+     * Creates a plain object from a ReadMessageResponse message. Also converts values to other types if specified.
+     * @param message ReadMessageResponse
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ReadMessageResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ReadMessageResponse to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for ReadMessageResponse
      * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns The default type url
      */

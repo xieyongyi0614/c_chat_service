@@ -23,12 +23,7 @@
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:migrate:reset": "prisma migrate reset",
     "prisma:studio": "prisma studio",
-    "prisma:push": "dotenv -e .env.development prisma db push",
-    "prisma:init": "prisma migrate dev --name init",
-    "db:migrate": "prisma migrate dev --name",
-    "db:generate": "prisma generate",
-    "db:setup": "prisma migrate dev --name init && prisma generate",
-    "postinstall": "prisma generate"
+    "prisma:push": "dotenv -e .env.development prisma db push"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

@@ -55,13 +55,13 @@ CREATE TABLE `GroupMember` (
 CREATE TABLE `Conversation` (
     `id` VARCHAR(191) NOT NULL,
     `type` INTEGER NOT NULL,
-    `target_id` VARCHAR(191) NOT NULL,
+    `group_id` VARCHAR(191) NULL,
     `last_msg_content` TEXT NULL,
     `last_msg_time` DATETIME(3) NULL,
     `update_time` DATETIME(3) NOT NULL,
     `create_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    INDEX `Conversation_type_target_id_idx`(`type`, `target_id`),
+    INDEX `Conversation_type_group_id_idx`(`type`, `group_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -74,6 +74,7 @@ CREATE TABLE `ConversationParticipant` (
     `is_disturb` BOOLEAN NOT NULL DEFAULT false,
     `remark` VARCHAR(191) NULL,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `last_read_message_id` INTEGER NOT NULL DEFAULT 0,
     `update_time` DATETIME(3) NOT NULL,
     `create_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -86,14 +87,15 @@ CREATE TABLE `MessageHistory` (
     `id` VARCHAR(191) NOT NULL,
     `sender_id` VARCHAR(191) NOT NULL,
     `conversation_id` VARCHAR(191) NOT NULL,
+    `msg_id` INTEGER NOT NULL,
     `content` TEXT NOT NULL,
     `type` INTEGER NOT NULL,
-    `is_read` BOOLEAN NOT NULL DEFAULT false,
     `state` INTEGER NOT NULL DEFAULT 0,
     `create_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `update_time` DATETIME(3) NOT NULL,
 
-    INDEX `MessageHistory_conversation_id_create_time_idx`(`conversation_id`, `create_time`),
+    INDEX `MessageHistory_conversation_id_msg_id_create_time_idx`(`conversation_id`, `msg_id`, `create_time`),
+    UNIQUE INDEX `MessageHistory_conversation_id_msg_id_key`(`conversation_id`, `msg_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -103,8 +105,8 @@ CREATE TABLE `Friend` (
     `user_id` VARCHAR(191) NOT NULL,
     `friend_id` VARCHAR(191) NOT NULL,
     `state` INTEGER NOT NULL DEFAULT 0,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+    `create_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `update_time` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `Friend_user_id_friend_id_key`(`user_id`, `friend_id`),
     PRIMARY KEY (`id`)
@@ -116,8 +118,8 @@ CREATE TABLE `FriendApply` (
     `requester_id` VARCHAR(191) NOT NULL,
     `responder_id` VARCHAR(191) NOT NULL,
     `state` INTEGER NOT NULL DEFAULT 0,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+    `create_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `update_time` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `FriendApply_requester_id_responder_id_key`(`requester_id`, `responder_id`),
     PRIMARY KEY (`id`)
