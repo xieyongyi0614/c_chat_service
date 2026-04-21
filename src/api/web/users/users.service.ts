@@ -84,6 +84,23 @@ export class UsersService {
     });
   }
 
+  async getMultipleUsers(userIds: string[]) {
+    if (!userIds || userIds.length === 0) {
+      return [];
+    }
+
+    return this.prisma.user.findMany({
+      where: {
+        id: { in: userIds },
+      },
+      select: {
+        id: true,
+        nickname: true,
+        avatarUrl: true,
+      },
+    });
+  }
+
   // async getById(id: string): Promise<TagTypes.PrismaTag> {
   //   return await this.prisma.tag.findUnique({ where: { id } });
   // }

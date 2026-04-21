@@ -15,6 +15,8 @@ import {
   GetConversationListResponse,
   GetMessageHistoryRequest,
   GetMessageHistoryResponse,
+  ReadMessageRequest,
+  ReadMessageResponse,
   UserInfo,
 } from 'src/proto';
 import { MessageService } from '../services/message.service';
@@ -48,6 +50,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     this.handlers.set(SOCKET_PROTO_EVENT.sendMessage, this.handleSendMessage);
     this.handlers.set(SOCKET_PROTO_EVENT.getConversationList, this.handleGetConversationList);
     this.handlers.set(SOCKET_PROTO_EVENT.getMessageHistory, this.handleGetMessageHistory);
+    this.handlers.set(SOCKET_PROTO_EVENT.readMessage, this.handleReadMessage);
   }
 
   private handlePing(client: ChatSocket) {
@@ -91,54 +94,50 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     const userId = client.data.user?.id;
     if (!userId) return;
 
-    const page = payload?.pagination?.page != null ? Number(payload.pagination.page) : 1;
-    const pageSize =
-      payload?.pagination?.pageSize != null ? Number(payload.pagination.pageSize) : 10;
+    const { page, pageSize } = transformPaginationParams(payload?.pagination);
 
     const { list, total } = await this.chatService.getUserConversations(userId, page, pageSize);
 
-    const encodedList = await Promise.all(
-      list.map(async (c) => {
-        let userInfo: UserInfo | undefined = undefined;
-        let groupName: string | undefined;
-        let groupAvatar: string | undefined;
+    const encodedList = list.map((c) => {
+      let groupName: string | undefined;
+      let groupAvatar: string | undefined;
 
-        if (c.type === 1) {
-          const targetUser = await this.userService.getUserById(c.targetId);
-          if (targetUser) {
-            userInfo = UserInfo.create({
-              ...targetUser,
-              // id: targetUser.id,
-              // email: targetUser.email,
-              // nickname: targetUser.nickname || undefined,
-              // avatarUrl: targetUser.avatarUrl,
-              // state: targetUser.state,
-              // updateTime: new Date(targetUser.updateTime).getTime(),
-            });
-          }
-        } else if (c.type === 2) {
-          const group = await this.prisma.group.findUnique({
-            where: { id: c.targetId },
-            select: { name: true, avatarUrl: true },
-          });
-          groupName = group?.name;
-          groupAvatar = group?.avatarUrl ?? '';
-        }
+      // if (c.type === 1) {
+      //   const targetUser = await this.userService.getUserById(c.targetId);
+      //   if (targetUser) {
+      //     userInfo = UserInfo.create({
+      //       ...targetUser,
+      //       // id: targetUser.id,
+      //       // email: targetUser.email,
+      //       // nickname: targetUser.nickname || undefined,
+      //       // avatarUrl: targetUser.avatarUrl,
+      //       // state: targetUser.state,
+      //       // updateTime: new Date(targetUser.updateTime).getTime(),
+      //     });
+      //   }
+      // } else if (c.type === 2) {
+      //   const group = await this.prisma.group.findUnique({
+      //     where: { id: c.targetId },
+      //     select: { name: true, avatarUrl: true },
+      //   });
+      //   groupName = group?.name;
+      //   groupAvatar = group?.avatarUrl ?? '';
+      // }
 
-        return ConversationInfo.create({
-          id: c.id,
-          type: c.type,
-          targetId: c.targetId,
-          lastMsgContent: c.lastMsgContent ?? undefined,
-          lastMsgTime: c.lastMsgTime ? new Date(c.lastMsgTime).getTime() : undefined,
-          updateTime: new Date(c.updateTime).getTime(),
-          createTime: new Date(c.createTime).getTime(),
-          user: userInfo,
-          groupName,
-          groupAvatar,
-        });
-      }),
-    );
+      return ConversationInfo.create({
+        id: c.id,
+        type: c.type,
+        lastMsgContent: c.lastMsgContent ?? undefined,
+        lastMsgTime: c.lastMsgTime ? new Date(c.lastMsgTime).getTime() : undefined,
+        updateTime: new Date(c.updateTime).getTime(),
+        createTime: new Date(c.createTime).getTime(),
+        unreadCount: c.unreadCount ?? 0,
+        lastReadMessageId: c.lastReadMessageId ?? 0,
+        user: c.user,
+        groupName,
+        groupAvatar,
+      });
+    });
 
     const responseData = {
       pagination: {
@@ -192,6 +191,36 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
 
     this.sendMessageToClient(client, SOCKET_PROTO_EVENT.getMessageHistory, response, requestId);
   };
+
+  /**
+   * 标记会话消息已读
+   */
+  private handleReadMessage = async (
+    client: ChatSocket,
+    payload?: ReadMessageRequest | null,
+    requestId?: string,
+  ) => {
+    const userId = client.data.user?.id;
+    if (!userId || !payload?.conversationId) {
+      return;
+    }
+
+    const result = await this.messageService.markConversationAsRead(
+      userId,
+      payload.conversationId,
+      payload.messageId ?? undefined,
+    );
+
+    const response = ReadMessageResponse.encode(
+      ReadMessageResponse.create({
+        conversationId: result.conversationId,
+        messageId: result.messageId,
+        unreadCount: result.unreadCount,
+      }),
+    ).finish();
+
+    this.sendMessageToClient(client, SOCKET_PROTO_EVENT.readMessage, response, requestId);
+  };
   /**
    * 处理创建私聊会话
    */
@@ -217,7 +246,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       ConversationInfo.create({
         id: conversation.id,
         type: conversation.type,
-        targetId: conversation.targetId,
+        // targetId: conversation.targetId,
         lastMsgContent: conversation.lastMsgContent ?? undefined,
         lastMsgTime: conversation.lastMsgTime?.getTime(),
         updateTime: conversation.updateTime.getTime(),
@@ -255,7 +284,6 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
         conversationId: message.conversationId,
         content: message.content,
         type: message.type,
-        isRead: message.isRead,
         state: message.state,
         createTime: message.createTime.getTime(),
         updateTime: message.updateTime.getTime(),
