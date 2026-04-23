@@ -26,3 +26,19 @@ src
 │   └── app.config.ts
 └── main.ts               # 启动文件
 ```
+
+```bash
+# clone 项目
+git clone https://github.com/xieyongyi0614/c_chat_service.git
+cd c_chat_service
+
+# 安装依赖
+pnpm install
+
+# 生成prisma
+pnpm run prisma:generate
+pnpm run prisma:migrate:deploy
+
+# 启动
+pnpm run dev
+```
