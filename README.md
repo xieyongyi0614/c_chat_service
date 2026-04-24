@@ -1,31 +1,16 @@
-# Nest.js 聊天室项目架构与开发规范
+# Corner Chat 即时通讯服务端
 
-## 项目概述
+## <img src="./docs/img/logo.png" align="left" width=80 > 一款跨平台即时通讯桌面应用。采用前后端分离架构，前端利用 Turborepo 构建 Monorepo 架构，将 Electron 主进程、渲染进程（React）及共享包进行统一治理；后端基于 NestJS 提供 RESTful 与 WebSocket 服务。
 
-本项目旨在构建一个基于 Nest.js 的实时聊天室，用户可以通过该平台进行消息交流，支持多端接入（包括 Web 和移动设备）。项目采用 Prisma 作为 ORM，Docker 进行容器化，Jest 进行单元测试。
+## 📦 快速开始
 
-## 目录结构
+#### 环境要求(本人本地环境，不一定严格要求)
 
-```plaintext
-src
-├── api
-│   ├── chat  # 业务接口层 /chat socket 接口
-├── core                  # 核心模块
-│   ├── auth              # 身份验证模块
-│   │   ├── auth.service.ts
-│   │   ├── auth.controller.ts
-│   │   └── auth.module.ts
-│   ├── database          # 数据库访问层
-│   │   └── prisma        # Prisma 配置与管理
-│   │       ├── prisma.service.ts
-│   │       └── prisma.module.ts
-│   └── common            # 公共工具模块
-│       ├── logger.service.ts
-│       └── error-handler.middleware.ts
-├── config                # 配置文件
-│   └── app.config.ts
-└── main.ts               # 启动文件
-```
+- Node.js v24.7.0
+- pnpm v9.0.0
+- mysql 8.0
+
+#### 启动
 
 ```bash
 # clone 项目

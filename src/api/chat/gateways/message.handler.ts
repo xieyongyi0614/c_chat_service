@@ -280,6 +280,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     const response = MessageInfo.encode(
       MessageInfo.create({
         id: message.id,
+        msgId: message.msgId,
         senderId: message.senderId,
         conversationId: message.conversationId,
         content: message.content,
