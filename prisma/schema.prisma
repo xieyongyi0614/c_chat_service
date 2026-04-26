@@ -30,6 +30,7 @@ model User {
   createTime     DateTime  @default(now()) @map("create_time") // 创建时间
 
   messages                 MessageHistory[] // 消息记录
+  files                    File[]
   // chatRoomParticipants ChatRoomParticipant[] // 聊天室参与者
   conversationParticipants ConversationParticipant[] // 群组拥有者 (可选)
   ownedGroups              Group[]                   @relation("GroupOwner")
@@ -43,7 +44,30 @@ model User {
 }
 
 // ==========================================
-// 2. 群组模块 (原 ChatRoom 拆分)
+// 2. 附件/文件上传模块
+// ==========================================
+model File {
+  id           String   @id @default(cuid())
+  hash         String
+  filename     String
+  originalName String   @map("original_name")
+  mimeType     String   @map("mime_type")
+  size         Int
+  path         String
+  url          String
+  alt          String?
+  description  String?
+  uploaderId   String   @map("uploader_id")
+  createTime   DateTime @default(now()) @map("create_time")
+  updateTime   DateTime @updatedAt @map("update_time")
+
+  uploader User @relation(fields: [uploaderId], references: [id])
+
+  @@index([uploaderId])
+}
+
+// ==========================================
+// 3. 群组模块 (原 ChatRoom 拆分)
 // ==========================================
 // 专门存储群聊的公共信息（头像、公告、群名）
 model Group {
@@ -87,10 +111,10 @@ model GroupMember {
 // 3. 会话模块 (核心改动：统一私聊与群聊入口)
 // ==========================================
 model Conversation {
-  id      String  @id @default(cuid())
-  type    Int // 1: 私聊, 2: 群聊
-  // 群聊时存储groupId
-  groupId String? @map("group_id")
+  id       String  @id @default(cuid())
+  type     Int // 1: 私聊, 2: 群聊
+  // 私聊存userId 群聊时存储groupId
+  targetId String? @map("target_id")
 
   // 冗余字段：用于聊天列表快速展示，避免连表查最新消息
   lastMsgContent String?   @map("last_msg_content") @db.Text
@@ -105,7 +129,7 @@ model Conversation {
   // 注意：私聊的唯一性建议在代码层控制 (如 A-B 和 B-A 生成同一个 Conversation ID)
 
   // 索引优化
-  @@index([type, groupId])
+  @@index([type, targetId])
 }
 
 // 会话参与者表 (用于存储：置顶、免打扰、删除会话等个性化设置)

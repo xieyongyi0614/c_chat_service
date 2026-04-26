@@ -108,21 +108,18 @@ export abstract class MessageHandlerRegistry {
   }
 
   /**
-   * 将某个用户的所有连接加入指定 Socket.io 房间
+   * 将多个用户的所有连接加入指定 Socket.io 房间
    */
-  protected async joinUserToRoom(
-    server: Server,
-    userSockets: Map<string, Set<string>>,
-    userId: string,
-    roomId: string,
-  ) {
-    const socketIds = userSockets.get(userId);
-    if (socketIds && server) {
-      for (const socketId of socketIds) {
-        const socket = (server.sockets as unknown as Map<string, Socket>).get(socketId);
-        if (socket) {
-          await socket.join(roomId);
-          console.log(`Socket ${socketId} (User: ${userId}) joined room ${roomId}`);
+  protected async joinUserToRoom(server: Server, userIds: string[], roomId: string) {
+    for (const userId of userIds) {
+      const socketIds = this.userSockets.get(userId);
+      if (socketIds && server) {
+        for (const socketId of socketIds) {
+          const socket = (server.sockets as unknown as Map<string, Socket>).get(socketId);
+          if (socket) {
+            await socket.join(roomId);
+            console.log(`Socket ${socketId} (User: ${userId}) joined room ${roomId}`);
+          }
         }
       }
     }

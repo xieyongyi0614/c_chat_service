@@ -31,6 +31,7 @@ export default tseslint.config(
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-namespace': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
       'prettier/prettier': [
         'error',
         {

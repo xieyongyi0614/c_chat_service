@@ -29,14 +29,20 @@ export class MyConfigService {
       port: this.configService.get<number>('DB_PORT'),
       username: this.configService.get<string>('DB_USER'),
       password: this.configService.get<string>('DB_PASSWORD'),
-      database: this.configService.get<string>('DB_NAME')
+      database: this.configService.get<string>('DB_NAME'),
     };
   }
   get redisInfo() {
     return {
       host: this.configService.get<string>('REDIS_HOST'),
       port: this.configService.get<number>('REDIS_PORT'),
-      password: this.configService.get<string>('REDIS_PASSWORD')
+      password: this.configService.get<string>('REDIS_PASSWORD'),
+    };
+  }
+  get uploadBaseConfig() {
+    return {
+      url: this.configService.get<string>('UPLOAD_BASE_URL') ?? 'http://localhost:3001',
+      uploadPath: this.configService.get<string>('UPLOAD_PATH') ?? './uploads',
     };
   }
 }

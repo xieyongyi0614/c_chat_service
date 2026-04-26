@@ -97,6 +97,254 @@ export class CreateConversationRequest implements ICreateConversationRequest {
     public static getTypeUrl(typeUrlPrefix?: string): string;
 }
 
+/** Properties of a GroupInfo. */
+export interface IGroupInfo {
+
+    /** GroupInfo id */
+    id?: (string|null);
+
+    /** GroupInfo name */
+    name?: (string|null);
+
+    /** GroupInfo avatarUrl */
+    avatarUrl?: (string|null);
+
+    /** GroupInfo notice */
+    notice?: (string|null);
+
+    /** GroupInfo ownerId */
+    ownerId?: (string|null);
+
+    /** GroupInfo state */
+    state?: (number|null);
+
+    /** GroupInfo updateTime */
+    updateTime?: (number|Long|null);
+
+    /** GroupInfo createTime */
+    createTime?: (number|Long|null);
+}
+
+/** Represents a GroupInfo. */
+export class GroupInfo implements IGroupInfo {
+
+    /**
+     * Constructs a new GroupInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IGroupInfo);
+
+    /** GroupInfo id. */
+    public id: string;
+
+    /** GroupInfo name. */
+    public name: string;
+
+    /** GroupInfo avatarUrl. */
+    public avatarUrl?: (string|null);
+
+    /** GroupInfo notice. */
+    public notice?: (string|null);
+
+    /** GroupInfo ownerId. */
+    public ownerId: string;
+
+    /** GroupInfo state. */
+    public state: number;
+
+    /** GroupInfo updateTime. */
+    public updateTime: (number|Long);
+
+    /** GroupInfo createTime. */
+    public createTime: (number|Long);
+
+    /**
+     * Creates a new GroupInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns GroupInfo instance
+     */
+    public static create(properties?: IGroupInfo): GroupInfo;
+
+    /**
+     * Encodes the specified GroupInfo message. Does not implicitly {@link GroupInfo.verify|verify} messages.
+     * @param message GroupInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IGroupInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified GroupInfo message, length delimited. Does not implicitly {@link GroupInfo.verify|verify} messages.
+     * @param message GroupInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IGroupInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a GroupInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns GroupInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GroupInfo;
+
+    /**
+     * Decodes a GroupInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns GroupInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GroupInfo;
+
+    /**
+     * Verifies a GroupInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a GroupInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns GroupInfo
+     */
+    public static fromObject(object: { [k: string]: any }): GroupInfo;
+
+    /**
+     * Creates a plain object from a GroupInfo message. Also converts values to other types if specified.
+     * @param message GroupInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: GroupInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this GroupInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for GroupInfo
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a TargetInfo. */
+export interface ITargetInfo {
+
+    /** TargetInfo id */
+    id?: (string|null);
+
+    /** TargetInfo name */
+    name?: (string|null);
+
+    /** TargetInfo avatarUrl */
+    avatarUrl?: (string|null);
+}
+
+/** Represents a TargetInfo. */
+export class TargetInfo implements ITargetInfo {
+
+    /**
+     * Constructs a new TargetInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ITargetInfo);
+
+    /** TargetInfo id. */
+    public id: string;
+
+    /** TargetInfo name. */
+    public name: string;
+
+    /** TargetInfo avatarUrl. */
+    public avatarUrl: string;
+
+    /**
+     * Creates a new TargetInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns TargetInfo instance
+     */
+    public static create(properties?: ITargetInfo): TargetInfo;
+
+    /**
+     * Encodes the specified TargetInfo message. Does not implicitly {@link TargetInfo.verify|verify} messages.
+     * @param message TargetInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ITargetInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified TargetInfo message, length delimited. Does not implicitly {@link TargetInfo.verify|verify} messages.
+     * @param message TargetInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ITargetInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a TargetInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns TargetInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TargetInfo;
+
+    /**
+     * Decodes a TargetInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns TargetInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): TargetInfo;
+
+    /**
+     * Verifies a TargetInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a TargetInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns TargetInfo
+     */
+    public static fromObject(object: { [k: string]: any }): TargetInfo;
+
+    /**
+     * Creates a plain object from a TargetInfo message. Also converts values to other types if specified.
+     * @param message TargetInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: TargetInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this TargetInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for TargetInfo
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
 /** Properties of a ConversationInfo. */
 export interface IConversationInfo {
 
@@ -106,8 +354,8 @@ export interface IConversationInfo {
     /** ConversationInfo type */
     type?: (number|null);
 
-    /** ConversationInfo targetId */
-    targetId?: (string|null);
+    /** ConversationInfo targetInfo */
+    targetInfo?: (ITargetInfo|null);
 
     /** ConversationInfo lastMsgContent */
     lastMsgContent?: (string|null);
@@ -120,15 +368,6 @@ export interface IConversationInfo {
 
     /** ConversationInfo createTime */
     createTime?: (number|Long|null);
-
-    /** ConversationInfo user */
-    user?: (IUserInfo|null);
-
-    /** ConversationInfo groupName */
-    groupName?: (string|null);
-
-    /** ConversationInfo groupAvatar */
-    groupAvatar?: (string|null);
 
     /** ConversationInfo unreadCount */
     unreadCount?: (number|null);
@@ -152,8 +391,8 @@ export class ConversationInfo implements IConversationInfo {
     /** ConversationInfo type. */
     public type: number;
 
-    /** ConversationInfo targetId. */
-    public targetId: string;
+    /** ConversationInfo targetInfo. */
+    public targetInfo?: (ITargetInfo|null);
 
     /** ConversationInfo lastMsgContent. */
     public lastMsgContent?: (string|null);
@@ -166,15 +405,6 @@ export class ConversationInfo implements IConversationInfo {
 
     /** ConversationInfo createTime. */
     public createTime: (number|Long);
-
-    /** ConversationInfo user. */
-    public user?: (IUserInfo|null);
-
-    /** ConversationInfo groupName. */
-    public groupName?: (string|null);
-
-    /** ConversationInfo groupAvatar. */
-    public groupAvatar?: (string|null);
 
     /** ConversationInfo unreadCount. */
     public unreadCount?: (number|null);
