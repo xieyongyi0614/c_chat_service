@@ -3,5 +3,8 @@
     "javascript",
     "typescript",
   ],
-  "eslint.run": "onSave" // 或 "onType"，决定何时运行检查
+  "eslint.run": "onSave",
+  "cSpell.words": [
+    "uuidv"
+  ] // 或 "onType"，决定何时运行检查
 }

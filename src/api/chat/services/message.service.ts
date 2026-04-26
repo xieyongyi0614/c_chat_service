@@ -1,15 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../core/database';
+import { ChatService } from './chat.service';
 
 @Injectable()
 export class MessageService {
   private readonly logger = new Logger(MessageService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private chatService: ChatService,
+  ) {}
 
   /**
    * 创建并发送消息
-   * 逻辑参考 AGENTS.md
    */
   async sendMessage(data: {
     senderId: string;
@@ -31,11 +34,11 @@ export class MessageService {
         const created = await tx.messageHistory.create({
           data: {
             senderId: senderId,
-            conversationId: conversationId,
+            conversationId,
             msgId: nextMsgId,
             content,
             type,
-            state: 0, // 正常
+            state: 0,
           },
         });
 

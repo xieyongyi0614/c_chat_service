@@ -214,6 +214,677 @@ $root.CreateConversationRequest = (function() {
     return CreateConversationRequest;
 })();
 
+$root.GroupInfo = (function() {
+
+    /**
+     * Properties of a GroupInfo.
+     * @exports IGroupInfo
+     * @interface IGroupInfo
+     * @property {string|null} [id] GroupInfo id
+     * @property {string|null} [name] GroupInfo name
+     * @property {string|null} [avatarUrl] GroupInfo avatarUrl
+     * @property {string|null} [notice] GroupInfo notice
+     * @property {string|null} [ownerId] GroupInfo ownerId
+     * @property {number|null} [state] GroupInfo state
+     * @property {number|Long|null} [updateTime] GroupInfo updateTime
+     * @property {number|Long|null} [createTime] GroupInfo createTime
+     */
+
+    /**
+     * Constructs a new GroupInfo.
+     * @exports GroupInfo
+     * @classdesc Represents a GroupInfo.
+     * @implements IGroupInfo
+     * @constructor
+     * @param {IGroupInfo=} [properties] Properties to set
+     */
+    function GroupInfo(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GroupInfo id.
+     * @member {string} id
+     * @memberof GroupInfo
+     * @instance
+     */
+    GroupInfo.prototype.id = "";
+
+    /**
+     * GroupInfo name.
+     * @member {string} name
+     * @memberof GroupInfo
+     * @instance
+     */
+    GroupInfo.prototype.name = "";
+
+    /**
+     * GroupInfo avatarUrl.
+     * @member {string|null|undefined} avatarUrl
+     * @memberof GroupInfo
+     * @instance
+     */
+    GroupInfo.prototype.avatarUrl = null;
+
+    /**
+     * GroupInfo notice.
+     * @member {string|null|undefined} notice
+     * @memberof GroupInfo
+     * @instance
+     */
+    GroupInfo.prototype.notice = null;
+
+    /**
+     * GroupInfo ownerId.
+     * @member {string} ownerId
+     * @memberof GroupInfo
+     * @instance
+     */
+    GroupInfo.prototype.ownerId = "";
+
+    /**
+     * GroupInfo state.
+     * @member {number} state
+     * @memberof GroupInfo
+     * @instance
+     */
+    GroupInfo.prototype.state = 0;
+
+    /**
+     * GroupInfo updateTime.
+     * @member {number|Long} updateTime
+     * @memberof GroupInfo
+     * @instance
+     */
+    GroupInfo.prototype.updateTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * GroupInfo createTime.
+     * @member {number|Long} createTime
+     * @memberof GroupInfo
+     * @instance
+     */
+    GroupInfo.prototype.createTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(GroupInfo.prototype, "_avatarUrl", {
+        get: $util.oneOfGetter($oneOfFields = ["avatarUrl"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(GroupInfo.prototype, "_notice", {
+        get: $util.oneOfGetter($oneOfFields = ["notice"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
+     * Creates a new GroupInfo instance using the specified properties.
+     * @function create
+     * @memberof GroupInfo
+     * @static
+     * @param {IGroupInfo=} [properties] Properties to set
+     * @returns {GroupInfo} GroupInfo instance
+     */
+    GroupInfo.create = function create(properties) {
+        return new GroupInfo(properties);
+    };
+
+    /**
+     * Encodes the specified GroupInfo message. Does not implicitly {@link GroupInfo.verify|verify} messages.
+     * @function encode
+     * @memberof GroupInfo
+     * @static
+     * @param {IGroupInfo} message GroupInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GroupInfo.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+        if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+        if (message.avatarUrl != null && Object.hasOwnProperty.call(message, "avatarUrl"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.avatarUrl);
+        if (message.notice != null && Object.hasOwnProperty.call(message, "notice"))
+            writer.uint32(/* id 4, wireType 2 =*/34).string(message.notice);
+        if (message.ownerId != null && Object.hasOwnProperty.call(message, "ownerId"))
+            writer.uint32(/* id 5, wireType 2 =*/42).string(message.ownerId);
+        if (message.state != null && Object.hasOwnProperty.call(message, "state"))
+            writer.uint32(/* id 6, wireType 0 =*/48).int32(message.state);
+        if (message.updateTime != null && Object.hasOwnProperty.call(message, "updateTime"))
+            writer.uint32(/* id 7, wireType 0 =*/56).int64(message.updateTime);
+        if (message.createTime != null && Object.hasOwnProperty.call(message, "createTime"))
+            writer.uint32(/* id 8, wireType 0 =*/64).int64(message.createTime);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GroupInfo message, length delimited. Does not implicitly {@link GroupInfo.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GroupInfo
+     * @static
+     * @param {IGroupInfo} message GroupInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GroupInfo.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GroupInfo message from the specified reader or buffer.
+     * @function decode
+     * @memberof GroupInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GroupInfo} GroupInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GroupInfo.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GroupInfo();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.id = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.name = reader.string();
+                    break;
+                }
+            case 3: {
+                    message.avatarUrl = reader.string();
+                    break;
+                }
+            case 4: {
+                    message.notice = reader.string();
+                    break;
+                }
+            case 5: {
+                    message.ownerId = reader.string();
+                    break;
+                }
+            case 6: {
+                    message.state = reader.int32();
+                    break;
+                }
+            case 7: {
+                    message.updateTime = reader.int64();
+                    break;
+                }
+            case 8: {
+                    message.createTime = reader.int64();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GroupInfo message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GroupInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GroupInfo} GroupInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GroupInfo.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GroupInfo message.
+     * @function verify
+     * @memberof GroupInfo
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GroupInfo.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        var properties = {};
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (!$util.isString(message.id))
+                return "id: string expected";
+        if (message.name != null && message.hasOwnProperty("name"))
+            if (!$util.isString(message.name))
+                return "name: string expected";
+        if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl")) {
+            properties._avatarUrl = 1;
+            if (!$util.isString(message.avatarUrl))
+                return "avatarUrl: string expected";
+        }
+        if (message.notice != null && message.hasOwnProperty("notice")) {
+            properties._notice = 1;
+            if (!$util.isString(message.notice))
+                return "notice: string expected";
+        }
+        if (message.ownerId != null && message.hasOwnProperty("ownerId"))
+            if (!$util.isString(message.ownerId))
+                return "ownerId: string expected";
+        if (message.state != null && message.hasOwnProperty("state"))
+            if (!$util.isInteger(message.state))
+                return "state: integer expected";
+        if (message.updateTime != null && message.hasOwnProperty("updateTime"))
+            if (!$util.isInteger(message.updateTime) && !(message.updateTime && $util.isInteger(message.updateTime.low) && $util.isInteger(message.updateTime.high)))
+                return "updateTime: integer|Long expected";
+        if (message.createTime != null && message.hasOwnProperty("createTime"))
+            if (!$util.isInteger(message.createTime) && !(message.createTime && $util.isInteger(message.createTime.low) && $util.isInteger(message.createTime.high)))
+                return "createTime: integer|Long expected";
+        return null;
+    };
+
+    /**
+     * Creates a GroupInfo message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GroupInfo
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GroupInfo} GroupInfo
+     */
+    GroupInfo.fromObject = function fromObject(object) {
+        if (object instanceof $root.GroupInfo)
+            return object;
+        var message = new $root.GroupInfo();
+        if (object.id != null)
+            message.id = String(object.id);
+        if (object.name != null)
+            message.name = String(object.name);
+        if (object.avatarUrl != null)
+            message.avatarUrl = String(object.avatarUrl);
+        if (object.notice != null)
+            message.notice = String(object.notice);
+        if (object.ownerId != null)
+            message.ownerId = String(object.ownerId);
+        if (object.state != null)
+            message.state = object.state | 0;
+        if (object.updateTime != null)
+            if ($util.Long)
+                (message.updateTime = $util.Long.fromValue(object.updateTime)).unsigned = false;
+            else if (typeof object.updateTime === "string")
+                message.updateTime = parseInt(object.updateTime, 10);
+            else if (typeof object.updateTime === "number")
+                message.updateTime = object.updateTime;
+            else if (typeof object.updateTime === "object")
+                message.updateTime = new $util.LongBits(object.updateTime.low >>> 0, object.updateTime.high >>> 0).toNumber();
+        if (object.createTime != null)
+            if ($util.Long)
+                (message.createTime = $util.Long.fromValue(object.createTime)).unsigned = false;
+            else if (typeof object.createTime === "string")
+                message.createTime = parseInt(object.createTime, 10);
+            else if (typeof object.createTime === "number")
+                message.createTime = object.createTime;
+            else if (typeof object.createTime === "object")
+                message.createTime = new $util.LongBits(object.createTime.low >>> 0, object.createTime.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GroupInfo message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GroupInfo
+     * @static
+     * @param {GroupInfo} message GroupInfo
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GroupInfo.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.id = "";
+            object.name = "";
+            object.ownerId = "";
+            object.state = 0;
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.updateTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.updateTime = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.createTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.createTime = options.longs === String ? "0" : 0;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            object.id = message.id;
+        if (message.name != null && message.hasOwnProperty("name"))
+            object.name = message.name;
+        if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl")) {
+            object.avatarUrl = message.avatarUrl;
+            if (options.oneofs)
+                object._avatarUrl = "avatarUrl";
+        }
+        if (message.notice != null && message.hasOwnProperty("notice")) {
+            object.notice = message.notice;
+            if (options.oneofs)
+                object._notice = "notice";
+        }
+        if (message.ownerId != null && message.hasOwnProperty("ownerId"))
+            object.ownerId = message.ownerId;
+        if (message.state != null && message.hasOwnProperty("state"))
+            object.state = message.state;
+        if (message.updateTime != null && message.hasOwnProperty("updateTime"))
+            if (typeof message.updateTime === "number")
+                object.updateTime = options.longs === String ? String(message.updateTime) : message.updateTime;
+            else
+                object.updateTime = options.longs === String ? $util.Long.prototype.toString.call(message.updateTime) : options.longs === Number ? new $util.LongBits(message.updateTime.low >>> 0, message.updateTime.high >>> 0).toNumber() : message.updateTime;
+        if (message.createTime != null && message.hasOwnProperty("createTime"))
+            if (typeof message.createTime === "number")
+                object.createTime = options.longs === String ? String(message.createTime) : message.createTime;
+            else
+                object.createTime = options.longs === String ? $util.Long.prototype.toString.call(message.createTime) : options.longs === Number ? new $util.LongBits(message.createTime.low >>> 0, message.createTime.high >>> 0).toNumber() : message.createTime;
+        return object;
+    };
+
+    /**
+     * Converts this GroupInfo to JSON.
+     * @function toJSON
+     * @memberof GroupInfo
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GroupInfo.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for GroupInfo
+     * @function getTypeUrl
+     * @memberof GroupInfo
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GroupInfo.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GroupInfo";
+    };
+
+    return GroupInfo;
+})();
+
+$root.TargetInfo = (function() {
+
+    /**
+     * Properties of a TargetInfo.
+     * @exports ITargetInfo
+     * @interface ITargetInfo
+     * @property {string|null} [id] TargetInfo id
+     * @property {string|null} [name] TargetInfo name
+     * @property {string|null} [avatarUrl] TargetInfo avatarUrl
+     */
+
+    /**
+     * Constructs a new TargetInfo.
+     * @exports TargetInfo
+     * @classdesc Represents a TargetInfo.
+     * @implements ITargetInfo
+     * @constructor
+     * @param {ITargetInfo=} [properties] Properties to set
+     */
+    function TargetInfo(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * TargetInfo id.
+     * @member {string} id
+     * @memberof TargetInfo
+     * @instance
+     */
+    TargetInfo.prototype.id = "";
+
+    /**
+     * TargetInfo name.
+     * @member {string} name
+     * @memberof TargetInfo
+     * @instance
+     */
+    TargetInfo.prototype.name = "";
+
+    /**
+     * TargetInfo avatarUrl.
+     * @member {string} avatarUrl
+     * @memberof TargetInfo
+     * @instance
+     */
+    TargetInfo.prototype.avatarUrl = "";
+
+    /**
+     * Creates a new TargetInfo instance using the specified properties.
+     * @function create
+     * @memberof TargetInfo
+     * @static
+     * @param {ITargetInfo=} [properties] Properties to set
+     * @returns {TargetInfo} TargetInfo instance
+     */
+    TargetInfo.create = function create(properties) {
+        return new TargetInfo(properties);
+    };
+
+    /**
+     * Encodes the specified TargetInfo message. Does not implicitly {@link TargetInfo.verify|verify} messages.
+     * @function encode
+     * @memberof TargetInfo
+     * @static
+     * @param {ITargetInfo} message TargetInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    TargetInfo.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+        if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+        if (message.avatarUrl != null && Object.hasOwnProperty.call(message, "avatarUrl"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.avatarUrl);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified TargetInfo message, length delimited. Does not implicitly {@link TargetInfo.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof TargetInfo
+     * @static
+     * @param {ITargetInfo} message TargetInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    TargetInfo.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a TargetInfo message from the specified reader or buffer.
+     * @function decode
+     * @memberof TargetInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {TargetInfo} TargetInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    TargetInfo.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.TargetInfo();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.id = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.name = reader.string();
+                    break;
+                }
+            case 3: {
+                    message.avatarUrl = reader.string();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a TargetInfo message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof TargetInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {TargetInfo} TargetInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    TargetInfo.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a TargetInfo message.
+     * @function verify
+     * @memberof TargetInfo
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    TargetInfo.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (!$util.isString(message.id))
+                return "id: string expected";
+        if (message.name != null && message.hasOwnProperty("name"))
+            if (!$util.isString(message.name))
+                return "name: string expected";
+        if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl"))
+            if (!$util.isString(message.avatarUrl))
+                return "avatarUrl: string expected";
+        return null;
+    };
+
+    /**
+     * Creates a TargetInfo message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof TargetInfo
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {TargetInfo} TargetInfo
+     */
+    TargetInfo.fromObject = function fromObject(object) {
+        if (object instanceof $root.TargetInfo)
+            return object;
+        var message = new $root.TargetInfo();
+        if (object.id != null)
+            message.id = String(object.id);
+        if (object.name != null)
+            message.name = String(object.name);
+        if (object.avatarUrl != null)
+            message.avatarUrl = String(object.avatarUrl);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a TargetInfo message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof TargetInfo
+     * @static
+     * @param {TargetInfo} message TargetInfo
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    TargetInfo.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.id = "";
+            object.name = "";
+            object.avatarUrl = "";
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            object.id = message.id;
+        if (message.name != null && message.hasOwnProperty("name"))
+            object.name = message.name;
+        if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl"))
+            object.avatarUrl = message.avatarUrl;
+        return object;
+    };
+
+    /**
+     * Converts this TargetInfo to JSON.
+     * @function toJSON
+     * @memberof TargetInfo
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    TargetInfo.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for TargetInfo
+     * @function getTypeUrl
+     * @memberof TargetInfo
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    TargetInfo.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/TargetInfo";
+    };
+
+    return TargetInfo;
+})();
+
 $root.ConversationInfo = (function() {
 
     /**
@@ -222,14 +893,11 @@ $root.ConversationInfo = (function() {
      * @interface IConversationInfo
      * @property {string|null} [id] ConversationInfo id
      * @property {number|null} [type] ConversationInfo type
-     * @property {string|null} [targetId] ConversationInfo targetId
+     * @property {ITargetInfo|null} [targetInfo] ConversationInfo targetInfo
      * @property {string|null} [lastMsgContent] ConversationInfo lastMsgContent
      * @property {number|Long|null} [lastMsgTime] ConversationInfo lastMsgTime
      * @property {number|Long|null} [updateTime] ConversationInfo updateTime
      * @property {number|Long|null} [createTime] ConversationInfo createTime
-     * @property {IUserInfo|null} [user] ConversationInfo user
-     * @property {string|null} [groupName] ConversationInfo groupName
-     * @property {string|null} [groupAvatar] ConversationInfo groupAvatar
      * @property {number|null} [unreadCount] ConversationInfo unreadCount
      * @property {number|null} [lastReadMessageId] ConversationInfo lastReadMessageId
      */
@@ -266,12 +934,12 @@ $root.ConversationInfo = (function() {
     ConversationInfo.prototype.type = 0;
 
     /**
-     * ConversationInfo targetId.
-     * @member {string} targetId
+     * ConversationInfo targetInfo.
+     * @member {ITargetInfo|null|undefined} targetInfo
      * @memberof ConversationInfo
      * @instance
      */
-    ConversationInfo.prototype.targetId = "";
+    ConversationInfo.prototype.targetInfo = null;
 
     /**
      * ConversationInfo lastMsgContent.
@@ -306,30 +974,6 @@ $root.ConversationInfo = (function() {
     ConversationInfo.prototype.createTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
     /**
-     * ConversationInfo user.
-     * @member {IUserInfo|null|undefined} user
-     * @memberof ConversationInfo
-     * @instance
-     */
-    ConversationInfo.prototype.user = null;
-
-    /**
-     * ConversationInfo groupName.
-     * @member {string|null|undefined} groupName
-     * @memberof ConversationInfo
-     * @instance
-     */
-    ConversationInfo.prototype.groupName = null;
-
-    /**
-     * ConversationInfo groupAvatar.
-     * @member {string|null|undefined} groupAvatar
-     * @memberof ConversationInfo
-     * @instance
-     */
-    ConversationInfo.prototype.groupAvatar = null;
-
-    /**
      * ConversationInfo unreadCount.
      * @member {number|null|undefined} unreadCount
      * @memberof ConversationInfo
@@ -349,6 +993,12 @@ $root.ConversationInfo = (function() {
     var $oneOfFields;
 
     // Virtual OneOf for proto3 optional field
+    Object.defineProperty(ConversationInfo.prototype, "_targetInfo", {
+        get: $util.oneOfGetter($oneOfFields = ["targetInfo"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
     Object.defineProperty(ConversationInfo.prototype, "_lastMsgContent", {
         get: $util.oneOfGetter($oneOfFields = ["lastMsgContent"]),
         set: $util.oneOfSetter($oneOfFields)
@@ -357,24 +1007,6 @@ $root.ConversationInfo = (function() {
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(ConversationInfo.prototype, "_lastMsgTime", {
         get: $util.oneOfGetter($oneOfFields = ["lastMsgTime"]),
-        set: $util.oneOfSetter($oneOfFields)
-    });
-
-    // Virtual OneOf for proto3 optional field
-    Object.defineProperty(ConversationInfo.prototype, "_user", {
-        get: $util.oneOfGetter($oneOfFields = ["user"]),
-        set: $util.oneOfSetter($oneOfFields)
-    });
-
-    // Virtual OneOf for proto3 optional field
-    Object.defineProperty(ConversationInfo.prototype, "_groupName", {
-        get: $util.oneOfGetter($oneOfFields = ["groupName"]),
-        set: $util.oneOfSetter($oneOfFields)
-    });
-
-    // Virtual OneOf for proto3 optional field
-    Object.defineProperty(ConversationInfo.prototype, "_groupAvatar", {
-        get: $util.oneOfGetter($oneOfFields = ["groupAvatar"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -418,8 +1050,8 @@ $root.ConversationInfo = (function() {
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
         if (message.type != null && Object.hasOwnProperty.call(message, "type"))
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.type);
-        if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
-            writer.uint32(/* id 3, wireType 2 =*/26).string(message.targetId);
+        if (message.targetInfo != null && Object.hasOwnProperty.call(message, "targetInfo"))
+            $root.TargetInfo.encode(message.targetInfo, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         if (message.lastMsgContent != null && Object.hasOwnProperty.call(message, "lastMsgContent"))
             writer.uint32(/* id 4, wireType 2 =*/34).string(message.lastMsgContent);
         if (message.lastMsgTime != null && Object.hasOwnProperty.call(message, "lastMsgTime"))
@@ -428,16 +1060,10 @@ $root.ConversationInfo = (function() {
             writer.uint32(/* id 6, wireType 0 =*/48).int64(message.updateTime);
         if (message.createTime != null && Object.hasOwnProperty.call(message, "createTime"))
             writer.uint32(/* id 7, wireType 0 =*/56).int64(message.createTime);
-        if (message.user != null && Object.hasOwnProperty.call(message, "user"))
-            $root.UserInfo.encode(message.user, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-        if (message.groupName != null && Object.hasOwnProperty.call(message, "groupName"))
-            writer.uint32(/* id 9, wireType 2 =*/74).string(message.groupName);
-        if (message.groupAvatar != null && Object.hasOwnProperty.call(message, "groupAvatar"))
-            writer.uint32(/* id 10, wireType 2 =*/82).string(message.groupAvatar);
         if (message.unreadCount != null && Object.hasOwnProperty.call(message, "unreadCount"))
-            writer.uint32(/* id 11, wireType 0 =*/88).int32(message.unreadCount);
+            writer.uint32(/* id 8, wireType 0 =*/64).int32(message.unreadCount);
         if (message.lastReadMessageId != null && Object.hasOwnProperty.call(message, "lastReadMessageId"))
-            writer.uint32(/* id 12, wireType 0 =*/96).int32(message.lastReadMessageId);
+            writer.uint32(/* id 9, wireType 0 =*/72).int32(message.lastReadMessageId);
         return writer;
     };
 
@@ -483,7 +1109,7 @@ $root.ConversationInfo = (function() {
                     break;
                 }
             case 3: {
-                    message.targetId = reader.string();
+                    message.targetInfo = $root.TargetInfo.decode(reader, reader.uint32());
                     break;
                 }
             case 4: {
@@ -503,22 +1129,10 @@ $root.ConversationInfo = (function() {
                     break;
                 }
             case 8: {
-                    message.user = $root.UserInfo.decode(reader, reader.uint32());
-                    break;
-                }
-            case 9: {
-                    message.groupName = reader.string();
-                    break;
-                }
-            case 10: {
-                    message.groupAvatar = reader.string();
-                    break;
-                }
-            case 11: {
                     message.unreadCount = reader.int32();
                     break;
                 }
-            case 12: {
+            case 9: {
                     message.lastReadMessageId = reader.int32();
                     break;
                 }
@@ -564,9 +1178,14 @@ $root.ConversationInfo = (function() {
         if (message.type != null && message.hasOwnProperty("type"))
             if (!$util.isInteger(message.type))
                 return "type: integer expected";
-        if (message.targetId != null && message.hasOwnProperty("targetId"))
-            if (!$util.isString(message.targetId))
-                return "targetId: string expected";
+        if (message.targetInfo != null && message.hasOwnProperty("targetInfo")) {
+            properties._targetInfo = 1;
+            {
+                var error = $root.TargetInfo.verify(message.targetInfo);
+                if (error)
+                    return "targetInfo." + error;
+            }
+        }
         if (message.lastMsgContent != null && message.hasOwnProperty("lastMsgContent")) {
             properties._lastMsgContent = 1;
             if (!$util.isString(message.lastMsgContent))
@@ -583,24 +1202,6 @@ $root.ConversationInfo = (function() {
         if (message.createTime != null && message.hasOwnProperty("createTime"))
             if (!$util.isInteger(message.createTime) && !(message.createTime && $util.isInteger(message.createTime.low) && $util.isInteger(message.createTime.high)))
                 return "createTime: integer|Long expected";
-        if (message.user != null && message.hasOwnProperty("user")) {
-            properties._user = 1;
-            {
-                var error = $root.UserInfo.verify(message.user);
-                if (error)
-                    return "user." + error;
-            }
-        }
-        if (message.groupName != null && message.hasOwnProperty("groupName")) {
-            properties._groupName = 1;
-            if (!$util.isString(message.groupName))
-                return "groupName: string expected";
-        }
-        if (message.groupAvatar != null && message.hasOwnProperty("groupAvatar")) {
-            properties._groupAvatar = 1;
-            if (!$util.isString(message.groupAvatar))
-                return "groupAvatar: string expected";
-        }
         if (message.unreadCount != null && message.hasOwnProperty("unreadCount")) {
             properties._unreadCount = 1;
             if (!$util.isInteger(message.unreadCount))
@@ -630,8 +1231,11 @@ $root.ConversationInfo = (function() {
             message.id = String(object.id);
         if (object.type != null)
             message.type = object.type | 0;
-        if (object.targetId != null)
-            message.targetId = String(object.targetId);
+        if (object.targetInfo != null) {
+            if (typeof object.targetInfo !== "object")
+                throw TypeError(".ConversationInfo.targetInfo: object expected");
+            message.targetInfo = $root.TargetInfo.fromObject(object.targetInfo);
+        }
         if (object.lastMsgContent != null)
             message.lastMsgContent = String(object.lastMsgContent);
         if (object.lastMsgTime != null)
@@ -661,15 +1265,6 @@ $root.ConversationInfo = (function() {
                 message.createTime = object.createTime;
             else if (typeof object.createTime === "object")
                 message.createTime = new $util.LongBits(object.createTime.low >>> 0, object.createTime.high >>> 0).toNumber();
-        if (object.user != null) {
-            if (typeof object.user !== "object")
-                throw TypeError(".ConversationInfo.user: object expected");
-            message.user = $root.UserInfo.fromObject(object.user);
-        }
-        if (object.groupName != null)
-            message.groupName = String(object.groupName);
-        if (object.groupAvatar != null)
-            message.groupAvatar = String(object.groupAvatar);
         if (object.unreadCount != null)
             message.unreadCount = object.unreadCount | 0;
         if (object.lastReadMessageId != null)
@@ -693,7 +1288,6 @@ $root.ConversationInfo = (function() {
         if (options.defaults) {
             object.id = "";
             object.type = 0;
-            object.targetId = "";
             if ($util.Long) {
                 var long = new $util.Long(0, 0, false);
                 object.updateTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -709,8 +1303,11 @@ $root.ConversationInfo = (function() {
             object.id = message.id;
         if (message.type != null && message.hasOwnProperty("type"))
             object.type = message.type;
-        if (message.targetId != null && message.hasOwnProperty("targetId"))
-            object.targetId = message.targetId;
+        if (message.targetInfo != null && message.hasOwnProperty("targetInfo")) {
+            object.targetInfo = $root.TargetInfo.toObject(message.targetInfo, options);
+            if (options.oneofs)
+                object._targetInfo = "targetInfo";
+        }
         if (message.lastMsgContent != null && message.hasOwnProperty("lastMsgContent")) {
             object.lastMsgContent = message.lastMsgContent;
             if (options.oneofs)
@@ -734,21 +1331,6 @@ $root.ConversationInfo = (function() {
                 object.createTime = options.longs === String ? String(message.createTime) : message.createTime;
             else
                 object.createTime = options.longs === String ? $util.Long.prototype.toString.call(message.createTime) : options.longs === Number ? new $util.LongBits(message.createTime.low >>> 0, message.createTime.high >>> 0).toNumber() : message.createTime;
-        if (message.user != null && message.hasOwnProperty("user")) {
-            object.user = $root.UserInfo.toObject(message.user, options);
-            if (options.oneofs)
-                object._user = "user";
-        }
-        if (message.groupName != null && message.hasOwnProperty("groupName")) {
-            object.groupName = message.groupName;
-            if (options.oneofs)
-                object._groupName = "groupName";
-        }
-        if (message.groupAvatar != null && message.hasOwnProperty("groupAvatar")) {
-            object.groupAvatar = message.groupAvatar;
-            if (options.oneofs)
-                object._groupAvatar = "groupAvatar";
-        }
         if (message.unreadCount != null && message.hasOwnProperty("unreadCount")) {
             object.unreadCount = message.unreadCount;
             if (options.oneofs)

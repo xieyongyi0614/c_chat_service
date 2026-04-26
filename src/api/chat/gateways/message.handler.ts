@@ -99,43 +99,20 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     const { list, total } = await this.chatService.getUserConversations(userId, page, pageSize);
 
     const encodedList = list.map((c) => {
-      let groupName: string | undefined;
-      let groupAvatar: string | undefined;
-
-      // if (c.type === 1) {
-      //   const targetUser = await this.userService.getUserById(c.targetId);
-      //   if (targetUser) {
-      //     userInfo = UserInfo.create({
-      //       ...targetUser,
-      //       // id: targetUser.id,
-      //       // email: targetUser.email,
-      //       // nickname: targetUser.nickname || undefined,
-      //       // avatarUrl: targetUser.avatarUrl,
-      //       // state: targetUser.state,
-      //       // updateTime: new Date(targetUser.updateTime).getTime(),
-      //     });
-      //   }
-      // } else if (c.type === 2) {
-      //   const group = await this.prisma.group.findUnique({
-      //     where: { id: c.targetId },
-      //     select: { name: true, avatarUrl: true },
-      //   });
-      //   groupName = group?.name;
-      //   groupAvatar = group?.avatarUrl ?? '';
-      // }
-
       return ConversationInfo.create({
         id: c.id,
         type: c.type,
         lastMsgContent: c.lastMsgContent ?? undefined,
         lastMsgTime: c.lastMsgTime ? new Date(c.lastMsgTime).getTime() : undefined,
-        updateTime: new Date(c.updateTime).getTime(),
-        createTime: new Date(c.createTime).getTime(),
+        updateTime: c.updateTime.getTime(),
+        createTime: c.createTime.getTime(),
         unreadCount: c.unreadCount ?? 0,
         lastReadMessageId: c.lastReadMessageId ?? 0,
-        user: c.user,
-        groupName,
-        groupAvatar,
+        targetInfo: {
+          id: c.user?.id,
+          name: c.user?.nickname,
+          avatarUrl: c.user?.avatarUrl,
+        },
       });
     });
 
@@ -152,7 +129,6 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     const response = GetConversationListResponse.encode(
       GetConversationListResponse.create(responseData),
     ).finish();
-    console.log(responseData, 'responseData');
 
     this.sendMessageToClient(client, SOCKET_PROTO_EVENT.getConversationList, response, requestId);
   };
@@ -229,24 +205,25 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     payload?: CreateConversationRequest | null,
     requestId?: string,
   ) => {
-    const userIdA = client.data.user?.id;
-    const userIdB = payload?.targetId;
+    const senderId = client.data.user?.id;
+    const targetId = payload?.targetId;
 
-    if (!userIdA || !userIdB) {
+    if (!senderId || !targetId) {
       return;
     }
 
-    const conversation = await this.chatService.getOrCreatePrivateConversation(userIdA, userIdB);
+    const conversation = await this.chatService.getOrCreatePrivateConversation(senderId, targetId);
 
-    // ⭐ 关键：将参与双方的所有在线 Socket 加入该会话的 Socket.io 房间
-    await this.joinUserToRoom(this.server, this.userSockets, userIdA, conversation.id);
-    await this.joinUserToRoom(this.server, this.userSockets, userIdB, conversation.id);
+    // 将参与双方的所有在线 Socket 加入该会话的 Socket.io 房间
+    await this.joinUserToRoom(this.server, [senderId, targetId], conversation.id);
 
+    // const targetInfo = conversation.participants.find(item=>item.userId === targetId)
     const response = ConversationInfo.encode(
       ConversationInfo.create({
         id: conversation.id,
         type: conversation.type,
         // targetId: conversation.targetId,
+        // targetInfo:{id:targetId,name:}
         lastMsgContent: conversation.lastMsgContent ?? undefined,
         lastMsgTime: conversation.lastMsgTime?.getTime(),
         updateTime: conversation.updateTime.getTime(),
@@ -262,11 +239,12 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
    */
   private handleSendMessage = async (
     client: ChatSocket,
-    payload?: SendMessageRequest | null,
+    payload: SendMessageRequest,
     requestId?: string,
   ) => {
+    const { conversationId, targetId, content } = payload ?? {};
     const senderId = client.data.user?.id;
-    if (!senderId || !payload?.conversationId || !payload?.content) {
+    if (!senderId || (!conversationId && !targetId) || !content) {
       return;
     }
 

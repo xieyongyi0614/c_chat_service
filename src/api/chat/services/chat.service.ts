@@ -17,7 +17,6 @@ export class ChatService {
 
   /**
    * 获取或创建私聊会话
-   * 逻辑参考 AGENTS.md
    */
   async getOrCreatePrivateConversation(userIdA: string, userIdB: string) {
     const conversationId = generatePrivateConversationId(userIdA, userIdB);
@@ -25,9 +24,7 @@ export class ChatService {
     // 1. 查找会话
     let conversation = await this.prisma.conversation.findUnique({
       where: { id: conversationId },
-      include: {
-        participants: true,
-      },
+      include: { participants: true },
     });
 
     // 2. 如果不存在，创建
@@ -63,12 +60,12 @@ export class ChatService {
   /**
    * 获取或创建群聊会话
    */
-  async getOrCreateGroupConversation(groupId: string) {
+  async getOrCreateGroupConversation(targetId: string) {
     // 1. 查找会话
     let conversation = await this.prisma.conversation.findFirst({
       where: {
         type: 2, // 群聊
-        groupId,
+        targetId: targetId,
       },
       include: {
         participants: true,
@@ -80,7 +77,7 @@ export class ChatService {
       conversation = await this.prisma.$transaction(async (tx) => {
         // 校验群组是否存在
         const group = await tx.group.findUnique({
-          where: { id: groupId },
+          where: { id: targetId },
           include: { members: { where: { state: 0 } } },
         });
 
@@ -92,7 +89,7 @@ export class ChatService {
         const newConversation = await tx.conversation.create({
           data: {
             type: 2, // 群聊
-            groupId,
+            targetId: targetId,
           },
         });
 
