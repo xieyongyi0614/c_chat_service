@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../core/database';
 import { ChatService } from './chat.service';
+import { Prisma } from 'generated/prisma/client';
 
 @Injectable()
 export class MessageService {
@@ -11,6 +12,15 @@ export class MessageService {
     private chatService: ChatService,
   ) {}
 
+  async getNextMsgId(tx: Prisma.TransactionClient, conversationId: string) {
+    const seq = await tx.conversation_sequence.upsert({
+      where: { conversationId },
+      update: { lastMsgId: { increment: 1 } },
+      create: { conversationId, lastMsgId: 1 },
+    });
+    return seq.lastMsgId;
+  }
+
   /**
    * 创建并发送消息
    */
@@ -19,45 +29,44 @@ export class MessageService {
     conversationId: string;
     content: string;
     type: number;
+    clientMsgId: string;
   }) {
-    const { senderId, conversationId, content, type } = data;
+    const { senderId, conversationId, content, type, clientMsgId } = data;
 
-    try {
-      const message = await this.prisma.$transaction(async (tx) => {
-        const lastMessage = await tx.messageHistory.findFirst({
-          where: { conversationId },
-          orderBy: { msgId: 'desc' },
-          select: { msgId: true },
-        });
-        const nextMsgId = (lastMessage?.msgId ?? 0) + 1;
-
-        const created = await tx.messageHistory.create({
-          data: {
-            senderId: senderId,
-            conversationId,
-            msgId: nextMsgId,
-            content,
-            type,
-            state: 0,
-          },
-        });
-
-        await tx.conversation.update({
-          where: { id: conversationId },
-          data: {
-            lastMsgContent: content,
-            lastMsgTime: new Date(),
-          },
-        });
-
-        return created;
+    return this.prisma.$transaction(async (tx) => {
+      // 🚀 1️⃣ 防重复（核心）
+      const existing = await tx.message_history.findFirst({
+        where: {
+          conversationId,
+          clientMsgId,
+          senderId,
+        },
       });
 
-      return message;
-    } catch (error) {
-      this.logger.error('发送消息失败', error);
-      throw error;
-    }
+      if (existing) return existing;
+
+      // 🚀 2️⃣ 生成 msgId（你之前的 sequence 方案）
+      // const seq = await tx.conversation_sequence.upsert({
+      //   where: { conversationId },
+      //   update: { lastMsgId: { increment: 1 } },
+      //   create: { conversationId, lastMsgId: 1 },
+      // });
+
+      // const msgId = seq.lastMsgId;
+      const msgId = await this.getNextMsgId(tx, conversationId);
+      // 🚀 3️⃣ 写入消息
+      const created = await tx.message_history.create({
+        data: { senderId, conversationId, msgId, content, type, clientMsgId },
+      });
+
+      // 🚀 4️⃣ 更新会话
+      await tx.conversation.update({
+        where: { id: conversationId },
+        data: { lastMsgContent: content, lastMsgTime: created.createTime },
+      });
+
+      return created;
+    });
   }
 
   /**
@@ -66,7 +75,7 @@ export class MessageService {
   async getConversationMessages(conversationId: string, page: number = 1, pageSize: number = 50) {
     const skip = (page - 1) * pageSize;
     const [messages, total] = await Promise.all([
-      this.prisma.messageHistory.findMany({
+      this.prisma.message_history.findMany({
         where: {
           conversationId: conversationId,
           state: 0,
@@ -77,7 +86,7 @@ export class MessageService {
         skip,
         take: pageSize,
       }),
-      this.prisma.messageHistory.count({
+      this.prisma.message_history.count({
         where: {
           conversationId: conversationId,
           state: 0,
@@ -94,7 +103,7 @@ export class MessageService {
   }
 
   async markConversationAsRead(userId: string, conversationId: string, messageId?: string) {
-    const participant = await this.prisma.conversationParticipant.findUnique({
+    const participant = await this.prisma.conversation_participant.findUnique({
       where: {
         conversationId_userId: {
           conversationId,
@@ -118,7 +127,7 @@ export class MessageService {
 
       // 兼容：如果客户端仍传的是 MessageHistory.id（cuid），先查出对应 msgId
       if (!Number.isNaN(parsedMsgId)) {
-        const target = await this.prisma.messageHistory.findFirst({
+        const target = await this.prisma.message_history.findFirst({
           where: {
             conversationId,
             msgId: parsedMsgId,
@@ -128,7 +137,7 @@ export class MessageService {
         });
         targetMsgId = target?.msgId ?? -1;
       } else {
-        const target = await this.prisma.messageHistory.findFirst({
+        const target = await this.prisma.message_history.findFirst({
           where: {
             id: messageId,
             conversationId,
@@ -143,7 +152,7 @@ export class MessageService {
         throw new Error('消息不存在');
       }
     } else {
-      const target = await this.prisma.messageHistory.findFirst({
+      const target = await this.prisma.message_history.findFirst({
         where: {
           conversationId,
           state: 0,
@@ -158,7 +167,7 @@ export class MessageService {
       targetMsgId = target?.msgId ?? -1;
     }
 
-    await this.prisma.conversationParticipant.update({
+    await this.prisma.conversation_participant.update({
       where: {
         conversationId_userId: {
           conversationId,
@@ -172,7 +181,7 @@ export class MessageService {
 
     const unreadCount =
       targetMsgId >= 0
-        ? await this.prisma.messageHistory.count({
+        ? await this.prisma.message_history.count({
             where: {
               conversationId,
               state: 0,

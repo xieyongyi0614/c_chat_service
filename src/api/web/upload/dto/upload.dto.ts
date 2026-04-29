@@ -31,7 +31,7 @@ export class UploadResponseDto {
   size: number;
 
   @ApiProperty({ description: '文件路径' })
-  path: string;
+  storagePath: string;
 
   @ApiProperty({ description: '文件URL' })
   url: string;

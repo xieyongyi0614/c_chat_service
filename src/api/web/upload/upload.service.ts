@@ -81,10 +81,10 @@ export class UploadService {
 
       const fileHash = await this.calculateFileHash(file.buffer);
 
-      // const existingFile = await this.findExistingFileByHash(fileHash);
-      // if (existingFile) {
-      //   return existingFile;
-      // }
+      const existingFile = await this.findExistingFileByHash(fileHash);
+      if (existingFile) {
+        return existingFile;
+      }
 
       const { filename, fileSize, filePath } = await this.saveFile(file);
 
@@ -95,8 +95,9 @@ export class UploadService {
           filename,
           originalName: file.originalname,
           mimeType: file.mimetype,
+          fileType: 0,
           size: fileSize,
-          path: filePath,
+          storagePath: filePath,
           url: `${this.baseUrl}/${filePath}`,
           alt: uploadDto?.alt,
           description: uploadDto?.description,
@@ -113,11 +114,7 @@ export class UploadService {
   /**
    * 批量文件上传
    */
-  async uploadFiles(
-    files: FileUpload[],
-    uploaderId: string,
-    uploadDto?: UploadFileDto,
-  ): Promise<BatchUploadResponseDto> {
+  async uploadFiles(files: FileUpload[], uploaderId: string): Promise<BatchUploadResponseDto> {
     const results: BatchUploadResponseDto = {
       success: [],
       failed: [],
@@ -128,7 +125,7 @@ export class UploadService {
 
     for (const file of files) {
       try {
-        const result = await this.uploadFile(file, uploaderId, uploadDto);
+        const result = await this.uploadFile(file, uploaderId);
         results.success.push(result);
         results.successCount++;
       } catch (error) {
@@ -169,7 +166,7 @@ export class UploadService {
   //   }
 
   //   const [files, total] = await Promise.all([
-  //     this.prisma.file.findMany({
+  //     this.prisma.media.findMany({
   //       where,
   //       skip,
   //       take: limit,
@@ -184,7 +181,7 @@ export class UploadService {
   //         },
   //       },
   //     }),
-  //     this.prisma.file.count({ where }),
+  //     this.prisma.media.count({ where }),
   //   ]);
 
   //   return {
@@ -207,7 +204,7 @@ export class UploadService {
   //     where.uploaderId = uploaderId;
   //   }
 
-  //   const file = await this.prisma.file.findFirst({ where });
+  //   const file = await this.prisma.media.findFirst({ where });
   //   if (!file) {
   //     throw new BadRequestException('文件不存在');
   //   }
@@ -219,7 +216,7 @@ export class UploadService {
   //     }
 
   //     // 删除数据库记录
-  //     await this.prisma.file.delete({ where: { id: fileId } });
+  //     await this.prisma.media.delete({ where: { id: fileId } });
   //   } catch (error) {
   //     throw new InternalServerErrorException(`文件删除失败: ${error.message}`);
   //   }
@@ -292,9 +289,7 @@ export class UploadService {
    */
   private async findExistingFileByHash(fileHash: string) {
     return await this.prisma.file.findFirst({
-      where: {
-        hash: fileHash,
-      },
+      where: { hash: fileHash },
     });
   }
   private async saveFile(file: FileUpload) {

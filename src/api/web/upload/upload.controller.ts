@@ -32,7 +32,7 @@ import { FileUpload } from './types/upload.types';
 @UseGuards(JwtAuthGuard)
 @Controller('upload')
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) { }
+  constructor(private readonly uploadService: UploadService) {}
 
   @Post('single')
   @ApiOperation({ summary: '单文件上传' })
@@ -57,7 +57,7 @@ export class UploadController {
     @Body() uploadDto: UploadFileDto,
     @CurrentUser('id') userId: string,
   ): Promise<BatchUploadResponseDto> {
-    return this.uploadService.uploadFiles(files, userId, uploadDto);
+    return this.uploadService.uploadFiles(files, userId);
   }
 
   @Post('chunk')
