@@ -78,8 +78,8 @@ export class UsersService {
         email: true,
         nickname: true,
         avatarUrl: true,
-        state: true,
-        updateTime: true,
+        // state: true,
+        // updateTime: true,
       },
     });
   }

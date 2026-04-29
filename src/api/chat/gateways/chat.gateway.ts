@@ -16,12 +16,12 @@ import { ChatService } from '../services/chat.service';
 import { SendMessageDto, JoinRoomDto, LeaveRoomDto, TypingDto } from '../dto/send-message.dto';
 import { AuthService, WsJwtAuthGuard } from 'src/auth';
 import { ChatSocket } from 'src/types/socket.types';
-import { SOCKET_PROTO_EVENT } from 'src/proto/protoMap';
 import { Command, ErrorResult, UserInfo } from 'src/proto';
 import { MessageHandler } from './message.handler';
 import { UsersService } from 'src/api/web/users/users.service';
 import { PrismaService } from 'src/core/database';
 import { SOCKET_ERROR_CODE } from 'src/constants/errorCode';
+import { ServiceToClientEvent } from 'src/proto/protoMap';
 
 @WebSocketGateway({
   namespace: '/chat',
@@ -95,7 +95,7 @@ export class ChatGateway
       // client.emit('message', responseBuffer);
       this.sendMessageToClient(
         client,
-        SOCKET_PROTO_EVENT.getUserInfo,
+        ServiceToClientEvent.getUserInfoResponse,
         UserInfo.encode(UserInfo.create(userInfo)).finish(),
       );
 

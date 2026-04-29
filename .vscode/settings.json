@@ -5,6 +5,7 @@
   ],
   "eslint.run": "onSave",
   "cSpell.words": [
+    "conv",
     "uuidv"
   ] // 或 "onType"，决定何时运行检查
 }

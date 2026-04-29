@@ -1,9 +1,9 @@
 import { Command, ErrorResult } from 'src/proto';
 import {
-  serviceDecodeProtoMap,
-  SOCKET_PROTO_EVENT,
-  ServiceDecodeProtoMapKey,
   ClientDecodeProtoMapKey,
+  serviceDecodeProtoMap,
+  ServiceDecodeProtoMapKey,
+  ServiceToClientEvent,
 } from 'src/proto/protoMap';
 import { ChatSocket } from 'src/types/socket.types';
 import { Server, Socket } from 'socket.io';
@@ -77,7 +77,7 @@ export abstract class MessageHandlerRegistry {
 
     this.sendMessageToClient(
       socketClient,
-      SOCKET_PROTO_EVENT.error,
+      ServiceToClientEvent.error,
       ErrorResult.encode(ErrorResult.create({ errorCode, errorMessage })).finish(),
     );
   }
@@ -87,7 +87,7 @@ export abstract class MessageHandlerRegistry {
    */
   broadcastToRoom(
     roomId: string,
-    event: ServiceDecodeProtoMapKey,
+    event: ClientDecodeProtoMapKey,
     payload: Uint8Array | Uint8Array[],
     senderId?: string,
     exceptSocketId?: string,

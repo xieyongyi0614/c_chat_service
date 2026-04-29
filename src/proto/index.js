@@ -1383,6 +1383,7 @@ $root.SendMessageRequest = (function() {
      * @property {string|null} [content] SendMessageRequest content
      * @property {number|null} [type] SendMessageRequest type
      * @property {string|null} [targetId] SendMessageRequest targetId
+     * @property {string|null} [clientMsgId] SendMessageRequest clientMsgId
      */
 
     /**
@@ -1432,6 +1433,14 @@ $root.SendMessageRequest = (function() {
      */
     SendMessageRequest.prototype.targetId = null;
 
+    /**
+     * SendMessageRequest clientMsgId.
+     * @member {string} clientMsgId
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.clientMsgId = "";
+
     // OneOf field names bound to virtual getters and setters
     var $oneOfFields;
 
@@ -1473,6 +1482,8 @@ $root.SendMessageRequest = (function() {
             writer.uint32(/* id 3, wireType 0 =*/24).int32(message.type);
         if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
             writer.uint32(/* id 4, wireType 2 =*/34).string(message.targetId);
+        if (message.clientMsgId != null && Object.hasOwnProperty.call(message, "clientMsgId"))
+            writer.uint32(/* id 5, wireType 2 =*/42).string(message.clientMsgId);
         return writer;
     };
 
@@ -1525,6 +1536,10 @@ $root.SendMessageRequest = (function() {
                     message.targetId = reader.string();
                     break;
                 }
+            case 5: {
+                    message.clientMsgId = reader.string();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -1575,6 +1590,9 @@ $root.SendMessageRequest = (function() {
             if (!$util.isString(message.targetId))
                 return "targetId: string expected";
         }
+        if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
+            if (!$util.isString(message.clientMsgId))
+                return "clientMsgId: string expected";
         return null;
     };
 
@@ -1598,6 +1616,8 @@ $root.SendMessageRequest = (function() {
             message.type = object.type | 0;
         if (object.targetId != null)
             message.targetId = String(object.targetId);
+        if (object.clientMsgId != null)
+            message.clientMsgId = String(object.clientMsgId);
         return message;
     };
 
@@ -1618,6 +1638,7 @@ $root.SendMessageRequest = (function() {
             object.conversationId = "";
             object.content = "";
             object.type = 0;
+            object.clientMsgId = "";
         }
         if (message.conversationId != null && message.hasOwnProperty("conversationId"))
             object.conversationId = message.conversationId;
@@ -1630,6 +1651,8 @@ $root.SendMessageRequest = (function() {
             if (options.oneofs)
                 object._targetId = "targetId";
         }
+        if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
+            object.clientMsgId = message.clientMsgId;
         return object;
     };
 
@@ -1662,6 +1685,235 @@ $root.SendMessageRequest = (function() {
     return SendMessageRequest;
 })();
 
+$root.AckSendMessage = (function() {
+
+    /**
+     * Properties of an AckSendMessage.
+     * @exports IAckSendMessage
+     * @interface IAckSendMessage
+     * @property {string|null} [clientMsgId] AckSendMessage clientMsgId
+     * @property {string|null} [status] AckSendMessage status
+     */
+
+    /**
+     * Constructs a new AckSendMessage.
+     * @exports AckSendMessage
+     * @classdesc Represents an AckSendMessage.
+     * @implements IAckSendMessage
+     * @constructor
+     * @param {IAckSendMessage=} [properties] Properties to set
+     */
+    function AckSendMessage(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * AckSendMessage clientMsgId.
+     * @member {string} clientMsgId
+     * @memberof AckSendMessage
+     * @instance
+     */
+    AckSendMessage.prototype.clientMsgId = "";
+
+    /**
+     * AckSendMessage status.
+     * @member {string} status
+     * @memberof AckSendMessage
+     * @instance
+     */
+    AckSendMessage.prototype.status = "";
+
+    /**
+     * Creates a new AckSendMessage instance using the specified properties.
+     * @function create
+     * @memberof AckSendMessage
+     * @static
+     * @param {IAckSendMessage=} [properties] Properties to set
+     * @returns {AckSendMessage} AckSendMessage instance
+     */
+    AckSendMessage.create = function create(properties) {
+        return new AckSendMessage(properties);
+    };
+
+    /**
+     * Encodes the specified AckSendMessage message. Does not implicitly {@link AckSendMessage.verify|verify} messages.
+     * @function encode
+     * @memberof AckSendMessage
+     * @static
+     * @param {IAckSendMessage} message AckSendMessage message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    AckSendMessage.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.clientMsgId != null && Object.hasOwnProperty.call(message, "clientMsgId"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.clientMsgId);
+        if (message.status != null && Object.hasOwnProperty.call(message, "status"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.status);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified AckSendMessage message, length delimited. Does not implicitly {@link AckSendMessage.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof AckSendMessage
+     * @static
+     * @param {IAckSendMessage} message AckSendMessage message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    AckSendMessage.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes an AckSendMessage message from the specified reader or buffer.
+     * @function decode
+     * @memberof AckSendMessage
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {AckSendMessage} AckSendMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    AckSendMessage.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.AckSendMessage();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.clientMsgId = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.status = reader.string();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes an AckSendMessage message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof AckSendMessage
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {AckSendMessage} AckSendMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    AckSendMessage.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies an AckSendMessage message.
+     * @function verify
+     * @memberof AckSendMessage
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    AckSendMessage.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
+            if (!$util.isString(message.clientMsgId))
+                return "clientMsgId: string expected";
+        if (message.status != null && message.hasOwnProperty("status"))
+            if (!$util.isString(message.status))
+                return "status: string expected";
+        return null;
+    };
+
+    /**
+     * Creates an AckSendMessage message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof AckSendMessage
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {AckSendMessage} AckSendMessage
+     */
+    AckSendMessage.fromObject = function fromObject(object) {
+        if (object instanceof $root.AckSendMessage)
+            return object;
+        var message = new $root.AckSendMessage();
+        if (object.clientMsgId != null)
+            message.clientMsgId = String(object.clientMsgId);
+        if (object.status != null)
+            message.status = String(object.status);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from an AckSendMessage message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof AckSendMessage
+     * @static
+     * @param {AckSendMessage} message AckSendMessage
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    AckSendMessage.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.clientMsgId = "";
+            object.status = "";
+        }
+        if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
+            object.clientMsgId = message.clientMsgId;
+        if (message.status != null && message.hasOwnProperty("status"))
+            object.status = message.status;
+        return object;
+    };
+
+    /**
+     * Converts this AckSendMessage to JSON.
+     * @function toJSON
+     * @memberof AckSendMessage
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    AckSendMessage.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for AckSendMessage
+     * @function getTypeUrl
+     * @memberof AckSendMessage
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    AckSendMessage.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/AckSendMessage";
+    };
+
+    return AckSendMessage;
+})();
+
 $root.MessageInfo = (function() {
 
     /**
@@ -1677,6 +1929,9 @@ $root.MessageInfo = (function() {
      * @property {number|null} [state] MessageInfo state
      * @property {number|Long|null} [createTime] MessageInfo createTime
      * @property {number|Long|null} [updateTime] MessageInfo updateTime
+     * @property {string|null} [clientMsgId] MessageInfo clientMsgId
+     * @property {string|null} [fileId] MessageInfo fileId
+     * @property {string|null} [mediaGroupId] MessageInfo mediaGroupId
      */
 
     /**
@@ -1767,6 +2022,45 @@ $root.MessageInfo = (function() {
     MessageInfo.prototype.updateTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
     /**
+     * MessageInfo clientMsgId.
+     * @member {string} clientMsgId
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.clientMsgId = "";
+
+    /**
+     * MessageInfo fileId.
+     * @member {string|null|undefined} fileId
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.fileId = null;
+
+    /**
+     * MessageInfo mediaGroupId.
+     * @member {string|null|undefined} mediaGroupId
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.mediaGroupId = null;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MessageInfo.prototype, "_fileId", {
+        get: $util.oneOfGetter($oneOfFields = ["fileId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MessageInfo.prototype, "_mediaGroupId", {
+        get: $util.oneOfGetter($oneOfFields = ["mediaGroupId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
      * Creates a new MessageInfo instance using the specified properties.
      * @function create
      * @memberof MessageInfo
@@ -1808,6 +2102,12 @@ $root.MessageInfo = (function() {
             writer.uint32(/* id 8, wireType 0 =*/64).int64(message.createTime);
         if (message.updateTime != null && Object.hasOwnProperty.call(message, "updateTime"))
             writer.uint32(/* id 9, wireType 0 =*/72).int64(message.updateTime);
+        if (message.clientMsgId != null && Object.hasOwnProperty.call(message, "clientMsgId"))
+            writer.uint32(/* id 10, wireType 2 =*/82).string(message.clientMsgId);
+        if (message.fileId != null && Object.hasOwnProperty.call(message, "fileId"))
+            writer.uint32(/* id 11, wireType 2 =*/90).string(message.fileId);
+        if (message.mediaGroupId != null && Object.hasOwnProperty.call(message, "mediaGroupId"))
+            writer.uint32(/* id 12, wireType 2 =*/98).string(message.mediaGroupId);
         return writer;
     };
 
@@ -1880,6 +2180,18 @@ $root.MessageInfo = (function() {
                     message.updateTime = reader.int64();
                     break;
                 }
+            case 10: {
+                    message.clientMsgId = reader.string();
+                    break;
+                }
+            case 11: {
+                    message.fileId = reader.string();
+                    break;
+                }
+            case 12: {
+                    message.mediaGroupId = reader.string();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -1915,6 +2227,7 @@ $root.MessageInfo = (function() {
     MessageInfo.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        var properties = {};
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isString(message.id))
                 return "id: string expected";
@@ -1942,6 +2255,19 @@ $root.MessageInfo = (function() {
         if (message.updateTime != null && message.hasOwnProperty("updateTime"))
             if (!$util.isInteger(message.updateTime) && !(message.updateTime && $util.isInteger(message.updateTime.low) && $util.isInteger(message.updateTime.high)))
                 return "updateTime: integer|Long expected";
+        if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
+            if (!$util.isString(message.clientMsgId))
+                return "clientMsgId: string expected";
+        if (message.fileId != null && message.hasOwnProperty("fileId")) {
+            properties._fileId = 1;
+            if (!$util.isString(message.fileId))
+                return "fileId: string expected";
+        }
+        if (message.mediaGroupId != null && message.hasOwnProperty("mediaGroupId")) {
+            properties._mediaGroupId = 1;
+            if (!$util.isString(message.mediaGroupId))
+                return "mediaGroupId: string expected";
+        }
         return null;
     };
 
@@ -1989,6 +2315,12 @@ $root.MessageInfo = (function() {
                 message.updateTime = object.updateTime;
             else if (typeof object.updateTime === "object")
                 message.updateTime = new $util.LongBits(object.updateTime.low >>> 0, object.updateTime.high >>> 0).toNumber();
+        if (object.clientMsgId != null)
+            message.clientMsgId = String(object.clientMsgId);
+        if (object.fileId != null)
+            message.fileId = String(object.fileId);
+        if (object.mediaGroupId != null)
+            message.mediaGroupId = String(object.mediaGroupId);
         return message;
     };
 
@@ -2023,6 +2355,7 @@ $root.MessageInfo = (function() {
                 object.updateTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.updateTime = options.longs === String ? "0" : 0;
+            object.clientMsgId = "";
         }
         if (message.id != null && message.hasOwnProperty("id"))
             object.id = message.id;
@@ -2048,6 +2381,18 @@ $root.MessageInfo = (function() {
                 object.updateTime = options.longs === String ? String(message.updateTime) : message.updateTime;
             else
                 object.updateTime = options.longs === String ? $util.Long.prototype.toString.call(message.updateTime) : options.longs === Number ? new $util.LongBits(message.updateTime.low >>> 0, message.updateTime.high >>> 0).toNumber() : message.updateTime;
+        if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
+            object.clientMsgId = message.clientMsgId;
+        if (message.fileId != null && message.hasOwnProperty("fileId")) {
+            object.fileId = message.fileId;
+            if (options.oneofs)
+                object._fileId = "fileId";
+        }
+        if (message.mediaGroupId != null && message.hasOwnProperty("mediaGroupId")) {
+            object.mediaGroupId = message.mediaGroupId;
+            if (options.oneofs)
+                object._mediaGroupId = "mediaGroupId";
+        }
         return object;
     };
 

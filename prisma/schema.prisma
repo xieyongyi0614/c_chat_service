@@ -29,41 +29,14 @@ model User {
   updateTime     DateTime  @updatedAt @map("update_time") // 更新时间
   createTime     DateTime  @default(now()) @map("create_time") // 创建时间
 
-  messages                 MessageHistory[] // 消息记录
+  messages                 Message_history[] // 消息记录
   files                    File[]
   // chatRoomParticipants ChatRoomParticipant[] // 聊天室参与者
-  conversationParticipants ConversationParticipant[] // 群组拥有者 (可选)
-  ownedGroups              Group[]                   @relation("GroupOwner")
+  conversationParticipants Conversation_participant[] // 群组拥有者 (可选)
+  ownedGroups              Group[]                    @relation("GroupOwner")
 
-  friendUser           Friend[]      @relation("friendUser") // 作为用户的好友关系
-  friendFriend         Friend[]      @relation("friendFriend")
-  friendApplyRequester FriendApply[] @relation("friendApplyRequester")
-  friendApplyResponder FriendApply[] @relation("friendApplyResponder")
-  groupMembers         GroupMember[]
+  groupMembers Group_member[]
   // chatRoomParticipants ChatRoomParticipant[]
-}
-
-// ==========================================
-// 2. 附件/文件上传模块
-// ==========================================
-model File {
-  id           String   @id @default(cuid())
-  hash         String
-  filename     String
-  originalName String   @map("original_name")
-  mimeType     String   @map("mime_type")
-  size         Int
-  path         String
-  url          String
-  alt          String?
-  description  String?
-  uploaderId   String   @map("uploader_id")
-  createTime   DateTime @default(now()) @map("create_time")
-  updateTime   DateTime @updatedAt @map("update_time")
-
-  uploader User @relation(fields: [uploaderId], references: [id])
-
-  @@index([uploaderId])
 }
 
 // ==========================================
@@ -81,15 +54,15 @@ model Group {
   createTime DateTime @default(now()) @map("create_time")
 
   // 关系
-  owner   User          @relation("GroupOwner", fields: [ownerId], references: [id])
-  members GroupMember[]
+  owner   User           @relation("GroupOwner", fields: [ownerId], references: [id])
+  members Group_member[]
 
   // 索引：快速查询某人创建的群
   @@index([ownerId])
 }
 
 // 群成员表 (原 ChatRoomParticipant)
-model GroupMember {
+model Group_member {
   id         String   @id @default(cuid())
   groupId    String   @map("group_id")
   userId     String   @map("user_id")
@@ -124,16 +97,21 @@ model Conversation {
   createTime DateTime @default(now()) @map("create_time")
 
   // 关联
-  messages     MessageHistory[]
-  participants ConversationParticipant[]
+  messages     Message_history[]
+  participants Conversation_participant[]
   // 注意：私聊的唯一性建议在代码层控制 (如 A-B 和 B-A 生成同一个 Conversation ID)
 
   // 索引优化
   @@index([type, targetId])
 }
 
+model Conversation_sequence {
+  conversationId String @id @map("conversation_id")
+  lastMsgId      Int    @default(0) @map("last_msg_id")
+}
+
 // 会话参与者表 (用于存储：置顶、免打扰、删除会话等个性化设置)
-model ConversationParticipant {
+model Conversation_participant {
   id             String @id @default(cuid())
   conversationId String @map("conversation_id")
   userId         String @map("user_id")
@@ -143,6 +121,7 @@ model ConversationParticipant {
   remark            String? // 针对该会话的备注（仅对自己生效）
   isDeleted         Boolean @default(false) @map("is_deleted") // 是否删除了该会话（软删除）
   lastReadMessageId Int     @default(0) @map("last_read_message_id") // 当前用户在该会话已读到的最新消息 msgId
+  unreadCount       Int     @default(0) @map("unread_count")
 
   updateTime DateTime @updatedAt @map("update_time")
   createTime DateTime @default(now()) @map("create_time")
@@ -153,55 +132,80 @@ model ConversationParticipant {
   @@unique([conversationId, userId])
 }
 
-model MessageHistory {
+model Message_history {
   id             String @id @default(cuid())
   senderId       String @map("sender_id")
-  // 关联改为 Conversation，不再直接关联 Room
   conversationId String @map("conversation_id")
-  msgId          Int    @map("msg_id") // 会话内自增消息ID（按conversation维度）
+  msgId          Int    @map("msg_id")
 
-  content String @db.Text
-  type    Int // 0:文本, 1:图片, 2:文件, 3:音频, 4:视频
-  state   Int    @default(0) // -2:撤回, -1:删除, 0:正常, 1:编辑
+  clientMsgId String? @map("client_msg_id")
+  content     String? @db.Text
+
+  type Int // 0:文本, 1:图片, 2:视频, 3:文件, 4:音频
+
+  state Int @default(0) // -2:撤回, -1:删除, 0:正常, 1:编辑
+
+  fileId String? @map("file_id")
+
+  mediaGroupId String? @map("media_group_id") // 相册分组
 
   createTime DateTime @default(now()) @map("create_time")
   updateTime DateTime @updatedAt @map("update_time")
 
   user         User         @relation(fields: [senderId], references: [id])
   conversation Conversation @relation(fields: [conversationId], references: [id])
+  file         File?        @relation(fields: [fileId], references: [id])
 
-  // 核心索引：加载聊天记录必须
   @@unique([conversationId, msgId])
-  @@index([conversationId, msgId, createTime])
+  @@unique([conversationId, senderId, clientMsgId])
+  @@index([conversationId, msgId(sort: Desc)])
+  @@index([conversationId, mediaGroupId])
 }
 
-// ==========================================
-// 5. 好友模块
-// ==========================================
-model Friend {
-  id         String   @id @default(cuid())
-  userId     String   @map("user_id")
-  friendId   String   @map("friend_id")
-  state      Int      @default(0) // 0: 正常, 1: 黑名单/拉黑, -1: 删除
-  createTime DateTime @default(now()) @map("create_time")
+// 资源表
+model File {
+  id String @id @default(cuid())
+
+  hash      String  @unique
+  uniqueKey String? @map("unique_key")
+
+  filename     String
+  originalName String @map("original_name")
+
+  mimeType String @map("mime_type")
+
+  fileType Int @map("file_type") // 0图片 1视频 2音频 3文件
+
+  size Int
+
+  //  存储 vs 访问解耦
+  storagePath String @map("storage_path")
+  url         String
+
+  //  缩略图
+  thumbUrl String? @map("thumb_url")
+
+  // 媒体信息
+  width    Int?
+  height   Int?
+  duration Int?
+
+  // 状态
+  status Int @default(1) // 0上传中 1完成 -1失败
+
+  //  引用计数
+  refCount Int @default(0) @map("ref_count")
+
+  alt         String?
+  description String?
+
+  uploaderId String   @map("uploader_id")
   updateTime DateTime @updatedAt @map("update_time")
+  createTime DateTime @default(now()) @map("create_time")
 
-  user   User @relation("friendUser", fields: [userId], references: [id])
-  friend User @relation("friendFriend", fields: [friendId], references: [id])
+  uploader User              @relation(fields: [uploaderId], references: [id])
+  messages Message_history[]
 
-  @@unique([userId, friendId])
-}
-
-model FriendApply {
-  id          String   @id @default(cuid())
-  requesterId String   @map("requester_id")
-  responderId String   @map("responder_id")
-  state       Int      @default(0) // 0: 待审核, 1: 已接受, -1: 已拒绝
-  createTime  DateTime @default(now()) @map("create_time")
-  updateTime  DateTime @updatedAt @map("update_time")
-
-  requester User @relation("friendApplyRequester", fields: [requesterId], references: [id])
-  responder User @relation("friendApplyResponder", fields: [responderId], references: [id])
-
-  @@unique([requesterId, responderId])
+  @@index([uploaderId])
+  @@index([fileType])
 }
