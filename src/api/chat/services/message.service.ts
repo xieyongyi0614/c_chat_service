@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../core/database';
 import { ChatService } from './chat.service';
 import { Prisma } from 'generated/prisma/client';
+import { SendMessageRequest } from 'src/proto';
 
 @Injectable()
 export class MessageService {
@@ -24,14 +25,12 @@ export class MessageService {
   /**
    * 创建并发送消息
    */
-  async sendMessage(data: {
-    senderId: string;
-    conversationId: string;
-    content: string;
-    type: number;
-    clientMsgId: string;
-  }) {
-    const { senderId, conversationId, content, type, clientMsgId } = data;
+  async sendMessage(
+    data: {
+      senderId: string;
+    } & Omit<SendMessageRequest, 'toJSON'>,
+  ) {
+    const { senderId, conversationId, content, type, clientMsgId, fileId } = data;
 
     return this.prisma.$transaction(async (tx) => {
       // 🚀 1️⃣ 防重复（核心）
@@ -56,7 +55,7 @@ export class MessageService {
       const msgId = await this.getNextMsgId(tx, conversationId);
       // 🚀 3️⃣ 写入消息
       const created = await tx.message_history.create({
-        data: { senderId, conversationId, msgId, content, type, clientMsgId },
+        data: { senderId, conversationId, msgId, content, type, clientMsgId, fileId },
       });
 
       // 🚀 4️⃣ 更新会话
@@ -74,7 +73,7 @@ export class MessageService {
    */
   async getConversationMessages(conversationId: string, page: number = 1, pageSize: number = 50) {
     const skip = (page - 1) * pageSize;
-    const [messages, total] = await Promise.all([
+    const [messages] = await Promise.all([
       this.prisma.message_history.findMany({
         where: {
           conversationId: conversationId,
@@ -83,20 +82,17 @@ export class MessageService {
         orderBy: {
           msgId: 'desc',
         },
+        include: {
+          file: true,
+        },
         skip,
         take: pageSize,
-      }),
-      this.prisma.message_history.count({
-        where: {
-          conversationId: conversationId,
-          state: 0,
-        },
       }),
     ]);
 
     return {
       list: messages.reverse(),
-      total,
+      total: 0,
       page,
       pageSize,
     };

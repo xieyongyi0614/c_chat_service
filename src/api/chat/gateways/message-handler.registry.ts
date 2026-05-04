@@ -23,7 +23,6 @@ export abstract class MessageHandlerRegistry {
 
   public dispatch(command: Command, client: ChatSocket) {
     const event = command.event as ServiceDecodeProtoMapKey;
-    console.log(`收到消息：Event=${command.event}`);
     const handler = this.handlers.get(event);
 
     if (!handler) {
