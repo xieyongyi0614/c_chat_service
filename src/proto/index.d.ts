@@ -1519,6 +1519,109 @@ export class ReadMessageResponse implements IReadMessageResponse {
     public static getTypeUrl(typeUrlPrefix?: string): string;
 }
 
+/** Properties of a SendFileUploadComplete. */
+export interface ISendFileUploadComplete {
+
+    /** SendFileUploadComplete uploadId */
+    uploadId?: (string|null);
+
+    /** SendFileUploadComplete fileId */
+    fileId?: (string|null);
+}
+
+/** Represents a SendFileUploadComplete. */
+export class SendFileUploadComplete implements ISendFileUploadComplete {
+
+    /**
+     * Constructs a new SendFileUploadComplete.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISendFileUploadComplete);
+
+    /** SendFileUploadComplete uploadId. */
+    public uploadId: string;
+
+    /** SendFileUploadComplete fileId. */
+    public fileId: string;
+
+    /**
+     * Creates a new SendFileUploadComplete instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns SendFileUploadComplete instance
+     */
+    public static create(properties?: ISendFileUploadComplete): SendFileUploadComplete;
+
+    /**
+     * Encodes the specified SendFileUploadComplete message. Does not implicitly {@link SendFileUploadComplete.verify|verify} messages.
+     * @param message SendFileUploadComplete message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISendFileUploadComplete, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified SendFileUploadComplete message, length delimited. Does not implicitly {@link SendFileUploadComplete.verify|verify} messages.
+     * @param message SendFileUploadComplete message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ISendFileUploadComplete, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a SendFileUploadComplete message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns SendFileUploadComplete
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): SendFileUploadComplete;
+
+    /**
+     * Decodes a SendFileUploadComplete message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns SendFileUploadComplete
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): SendFileUploadComplete;
+
+    /**
+     * Verifies a SendFileUploadComplete message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a SendFileUploadComplete message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns SendFileUploadComplete
+     */
+    public static fromObject(object: { [k: string]: any }): SendFileUploadComplete;
+
+    /**
+     * Creates a plain object from a SendFileUploadComplete message. Also converts values to other types if specified.
+     * @param message SendFileUploadComplete
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: SendFileUploadComplete, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this SendFileUploadComplete to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for SendFileUploadComplete
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
 /** Namespace Common. */
 export namespace Common {
 

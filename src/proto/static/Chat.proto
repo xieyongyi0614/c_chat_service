@@ -50,7 +50,7 @@ message SendMessageRequest {
 }
 message AckSendMessage{
   string clientMsgId = 1;
-  string status = 2;
+  string status = 2; 
 }
 
 // 消息信息
@@ -105,4 +105,12 @@ message ReadMessageResponse {
   string conversation_id = 1;
   optional string message_id = 2;
   int32 unread_count = 3;
+}
+
+
+
+// 发送附件消息，文件上传完成
+message SendFileUploadComplete{
+  string uploadId = 1;
+  string fileId = 2;
 }
