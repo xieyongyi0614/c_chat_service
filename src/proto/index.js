@@ -4019,6 +4019,235 @@ $root.ReadMessageResponse = (function() {
     return ReadMessageResponse;
 })();
 
+$root.SendFileUploadComplete = (function() {
+
+    /**
+     * Properties of a SendFileUploadComplete.
+     * @exports ISendFileUploadComplete
+     * @interface ISendFileUploadComplete
+     * @property {string|null} [uploadId] SendFileUploadComplete uploadId
+     * @property {string|null} [fileId] SendFileUploadComplete fileId
+     */
+
+    /**
+     * Constructs a new SendFileUploadComplete.
+     * @exports SendFileUploadComplete
+     * @classdesc Represents a SendFileUploadComplete.
+     * @implements ISendFileUploadComplete
+     * @constructor
+     * @param {ISendFileUploadComplete=} [properties] Properties to set
+     */
+    function SendFileUploadComplete(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * SendFileUploadComplete uploadId.
+     * @member {string} uploadId
+     * @memberof SendFileUploadComplete
+     * @instance
+     */
+    SendFileUploadComplete.prototype.uploadId = "";
+
+    /**
+     * SendFileUploadComplete fileId.
+     * @member {string} fileId
+     * @memberof SendFileUploadComplete
+     * @instance
+     */
+    SendFileUploadComplete.prototype.fileId = "";
+
+    /**
+     * Creates a new SendFileUploadComplete instance using the specified properties.
+     * @function create
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {ISendFileUploadComplete=} [properties] Properties to set
+     * @returns {SendFileUploadComplete} SendFileUploadComplete instance
+     */
+    SendFileUploadComplete.create = function create(properties) {
+        return new SendFileUploadComplete(properties);
+    };
+
+    /**
+     * Encodes the specified SendFileUploadComplete message. Does not implicitly {@link SendFileUploadComplete.verify|verify} messages.
+     * @function encode
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {ISendFileUploadComplete} message SendFileUploadComplete message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    SendFileUploadComplete.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.uploadId != null && Object.hasOwnProperty.call(message, "uploadId"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.uploadId);
+        if (message.fileId != null && Object.hasOwnProperty.call(message, "fileId"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.fileId);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified SendFileUploadComplete message, length delimited. Does not implicitly {@link SendFileUploadComplete.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {ISendFileUploadComplete} message SendFileUploadComplete message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    SendFileUploadComplete.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a SendFileUploadComplete message from the specified reader or buffer.
+     * @function decode
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {SendFileUploadComplete} SendFileUploadComplete
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    SendFileUploadComplete.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.SendFileUploadComplete();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.uploadId = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.fileId = reader.string();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a SendFileUploadComplete message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {SendFileUploadComplete} SendFileUploadComplete
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    SendFileUploadComplete.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a SendFileUploadComplete message.
+     * @function verify
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    SendFileUploadComplete.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.uploadId != null && message.hasOwnProperty("uploadId"))
+            if (!$util.isString(message.uploadId))
+                return "uploadId: string expected";
+        if (message.fileId != null && message.hasOwnProperty("fileId"))
+            if (!$util.isString(message.fileId))
+                return "fileId: string expected";
+        return null;
+    };
+
+    /**
+     * Creates a SendFileUploadComplete message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {SendFileUploadComplete} SendFileUploadComplete
+     */
+    SendFileUploadComplete.fromObject = function fromObject(object) {
+        if (object instanceof $root.SendFileUploadComplete)
+            return object;
+        var message = new $root.SendFileUploadComplete();
+        if (object.uploadId != null)
+            message.uploadId = String(object.uploadId);
+        if (object.fileId != null)
+            message.fileId = String(object.fileId);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a SendFileUploadComplete message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {SendFileUploadComplete} message SendFileUploadComplete
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    SendFileUploadComplete.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.uploadId = "";
+            object.fileId = "";
+        }
+        if (message.uploadId != null && message.hasOwnProperty("uploadId"))
+            object.uploadId = message.uploadId;
+        if (message.fileId != null && message.hasOwnProperty("fileId"))
+            object.fileId = message.fileId;
+        return object;
+    };
+
+    /**
+     * Converts this SendFileUploadComplete to JSON.
+     * @function toJSON
+     * @memberof SendFileUploadComplete
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    SendFileUploadComplete.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for SendFileUploadComplete
+     * @function getTypeUrl
+     * @memberof SendFileUploadComplete
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    SendFileUploadComplete.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/SendFileUploadComplete";
+    };
+
+    return SendFileUploadComplete;
+})();
+
 $root.Common = (function() {
 
     /**

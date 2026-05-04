@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ChatModule } from 'src/api/chat/chat.module';
 import { BullModule } from '@nestjs/bull';
 import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
@@ -13,6 +14,7 @@ import { FileService } from './services/file.service';
     BullModule.registerQueue({
       name: 'upload',
     }),
+    ChatModule,
   ],
   controllers: [UploadController],
   providers: [

@@ -53,9 +53,14 @@ export class MessageService {
 
       // const msgId = seq.lastMsgId;
       const msgId = await this.getNextMsgId(tx, conversationId);
+      let fileUrl = '';
+      if (fileId) {
+        const file = await tx.file.findFirst({ where: { id: fileId }, select: { url: true } });
+        fileUrl = file?.url ?? '';
+      }
       // 🚀 3️⃣ 写入消息
       const created = await tx.message_history.create({
-        data: { senderId, conversationId, msgId, content, type, clientMsgId, fileId },
+        data: { senderId, conversationId, msgId, content, type, clientMsgId, fileId, fileUrl },
       });
 
       // 🚀 4️⃣ 更新会话
