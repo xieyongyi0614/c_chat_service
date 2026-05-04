@@ -157,6 +157,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     const encodedList = list.map((m) =>
       MessageInfo.create({
         ...m,
+        fileUrl: m.file?.url,
         createTime: m.createTime.getTime(),
         updateTime: m.updateTime.getTime(),
       }),
@@ -416,10 +417,18 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
   ) => {
     const senderId = client.data.user?.id;
 
-    const { targetId, content, type = 0, clientMsgId } = payload || {};
+    const { targetId, content, fileId, type = 0, clientMsgId, mediaGroupId } = payload || {};
 
     let conversationId = payload?.conversationId;
-    if (!senderId || !content || !clientMsgId) return;
+    if (!senderId || (!content && !fileId) || !clientMsgId) {
+      this.sendMessageToClient(
+        client,
+        ServiceToClientEvent.ackSendMessage,
+        AckSendMessage.encode(AckSendMessage.create({ clientMsgId, status: '' })).finish(),
+        requestId,
+      );
+      return;
+    }
 
     // 🚀 1️⃣ 先 ACK（立即返回）
 
@@ -443,7 +452,9 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     const message = await this.messageService.sendMessage({
       senderId,
       conversationId,
-      content,
+      content: content ?? '',
+      fileId,
+      mediaGroupId,
       type,
       clientMsgId,
     });

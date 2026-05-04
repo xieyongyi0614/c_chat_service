@@ -30,7 +30,6 @@ model User {
   createTime     DateTime  @default(now()) @map("create_time") // 创建时间
 
   messages                 Message_history[] // 消息记录
-  files                    File[]
   // chatRoomParticipants ChatRoomParticipant[] // 聊天室参与者
   conversationParticipants Conversation_participant[] // 群组拥有者 (可选)
   ownedGroups              Group[]                    @relation("GroupOwner")
@@ -146,15 +145,17 @@ model Message_history {
   state Int @default(0) // -2:撤回, -1:删除, 0:正常, 1:编辑
 
   fileId String? @map("file_id")
+  file   File?   @relation(fields: [fileId], references: [id])
 
   mediaGroupId String? @map("media_group_id") // 相册分组
+  fileUrl      String? @map("file_url") // 小图 / 可直接展示
+  thumbUrl     String? @map("thumb_url") // 缩略图
 
   createTime DateTime @default(now()) @map("create_time")
   updateTime DateTime @updatedAt @map("update_time")
 
   user         User         @relation(fields: [senderId], references: [id])
   conversation Conversation @relation(fields: [conversationId], references: [id])
-  file         File?        @relation(fields: [fileId], references: [id])
 
   @@unique([conversationId, msgId])
   @@unique([conversationId, senderId, clientMsgId])
@@ -163,49 +164,92 @@ model Message_history {
 }
 
 // 资源表
+// model File {
+//   id String @id @default(cuid())
+
+//   hash        String  @unique
+//   fingerprint String?
+
+//   filename     String
+//   originalName String @map("original_name")
+
+//   mimeType String @map("mime_type")
+
+//   fileType Int @map("file_type") // 0图片 1视频 2音频 3文件
+
+//   size Int
+
+//   //  存储 vs 访问解耦
+//   storagePath String @map("storage_path")
+//   url         String
+
+//   //  缩略图
+//   thumbUrl String? @map("thumb_url")
+
+//   // 媒体信息
+//   width    Int?
+//   height   Int?
+//   duration Int?
+
+//   // 状态
+//   status Int @default(0) // 0上传中 1完成 -1失败
+
+//   //  引用计数
+//   refCount Int @default(0) @map("ref_count")
+
+//   alt         String?
+//   description String?
+
+//   uploaderId String   @map("uploader_id")
+//   updateTime DateTime @updatedAt @map("update_time")
+//   createTime DateTime @default(now()) @map("create_time")
+
+//   uploader User              @relation(fields: [uploaderId], references: [id])
+//   messages Message_history[]
+
+//   @@unique([hash, size])
+//   @@index([fingerprint, size])
+//   @@index([uploaderId])
+//   @@index([fileType])
+// }
+
+model Upload_session {
+  id            String @id @default(cuid())
+  fileName      String
+  fileHash      String
+  fileSize      BigInt
+  chunkSize     Int
+  totalChunks   Int
+  uploadedCount Int    @default(0)
+
+  status Int // 0 waiting / 1 uploading / 2 merging / 3 success / -1 fail
+
+  uploaderId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Upload_chunk {
+  id         String  @id @default(cuid())
+  uploadId   String
+  chunkIndex Int
+  chunkHash  String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([uploadId, chunkIndex])
+}
+
 model File {
-  id String @id @default(cuid())
+  id       String @id @default(cuid())
+  fileName String
+  fileHash String @unique
+  size     BigInt
+  url      String
 
-  hash      String  @unique
-  uniqueKey String? @map("unique_key")
+  uploaderId       String
+  createdAt        DateTime          @default(now())
+  messageHistories Message_history[]
 
-  filename     String
-  originalName String @map("original_name")
-
-  mimeType String @map("mime_type")
-
-  fileType Int @map("file_type") // 0图片 1视频 2音频 3文件
-
-  size Int
-
-  //  存储 vs 访问解耦
-  storagePath String @map("storage_path")
-  url         String
-
-  //  缩略图
-  thumbUrl String? @map("thumb_url")
-
-  // 媒体信息
-  width    Int?
-  height   Int?
-  duration Int?
-
-  // 状态
-  status Int @default(1) // 0上传中 1完成 -1失败
-
-  //  引用计数
-  refCount Int @default(0) @map("ref_count")
-
-  alt         String?
-  description String?
-
-  uploaderId String   @map("uploader_id")
-  updateTime DateTime @updatedAt @map("update_time")
-  createTime DateTime @default(now()) @map("create_time")
-
-  uploader User              @relation(fields: [uploaderId], references: [id])
-  messages Message_history[]
-
-  @@index([uploaderId])
-  @@index([fileType])
+  @@index([fileHash, size])
 }

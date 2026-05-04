@@ -507,6 +507,12 @@ export interface ISendMessageRequest {
 
     /** SendMessageRequest clientMsgId */
     clientMsgId?: (string|null);
+
+    /** SendMessageRequest mediaGroupId */
+    mediaGroupId?: (string|null);
+
+    /** SendMessageRequest fileId */
+    fileId?: (string|null);
 }
 
 /** Represents a SendMessageRequest. */
@@ -532,6 +538,12 @@ export class SendMessageRequest implements ISendMessageRequest {
 
     /** SendMessageRequest clientMsgId. */
     public clientMsgId: string;
+
+    /** SendMessageRequest mediaGroupId. */
+    public mediaGroupId?: (string|null);
+
+    /** SendMessageRequest fileId. */
+    public fileId?: (string|null);
 
     /**
      * Creates a new SendMessageRequest instance using the specified properties.
@@ -752,6 +764,12 @@ export interface IMessageInfo {
 
     /** MessageInfo mediaGroupId */
     mediaGroupId?: (string|null);
+
+    /** MessageInfo fileUrl */
+    fileUrl?: (string|null);
+
+    /** MessageInfo thumbUrl */
+    thumbUrl?: (string|null);
 }
 
 /** Represents a MessageInfo. */
@@ -798,6 +816,12 @@ export class MessageInfo implements IMessageInfo {
 
     /** MessageInfo mediaGroupId. */
     public mediaGroupId?: (string|null);
+
+    /** MessageInfo fileUrl. */
+    public fileUrl?: (string|null);
+
+    /** MessageInfo thumbUrl. */
+    public thumbUrl?: (string|null);
 
     /**
      * Creates a new MessageInfo instance using the specified properties.

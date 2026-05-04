@@ -1384,6 +1384,8 @@ $root.SendMessageRequest = (function() {
      * @property {number|null} [type] SendMessageRequest type
      * @property {string|null} [targetId] SendMessageRequest targetId
      * @property {string|null} [clientMsgId] SendMessageRequest clientMsgId
+     * @property {string|null} [mediaGroupId] SendMessageRequest mediaGroupId
+     * @property {string|null} [fileId] SendMessageRequest fileId
      */
 
     /**
@@ -1441,12 +1443,40 @@ $root.SendMessageRequest = (function() {
      */
     SendMessageRequest.prototype.clientMsgId = "";
 
+    /**
+     * SendMessageRequest mediaGroupId.
+     * @member {string|null|undefined} mediaGroupId
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.mediaGroupId = null;
+
+    /**
+     * SendMessageRequest fileId.
+     * @member {string|null|undefined} fileId
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.fileId = null;
+
     // OneOf field names bound to virtual getters and setters
     var $oneOfFields;
 
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(SendMessageRequest.prototype, "_targetId", {
         get: $util.oneOfGetter($oneOfFields = ["targetId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(SendMessageRequest.prototype, "_mediaGroupId", {
+        get: $util.oneOfGetter($oneOfFields = ["mediaGroupId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(SendMessageRequest.prototype, "_fileId", {
+        get: $util.oneOfGetter($oneOfFields = ["fileId"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -1484,6 +1514,10 @@ $root.SendMessageRequest = (function() {
             writer.uint32(/* id 4, wireType 2 =*/34).string(message.targetId);
         if (message.clientMsgId != null && Object.hasOwnProperty.call(message, "clientMsgId"))
             writer.uint32(/* id 5, wireType 2 =*/42).string(message.clientMsgId);
+        if (message.mediaGroupId != null && Object.hasOwnProperty.call(message, "mediaGroupId"))
+            writer.uint32(/* id 6, wireType 2 =*/50).string(message.mediaGroupId);
+        if (message.fileId != null && Object.hasOwnProperty.call(message, "fileId"))
+            writer.uint32(/* id 7, wireType 2 =*/58).string(message.fileId);
         return writer;
     };
 
@@ -1540,6 +1574,14 @@ $root.SendMessageRequest = (function() {
                     message.clientMsgId = reader.string();
                     break;
                 }
+            case 6: {
+                    message.mediaGroupId = reader.string();
+                    break;
+                }
+            case 7: {
+                    message.fileId = reader.string();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -1593,6 +1635,16 @@ $root.SendMessageRequest = (function() {
         if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
             if (!$util.isString(message.clientMsgId))
                 return "clientMsgId: string expected";
+        if (message.mediaGroupId != null && message.hasOwnProperty("mediaGroupId")) {
+            properties._mediaGroupId = 1;
+            if (!$util.isString(message.mediaGroupId))
+                return "mediaGroupId: string expected";
+        }
+        if (message.fileId != null && message.hasOwnProperty("fileId")) {
+            properties._fileId = 1;
+            if (!$util.isString(message.fileId))
+                return "fileId: string expected";
+        }
         return null;
     };
 
@@ -1618,6 +1670,10 @@ $root.SendMessageRequest = (function() {
             message.targetId = String(object.targetId);
         if (object.clientMsgId != null)
             message.clientMsgId = String(object.clientMsgId);
+        if (object.mediaGroupId != null)
+            message.mediaGroupId = String(object.mediaGroupId);
+        if (object.fileId != null)
+            message.fileId = String(object.fileId);
         return message;
     };
 
@@ -1653,6 +1709,16 @@ $root.SendMessageRequest = (function() {
         }
         if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
             object.clientMsgId = message.clientMsgId;
+        if (message.mediaGroupId != null && message.hasOwnProperty("mediaGroupId")) {
+            object.mediaGroupId = message.mediaGroupId;
+            if (options.oneofs)
+                object._mediaGroupId = "mediaGroupId";
+        }
+        if (message.fileId != null && message.hasOwnProperty("fileId")) {
+            object.fileId = message.fileId;
+            if (options.oneofs)
+                object._fileId = "fileId";
+        }
         return object;
     };
 
@@ -1932,6 +1998,8 @@ $root.MessageInfo = (function() {
      * @property {string|null} [clientMsgId] MessageInfo clientMsgId
      * @property {string|null} [fileId] MessageInfo fileId
      * @property {string|null} [mediaGroupId] MessageInfo mediaGroupId
+     * @property {string|null} [fileUrl] MessageInfo fileUrl
+     * @property {string|null} [thumbUrl] MessageInfo thumbUrl
      */
 
     /**
@@ -2045,6 +2113,22 @@ $root.MessageInfo = (function() {
      */
     MessageInfo.prototype.mediaGroupId = null;
 
+    /**
+     * MessageInfo fileUrl.
+     * @member {string|null|undefined} fileUrl
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.fileUrl = null;
+
+    /**
+     * MessageInfo thumbUrl.
+     * @member {string|null|undefined} thumbUrl
+     * @memberof MessageInfo
+     * @instance
+     */
+    MessageInfo.prototype.thumbUrl = null;
+
     // OneOf field names bound to virtual getters and setters
     var $oneOfFields;
 
@@ -2057,6 +2141,18 @@ $root.MessageInfo = (function() {
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(MessageInfo.prototype, "_mediaGroupId", {
         get: $util.oneOfGetter($oneOfFields = ["mediaGroupId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MessageInfo.prototype, "_fileUrl", {
+        get: $util.oneOfGetter($oneOfFields = ["fileUrl"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MessageInfo.prototype, "_thumbUrl", {
+        get: $util.oneOfGetter($oneOfFields = ["thumbUrl"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -2108,6 +2204,10 @@ $root.MessageInfo = (function() {
             writer.uint32(/* id 11, wireType 2 =*/90).string(message.fileId);
         if (message.mediaGroupId != null && Object.hasOwnProperty.call(message, "mediaGroupId"))
             writer.uint32(/* id 12, wireType 2 =*/98).string(message.mediaGroupId);
+        if (message.fileUrl != null && Object.hasOwnProperty.call(message, "fileUrl"))
+            writer.uint32(/* id 13, wireType 2 =*/106).string(message.fileUrl);
+        if (message.thumbUrl != null && Object.hasOwnProperty.call(message, "thumbUrl"))
+            writer.uint32(/* id 14, wireType 2 =*/114).string(message.thumbUrl);
         return writer;
     };
 
@@ -2192,6 +2292,14 @@ $root.MessageInfo = (function() {
                     message.mediaGroupId = reader.string();
                     break;
                 }
+            case 13: {
+                    message.fileUrl = reader.string();
+                    break;
+                }
+            case 14: {
+                    message.thumbUrl = reader.string();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -2268,6 +2376,16 @@ $root.MessageInfo = (function() {
             if (!$util.isString(message.mediaGroupId))
                 return "mediaGroupId: string expected";
         }
+        if (message.fileUrl != null && message.hasOwnProperty("fileUrl")) {
+            properties._fileUrl = 1;
+            if (!$util.isString(message.fileUrl))
+                return "fileUrl: string expected";
+        }
+        if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
+            properties._thumbUrl = 1;
+            if (!$util.isString(message.thumbUrl))
+                return "thumbUrl: string expected";
+        }
         return null;
     };
 
@@ -2321,6 +2439,10 @@ $root.MessageInfo = (function() {
             message.fileId = String(object.fileId);
         if (object.mediaGroupId != null)
             message.mediaGroupId = String(object.mediaGroupId);
+        if (object.fileUrl != null)
+            message.fileUrl = String(object.fileUrl);
+        if (object.thumbUrl != null)
+            message.thumbUrl = String(object.thumbUrl);
         return message;
     };
 
@@ -2392,6 +2514,16 @@ $root.MessageInfo = (function() {
             object.mediaGroupId = message.mediaGroupId;
             if (options.oneofs)
                 object._mediaGroupId = "mediaGroupId";
+        }
+        if (message.fileUrl != null && message.hasOwnProperty("fileUrl")) {
+            object.fileUrl = message.fileUrl;
+            if (options.oneofs)
+                object._fileUrl = "fileUrl";
+        }
+        if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
+            object.thumbUrl = message.thumbUrl;
+            if (options.oneofs)
+                object._thumbUrl = "thumbUrl";
         }
         return object;
     };
