@@ -21,7 +21,12 @@ export class MergeService {
     await this.session.setMerging(uploadId);
 
     const chunkDir = path.join(this.base, 'chunked', uploadId);
-    const finalPath = path.join(this.base, `${uploadId}_${s.fileName}`);
+
+    const date = s?.createdAt ? new Date(s.createdAt) : new Date();
+    const dayFolder = date.toISOString().slice(0, 10); // YYYY-MM-DD
+    const finalDir = path.join(this.base, dayFolder);
+    await fs.ensureDir(finalDir);
+    const finalPath = path.join(finalDir, `${uploadId}`);
 
     const write = fs.createWriteStream(finalPath);
 
@@ -45,7 +50,7 @@ export class MergeService {
         fileName: s.fileName,
         fileHash: s.fileHash,
         size: BigInt(stat.size),
-        url: `/uploads/${path.basename(finalPath)}`,
+        url: `/uploads/${dayFolder}/${path.basename(finalPath)}`,
         uploaderId: s.uploaderId,
       },
       update: {},

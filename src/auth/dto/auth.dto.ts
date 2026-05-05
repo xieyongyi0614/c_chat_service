@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
@@ -31,16 +31,11 @@ export class RegisterDto {
   phone?: string;
 
   @IsOptional()
-  @Transform(({ value }) => {
-    if (value === undefined || value === null || value === '') {
-      return 2;
-    }
-    return Number(value);
-  })
+  @Type(() => Number)
   @IsNumber({}, { message: '性别必须是数字' })
   @Min(0, { message: '性别值无效' })
   @Max(2, { message: '性别值无效' })
-  gender?: number; // 0-女, 1-男, 2-其他
+  gender?: number = 2;
 }
 
 export class LoginDto {

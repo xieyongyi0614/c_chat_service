@@ -11,7 +11,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-    private readonly configService: MyConfigService
+    private readonly configService: MyConfigService,
   ) {}
 
   @Post('sign-up')
@@ -20,7 +20,7 @@ export class AuthController {
   @ApiResponse({
     status: 201,
     description: '注册成功',
-    type: AuthResponseDto
+    type: AuthResponseDto,
   })
   @ApiResponse({ status: 409, description: '邮箱或手机号已被注册' })
   async register(@Body() registerDto: RegisterDto): Promise<AuthResponseDto> {
@@ -33,7 +33,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: '登录成功',
-    type: AuthResponseDto
+    type: AuthResponseDto,
   })
   @ApiResponse({ status: 401, description: '邮箱或密码错误' })
   async login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
