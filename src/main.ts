@@ -19,7 +19,7 @@ async function bootstrap() {
   // app.enableCors();
   app.useStaticAssets(join(process.cwd(), 'uploads'), { prefix: '/uploads' });
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const port = process.env.PORT || 3001;
 
   // Swagger 文档配置
