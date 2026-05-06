@@ -26,7 +26,9 @@ export class MergeService {
     const dayFolder = date.toISOString().slice(0, 10); // YYYY-MM-DD
     const finalDir = path.join(this.base, dayFolder);
     await fs.ensureDir(finalDir);
-    const finalPath = path.join(finalDir, `${uploadId}`);
+
+    const ext = path.extname(s.fileName) ?? '';
+    const finalPath = path.join(finalDir, `${uploadId}${ext}`);
 
     const write = fs.createWriteStream(finalPath);
 
