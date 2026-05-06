@@ -9,6 +9,7 @@
 - Node.js v24.7.0
 - pnpm v9.0.0
 - mysql 8.0
+- redis 7-alpine
 
 #### 启动
 

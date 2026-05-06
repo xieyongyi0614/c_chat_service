@@ -1,19 +1,21 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../core/database';
 import { RegisterDto, LoginDto, AuthResponseDto } from '.';
 import * as bcrypt from 'bcryptjs';
 import { Socket } from 'socket.io';
 import { WsException } from '@nestjs/websockets';
-import { MyConfigService } from 'src/config';
+import { jwtConfig } from 'src/config';
 import { AuthTypes } from 'src/types/api/users-types';
+import { ConfigType } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-    private readonly configService: MyConfigService,
+    @Inject(jwtConfig.KEY)
+    private readonly jwt: ConfigType<typeof jwtConfig>,
   ) {}
 
   /**
@@ -124,7 +126,7 @@ export class AuthService {
 
     try {
       const payload = await this.jwtService.verifyAsync<AuthTypes.JWTPayload>(auth.token, {
-        secret: this.configService.jwtSecret,
+        secret: this.jwt.secret,
       });
 
       if (!payload?.id) {
