@@ -2,11 +2,11 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 import { ChatModule } from '../api/chat/chat.module';
 import { UploadModule } from '../modules/upload/upload.module';
-import { APP_FILTER, APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import {
   CoreModule,
   HttpExceptionFilter,
@@ -16,19 +16,26 @@ import {
 import { CommonModule, RequestContextMiddleware } from '../common';
 import { AdminModule } from 'src/api/web/admin.module';
 import { BullModule } from '@nestjs/bull';
+import { AppConfigModule, redisConfig } from '../config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV}`,
-      isGlobal: true,
-    }),
-    BullModule.forRoot({
-      redis: {
-        host: '127.0.0.1',
-        port: 6379,
-        password: 'redis123456',
-      },
+    AppConfigModule,
+    BullModule.forRootAsync({
+      inject: [redisConfig.KEY],
+      useFactory: (redis: ConfigType<typeof redisConfig>) => ({
+        redis: {
+          host: redis.host,
+          port: redis.port,
+          password: redis.password,
+        },
+        defaultJobOptions: {
+          attempts: 3,
+          backoff: 2000,
+          removeOnComplete: true,
+          removeOnFail: false,
+        },
+      }),
     }),
 
     CoreModule,
