@@ -23,6 +23,25 @@ export class MessageService {
   }
 
   /**
+   * 根据消息类型生成会话列表显示的内容
+   * 0:文本, 1:图片, 2:视频, 3:文件, 4:音频
+   */
+  private generateLastMsgContent(content: string | null, type: number): string {
+    if (content && content.trim()) {
+      return content;
+    }
+
+    const typeMap: Record<number, string> = {
+      0: '',
+      1: '[图片]',
+      2: '[视频]',
+      3: '[文件]',
+      4: '[音频]',
+    };
+    return typeMap[type] || '[消息]';
+  }
+
+  /**
    * 创建并发送消息
    */
   async sendMessage(
@@ -33,7 +52,6 @@ export class MessageService {
     const { senderId, conversationId, content, type, clientMsgId, fileId } = data;
 
     return this.prisma.$transaction(async (tx) => {
-      // 🚀 1️⃣ 防重复（核心）
       const existing = await tx.message_history.findFirst({
         where: {
           conversationId,
@@ -44,14 +62,6 @@ export class MessageService {
 
       if (existing) return existing;
 
-      // 🚀 2️⃣ 生成 msgId（你之前的 sequence 方案）
-      // const seq = await tx.conversation_sequence.upsert({
-      //   where: { conversationId },
-      //   update: { lastMsgId: { increment: 1 } },
-      //   create: { conversationId, lastMsgId: 1 },
-      // });
-
-      // const msgId = seq.lastMsgId;
       const msgId = await this.getNextMsgId(tx, conversationId);
       let fileUrl = '';
       if (fileId) {
@@ -63,10 +73,11 @@ export class MessageService {
         data: { senderId, conversationId, msgId, content, type, clientMsgId, fileId, fileUrl },
       });
 
-      // 🚀 4️⃣ 更新会话
+      // 🚀 4️⃣ 更新会话 - 根据消息类型生成合适的显示内容
+      const lastMsgContent = this.generateLastMsgContent(content, type);
       await tx.conversation.update({
         where: { id: conversationId },
-        data: { lastMsgContent: content, lastMsgTime: created.createTime },
+        data: { lastMsgContent, lastMsgTime: created.createTime },
       });
 
       return created;
