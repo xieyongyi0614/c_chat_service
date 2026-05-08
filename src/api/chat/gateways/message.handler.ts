@@ -157,7 +157,8 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     const encodedList = list.map((m) =>
       MessageInfo.create({
         ...m,
-        fileUrl: m.file?.url,
+        mediaGroupId: m.mediaGroupId ?? '',
+        // fileUrl: m.file?.url,
         createTime: m.createTime.getTime(),
         updateTime: m.updateTime.getTime(),
       }),

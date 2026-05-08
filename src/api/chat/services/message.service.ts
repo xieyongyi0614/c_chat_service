@@ -49,7 +49,7 @@ export class MessageService {
       senderId: string;
     } & Omit<SendMessageRequest, 'toJSON'>,
   ) {
-    const { senderId, conversationId, content, type, clientMsgId, fileId } = data;
+    const { senderId, conversationId, content, type, clientMsgId, fileId, mediaGroupId } = data;
 
     return this.prisma.$transaction(async (tx) => {
       const existing = await tx.message_history.findFirst({
@@ -68,12 +68,20 @@ export class MessageService {
         const file = await tx.file.findFirst({ where: { id: fileId }, select: { url: true } });
         fileUrl = file?.url ?? '';
       }
-      // 🚀 3️⃣ 写入消息
       const created = await tx.message_history.create({
-        data: { senderId, conversationId, msgId, content, type, clientMsgId, fileId, fileUrl },
+        data: {
+          senderId,
+          conversationId,
+          msgId,
+          content,
+          type,
+          clientMsgId,
+          fileId,
+          fileUrl,
+          mediaGroupId,
+        },
       });
 
-      // 🚀 4️⃣ 更新会话 - 根据消息类型生成合适的显示内容
       const lastMsgContent = this.generateLastMsgContent(content, type);
       await tx.conversation.update({
         where: { id: conversationId },
@@ -98,9 +106,9 @@ export class MessageService {
         orderBy: {
           msgId: 'desc',
         },
-        include: {
-          file: true,
-        },
+        // include: {
+        //   file: true,
+        // },
         skip,
         take: pageSize,
       }),
