@@ -24,7 +24,7 @@ export class MessageService {
 
   /**
    * 根据消息类型生成会话列表显示的内容
-   * 0:文本, 1:图片, 2:视频, 3:文件, 4:音频
+   * 0:文本, 1:图片, 2:文件, 3:音频, 4:视频
    */
   private generateLastMsgContent(content: string | null, type: number): string {
     if (content && content.trim()) {
@@ -34,9 +34,9 @@ export class MessageService {
     const typeMap: Record<number, string> = {
       0: '',
       1: '[图片]',
-      2: '[视频]',
-      3: '[文件]',
-      4: '[音频]',
+      2: '[文件]',
+      3: '[音频]',
+      4: '[视频]',
     };
     return typeMap[type] || '[消息]';
   }
