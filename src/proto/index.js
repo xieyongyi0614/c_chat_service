@@ -885,6 +885,852 @@ $root.TargetInfo = (function() {
     return TargetInfo;
 })();
 
+$root.FileInfo = (function() {
+
+    /**
+     * Properties of a FileInfo.
+     * @exports IFileInfo
+     * @interface IFileInfo
+     * @property {string|null} [id] FileInfo id
+     * @property {string|null} [fileName] FileInfo fileName
+     * @property {string|null} [url] FileInfo url
+     * @property {string|null} [mimeType] FileInfo mimeType
+     * @property {string|null} [ext] FileInfo ext
+     * @property {number|Long|null} [size] FileInfo size
+     */
+
+    /**
+     * Constructs a new FileInfo.
+     * @exports FileInfo
+     * @classdesc Represents a FileInfo.
+     * @implements IFileInfo
+     * @constructor
+     * @param {IFileInfo=} [properties] Properties to set
+     */
+    function FileInfo(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * FileInfo id.
+     * @member {string} id
+     * @memberof FileInfo
+     * @instance
+     */
+    FileInfo.prototype.id = "";
+
+    /**
+     * FileInfo fileName.
+     * @member {string} fileName
+     * @memberof FileInfo
+     * @instance
+     */
+    FileInfo.prototype.fileName = "";
+
+    /**
+     * FileInfo url.
+     * @member {string} url
+     * @memberof FileInfo
+     * @instance
+     */
+    FileInfo.prototype.url = "";
+
+    /**
+     * FileInfo mimeType.
+     * @member {string} mimeType
+     * @memberof FileInfo
+     * @instance
+     */
+    FileInfo.prototype.mimeType = "";
+
+    /**
+     * FileInfo ext.
+     * @member {string|null|undefined} ext
+     * @memberof FileInfo
+     * @instance
+     */
+    FileInfo.prototype.ext = null;
+
+    /**
+     * FileInfo size.
+     * @member {number|Long} size
+     * @memberof FileInfo
+     * @instance
+     */
+    FileInfo.prototype.size = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(FileInfo.prototype, "_ext", {
+        get: $util.oneOfGetter($oneOfFields = ["ext"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
+     * Creates a new FileInfo instance using the specified properties.
+     * @function create
+     * @memberof FileInfo
+     * @static
+     * @param {IFileInfo=} [properties] Properties to set
+     * @returns {FileInfo} FileInfo instance
+     */
+    FileInfo.create = function create(properties) {
+        return new FileInfo(properties);
+    };
+
+    /**
+     * Encodes the specified FileInfo message. Does not implicitly {@link FileInfo.verify|verify} messages.
+     * @function encode
+     * @memberof FileInfo
+     * @static
+     * @param {IFileInfo} message FileInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    FileInfo.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+        if (message.fileName != null && Object.hasOwnProperty.call(message, "fileName"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.fileName);
+        if (message.url != null && Object.hasOwnProperty.call(message, "url"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.url);
+        if (message.mimeType != null && Object.hasOwnProperty.call(message, "mimeType"))
+            writer.uint32(/* id 4, wireType 2 =*/34).string(message.mimeType);
+        if (message.ext != null && Object.hasOwnProperty.call(message, "ext"))
+            writer.uint32(/* id 5, wireType 2 =*/42).string(message.ext);
+        if (message.size != null && Object.hasOwnProperty.call(message, "size"))
+            writer.uint32(/* id 6, wireType 0 =*/48).int64(message.size);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified FileInfo message, length delimited. Does not implicitly {@link FileInfo.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof FileInfo
+     * @static
+     * @param {IFileInfo} message FileInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    FileInfo.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a FileInfo message from the specified reader or buffer.
+     * @function decode
+     * @memberof FileInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {FileInfo} FileInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    FileInfo.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.FileInfo();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.id = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.fileName = reader.string();
+                    break;
+                }
+            case 3: {
+                    message.url = reader.string();
+                    break;
+                }
+            case 4: {
+                    message.mimeType = reader.string();
+                    break;
+                }
+            case 5: {
+                    message.ext = reader.string();
+                    break;
+                }
+            case 6: {
+                    message.size = reader.int64();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a FileInfo message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof FileInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {FileInfo} FileInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    FileInfo.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a FileInfo message.
+     * @function verify
+     * @memberof FileInfo
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    FileInfo.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        var properties = {};
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (!$util.isString(message.id))
+                return "id: string expected";
+        if (message.fileName != null && message.hasOwnProperty("fileName"))
+            if (!$util.isString(message.fileName))
+                return "fileName: string expected";
+        if (message.url != null && message.hasOwnProperty("url"))
+            if (!$util.isString(message.url))
+                return "url: string expected";
+        if (message.mimeType != null && message.hasOwnProperty("mimeType"))
+            if (!$util.isString(message.mimeType))
+                return "mimeType: string expected";
+        if (message.ext != null && message.hasOwnProperty("ext")) {
+            properties._ext = 1;
+            if (!$util.isString(message.ext))
+                return "ext: string expected";
+        }
+        if (message.size != null && message.hasOwnProperty("size"))
+            if (!$util.isInteger(message.size) && !(message.size && $util.isInteger(message.size.low) && $util.isInteger(message.size.high)))
+                return "size: integer|Long expected";
+        return null;
+    };
+
+    /**
+     * Creates a FileInfo message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof FileInfo
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {FileInfo} FileInfo
+     */
+    FileInfo.fromObject = function fromObject(object) {
+        if (object instanceof $root.FileInfo)
+            return object;
+        var message = new $root.FileInfo();
+        if (object.id != null)
+            message.id = String(object.id);
+        if (object.fileName != null)
+            message.fileName = String(object.fileName);
+        if (object.url != null)
+            message.url = String(object.url);
+        if (object.mimeType != null)
+            message.mimeType = String(object.mimeType);
+        if (object.ext != null)
+            message.ext = String(object.ext);
+        if (object.size != null)
+            if ($util.Long)
+                (message.size = $util.Long.fromValue(object.size)).unsigned = false;
+            else if (typeof object.size === "string")
+                message.size = parseInt(object.size, 10);
+            else if (typeof object.size === "number")
+                message.size = object.size;
+            else if (typeof object.size === "object")
+                message.size = new $util.LongBits(object.size.low >>> 0, object.size.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a FileInfo message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof FileInfo
+     * @static
+     * @param {FileInfo} message FileInfo
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    FileInfo.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.id = "";
+            object.fileName = "";
+            object.url = "";
+            object.mimeType = "";
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.size = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.size = options.longs === String ? "0" : 0;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            object.id = message.id;
+        if (message.fileName != null && message.hasOwnProperty("fileName"))
+            object.fileName = message.fileName;
+        if (message.url != null && message.hasOwnProperty("url"))
+            object.url = message.url;
+        if (message.mimeType != null && message.hasOwnProperty("mimeType"))
+            object.mimeType = message.mimeType;
+        if (message.ext != null && message.hasOwnProperty("ext")) {
+            object.ext = message.ext;
+            if (options.oneofs)
+                object._ext = "ext";
+        }
+        if (message.size != null && message.hasOwnProperty("size"))
+            if (typeof message.size === "number")
+                object.size = options.longs === String ? String(message.size) : message.size;
+            else
+                object.size = options.longs === String ? $util.Long.prototype.toString.call(message.size) : options.longs === Number ? new $util.LongBits(message.size.low >>> 0, message.size.high >>> 0).toNumber() : message.size;
+        return object;
+    };
+
+    /**
+     * Converts this FileInfo to JSON.
+     * @function toJSON
+     * @memberof FileInfo
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    FileInfo.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for FileInfo
+     * @function getTypeUrl
+     * @memberof FileInfo
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    FileInfo.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/FileInfo";
+    };
+
+    return FileInfo;
+})();
+
+$root.MediaInfo = (function() {
+
+    /**
+     * Properties of a MediaInfo.
+     * @exports IMediaInfo
+     * @interface IMediaInfo
+     * @property {string|null} [id] MediaInfo id
+     * @property {number|null} [type] MediaInfo type
+     * @property {string|null} [fileId] MediaInfo fileId
+     * @property {IFileInfo|null} [file] MediaInfo file
+     * @property {string|null} [fileUrl] MediaInfo fileUrl
+     * @property {string|null} [thumbUrl] MediaInfo thumbUrl
+     * @property {number|null} [width] MediaInfo width
+     * @property {number|null} [height] MediaInfo height
+     * @property {number|null} [durationSec] MediaInfo durationSec
+     * @property {Array.<number>|null} [waveform] MediaInfo waveform
+     */
+
+    /**
+     * Constructs a new MediaInfo.
+     * @exports MediaInfo
+     * @classdesc Represents a MediaInfo.
+     * @implements IMediaInfo
+     * @constructor
+     * @param {IMediaInfo=} [properties] Properties to set
+     */
+    function MediaInfo(properties) {
+        this.waveform = [];
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * MediaInfo id.
+     * @member {string} id
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.id = "";
+
+    /**
+     * MediaInfo type.
+     * @member {number} type
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.type = 0;
+
+    /**
+     * MediaInfo fileId.
+     * @member {string} fileId
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.fileId = "";
+
+    /**
+     * MediaInfo file.
+     * @member {IFileInfo|null|undefined} file
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.file = null;
+
+    /**
+     * MediaInfo fileUrl.
+     * @member {string|null|undefined} fileUrl
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.fileUrl = null;
+
+    /**
+     * MediaInfo thumbUrl.
+     * @member {string|null|undefined} thumbUrl
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.thumbUrl = null;
+
+    /**
+     * MediaInfo width.
+     * @member {number|null|undefined} width
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.width = null;
+
+    /**
+     * MediaInfo height.
+     * @member {number|null|undefined} height
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.height = null;
+
+    /**
+     * MediaInfo durationSec.
+     * @member {number|null|undefined} durationSec
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.durationSec = null;
+
+    /**
+     * MediaInfo waveform.
+     * @member {Array.<number>} waveform
+     * @memberof MediaInfo
+     * @instance
+     */
+    MediaInfo.prototype.waveform = $util.emptyArray;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MediaInfo.prototype, "_fileUrl", {
+        get: $util.oneOfGetter($oneOfFields = ["fileUrl"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MediaInfo.prototype, "_thumbUrl", {
+        get: $util.oneOfGetter($oneOfFields = ["thumbUrl"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MediaInfo.prototype, "_width", {
+        get: $util.oneOfGetter($oneOfFields = ["width"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MediaInfo.prototype, "_height", {
+        get: $util.oneOfGetter($oneOfFields = ["height"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MediaInfo.prototype, "_durationSec", {
+        get: $util.oneOfGetter($oneOfFields = ["durationSec"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
+     * Creates a new MediaInfo instance using the specified properties.
+     * @function create
+     * @memberof MediaInfo
+     * @static
+     * @param {IMediaInfo=} [properties] Properties to set
+     * @returns {MediaInfo} MediaInfo instance
+     */
+    MediaInfo.create = function create(properties) {
+        return new MediaInfo(properties);
+    };
+
+    /**
+     * Encodes the specified MediaInfo message. Does not implicitly {@link MediaInfo.verify|verify} messages.
+     * @function encode
+     * @memberof MediaInfo
+     * @static
+     * @param {IMediaInfo} message MediaInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    MediaInfo.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.type);
+        if (message.fileId != null && Object.hasOwnProperty.call(message, "fileId"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.fileId);
+        if (message.file != null && Object.hasOwnProperty.call(message, "file"))
+            $root.FileInfo.encode(message.file, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        if (message.fileUrl != null && Object.hasOwnProperty.call(message, "fileUrl"))
+            writer.uint32(/* id 5, wireType 2 =*/42).string(message.fileUrl);
+        if (message.thumbUrl != null && Object.hasOwnProperty.call(message, "thumbUrl"))
+            writer.uint32(/* id 6, wireType 2 =*/50).string(message.thumbUrl);
+        if (message.width != null && Object.hasOwnProperty.call(message, "width"))
+            writer.uint32(/* id 7, wireType 0 =*/56).int32(message.width);
+        if (message.height != null && Object.hasOwnProperty.call(message, "height"))
+            writer.uint32(/* id 8, wireType 0 =*/64).int32(message.height);
+        if (message.durationSec != null && Object.hasOwnProperty.call(message, "durationSec"))
+            writer.uint32(/* id 9, wireType 0 =*/72).int32(message.durationSec);
+        if (message.waveform != null && message.waveform.length) {
+            writer.uint32(/* id 10, wireType 2 =*/82).fork();
+            for (var i = 0; i < message.waveform.length; ++i)
+                writer.float(message.waveform[i]);
+            writer.ldelim();
+        }
+        return writer;
+    };
+
+    /**
+     * Encodes the specified MediaInfo message, length delimited. Does not implicitly {@link MediaInfo.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof MediaInfo
+     * @static
+     * @param {IMediaInfo} message MediaInfo message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    MediaInfo.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a MediaInfo message from the specified reader or buffer.
+     * @function decode
+     * @memberof MediaInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {MediaInfo} MediaInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    MediaInfo.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.MediaInfo();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    message.id = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.type = reader.int32();
+                    break;
+                }
+            case 3: {
+                    message.fileId = reader.string();
+                    break;
+                }
+            case 4: {
+                    message.file = $root.FileInfo.decode(reader, reader.uint32());
+                    break;
+                }
+            case 5: {
+                    message.fileUrl = reader.string();
+                    break;
+                }
+            case 6: {
+                    message.thumbUrl = reader.string();
+                    break;
+                }
+            case 7: {
+                    message.width = reader.int32();
+                    break;
+                }
+            case 8: {
+                    message.height = reader.int32();
+                    break;
+                }
+            case 9: {
+                    message.durationSec = reader.int32();
+                    break;
+                }
+            case 10: {
+                    if (!(message.waveform && message.waveform.length))
+                        message.waveform = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.waveform.push(reader.float());
+                    } else
+                        message.waveform.push(reader.float());
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a MediaInfo message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof MediaInfo
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {MediaInfo} MediaInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    MediaInfo.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a MediaInfo message.
+     * @function verify
+     * @memberof MediaInfo
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    MediaInfo.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        var properties = {};
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (!$util.isString(message.id))
+                return "id: string expected";
+        if (message.type != null && message.hasOwnProperty("type"))
+            if (!$util.isInteger(message.type))
+                return "type: integer expected";
+        if (message.fileId != null && message.hasOwnProperty("fileId"))
+            if (!$util.isString(message.fileId))
+                return "fileId: string expected";
+        if (message.file != null && message.hasOwnProperty("file")) {
+            var error = $root.FileInfo.verify(message.file);
+            if (error)
+                return "file." + error;
+        }
+        if (message.fileUrl != null && message.hasOwnProperty("fileUrl")) {
+            properties._fileUrl = 1;
+            if (!$util.isString(message.fileUrl))
+                return "fileUrl: string expected";
+        }
+        if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
+            properties._thumbUrl = 1;
+            if (!$util.isString(message.thumbUrl))
+                return "thumbUrl: string expected";
+        }
+        if (message.width != null && message.hasOwnProperty("width")) {
+            properties._width = 1;
+            if (!$util.isInteger(message.width))
+                return "width: integer expected";
+        }
+        if (message.height != null && message.hasOwnProperty("height")) {
+            properties._height = 1;
+            if (!$util.isInteger(message.height))
+                return "height: integer expected";
+        }
+        if (message.durationSec != null && message.hasOwnProperty("durationSec")) {
+            properties._durationSec = 1;
+            if (!$util.isInteger(message.durationSec))
+                return "durationSec: integer expected";
+        }
+        if (message.waveform != null && message.hasOwnProperty("waveform")) {
+            if (!Array.isArray(message.waveform))
+                return "waveform: array expected";
+            for (var i = 0; i < message.waveform.length; ++i)
+                if (typeof message.waveform[i] !== "number")
+                    return "waveform: number[] expected";
+        }
+        return null;
+    };
+
+    /**
+     * Creates a MediaInfo message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof MediaInfo
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {MediaInfo} MediaInfo
+     */
+    MediaInfo.fromObject = function fromObject(object) {
+        if (object instanceof $root.MediaInfo)
+            return object;
+        var message = new $root.MediaInfo();
+        if (object.id != null)
+            message.id = String(object.id);
+        if (object.type != null)
+            message.type = object.type | 0;
+        if (object.fileId != null)
+            message.fileId = String(object.fileId);
+        if (object.file != null) {
+            if (typeof object.file !== "object")
+                throw TypeError(".MediaInfo.file: object expected");
+            message.file = $root.FileInfo.fromObject(object.file);
+        }
+        if (object.fileUrl != null)
+            message.fileUrl = String(object.fileUrl);
+        if (object.thumbUrl != null)
+            message.thumbUrl = String(object.thumbUrl);
+        if (object.width != null)
+            message.width = object.width | 0;
+        if (object.height != null)
+            message.height = object.height | 0;
+        if (object.durationSec != null)
+            message.durationSec = object.durationSec | 0;
+        if (object.waveform) {
+            if (!Array.isArray(object.waveform))
+                throw TypeError(".MediaInfo.waveform: array expected");
+            message.waveform = [];
+            for (var i = 0; i < object.waveform.length; ++i)
+                message.waveform[i] = Number(object.waveform[i]);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a MediaInfo message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof MediaInfo
+     * @static
+     * @param {MediaInfo} message MediaInfo
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    MediaInfo.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.arrays || options.defaults)
+            object.waveform = [];
+        if (options.defaults) {
+            object.id = "";
+            object.type = 0;
+            object.fileId = "";
+            object.file = null;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            object.id = message.id;
+        if (message.type != null && message.hasOwnProperty("type"))
+            object.type = message.type;
+        if (message.fileId != null && message.hasOwnProperty("fileId"))
+            object.fileId = message.fileId;
+        if (message.file != null && message.hasOwnProperty("file"))
+            object.file = $root.FileInfo.toObject(message.file, options);
+        if (message.fileUrl != null && message.hasOwnProperty("fileUrl")) {
+            object.fileUrl = message.fileUrl;
+            if (options.oneofs)
+                object._fileUrl = "fileUrl";
+        }
+        if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
+            object.thumbUrl = message.thumbUrl;
+            if (options.oneofs)
+                object._thumbUrl = "thumbUrl";
+        }
+        if (message.width != null && message.hasOwnProperty("width")) {
+            object.width = message.width;
+            if (options.oneofs)
+                object._width = "width";
+        }
+        if (message.height != null && message.hasOwnProperty("height")) {
+            object.height = message.height;
+            if (options.oneofs)
+                object._height = "height";
+        }
+        if (message.durationSec != null && message.hasOwnProperty("durationSec")) {
+            object.durationSec = message.durationSec;
+            if (options.oneofs)
+                object._durationSec = "durationSec";
+        }
+        if (message.waveform && message.waveform.length) {
+            object.waveform = [];
+            for (var j = 0; j < message.waveform.length; ++j)
+                object.waveform[j] = options.json && !isFinite(message.waveform[j]) ? String(message.waveform[j]) : message.waveform[j];
+        }
+        return object;
+    };
+
+    /**
+     * Converts this MediaInfo to JSON.
+     * @function toJSON
+     * @memberof MediaInfo
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    MediaInfo.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for MediaInfo
+     * @function getTypeUrl
+     * @memberof MediaInfo
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    MediaInfo.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/MediaInfo";
+    };
+
+    return MediaInfo;
+})();
+
 $root.ConversationInfo = (function() {
 
     /**
@@ -1386,6 +2232,9 @@ $root.SendMessageRequest = (function() {
      * @property {string|null} [clientMsgId] SendMessageRequest clientMsgId
      * @property {string|null} [mediaGroupId] SendMessageRequest mediaGroupId
      * @property {string|null} [fileId] SendMessageRequest fileId
+     * @property {number|null} [durationSec] SendMessageRequest durationSec
+     * @property {Array.<number>|null} [waveform] SendMessageRequest waveform
+     * @property {string|null} [thumbUrl] SendMessageRequest thumbUrl
      */
 
     /**
@@ -1397,6 +2246,7 @@ $root.SendMessageRequest = (function() {
      * @param {ISendMessageRequest=} [properties] Properties to set
      */
     function SendMessageRequest(properties) {
+        this.waveform = [];
         if (properties)
             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -1459,6 +2309,30 @@ $root.SendMessageRequest = (function() {
      */
     SendMessageRequest.prototype.fileId = null;
 
+    /**
+     * SendMessageRequest durationSec.
+     * @member {number|null|undefined} durationSec
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.durationSec = null;
+
+    /**
+     * SendMessageRequest waveform.
+     * @member {Array.<number>} waveform
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.waveform = $util.emptyArray;
+
+    /**
+     * SendMessageRequest thumbUrl.
+     * @member {string|null|undefined} thumbUrl
+     * @memberof SendMessageRequest
+     * @instance
+     */
+    SendMessageRequest.prototype.thumbUrl = null;
+
     // OneOf field names bound to virtual getters and setters
     var $oneOfFields;
 
@@ -1477,6 +2351,18 @@ $root.SendMessageRequest = (function() {
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(SendMessageRequest.prototype, "_fileId", {
         get: $util.oneOfGetter($oneOfFields = ["fileId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(SendMessageRequest.prototype, "_durationSec", {
+        get: $util.oneOfGetter($oneOfFields = ["durationSec"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(SendMessageRequest.prototype, "_thumbUrl", {
+        get: $util.oneOfGetter($oneOfFields = ["thumbUrl"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -1518,6 +2404,16 @@ $root.SendMessageRequest = (function() {
             writer.uint32(/* id 6, wireType 2 =*/50).string(message.mediaGroupId);
         if (message.fileId != null && Object.hasOwnProperty.call(message, "fileId"))
             writer.uint32(/* id 7, wireType 2 =*/58).string(message.fileId);
+        if (message.durationSec != null && Object.hasOwnProperty.call(message, "durationSec"))
+            writer.uint32(/* id 8, wireType 0 =*/64).int32(message.durationSec);
+        if (message.waveform != null && message.waveform.length) {
+            writer.uint32(/* id 9, wireType 2 =*/74).fork();
+            for (var i = 0; i < message.waveform.length; ++i)
+                writer.float(message.waveform[i]);
+            writer.ldelim();
+        }
+        if (message.thumbUrl != null && Object.hasOwnProperty.call(message, "thumbUrl"))
+            writer.uint32(/* id 10, wireType 2 =*/82).string(message.thumbUrl);
         return writer;
     };
 
@@ -1580,6 +2476,25 @@ $root.SendMessageRequest = (function() {
                 }
             case 7: {
                     message.fileId = reader.string();
+                    break;
+                }
+            case 8: {
+                    message.durationSec = reader.int32();
+                    break;
+                }
+            case 9: {
+                    if (!(message.waveform && message.waveform.length))
+                        message.waveform = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.waveform.push(reader.float());
+                    } else
+                        message.waveform.push(reader.float());
+                    break;
+                }
+            case 10: {
+                    message.thumbUrl = reader.string();
                     break;
                 }
             default:
@@ -1645,6 +2560,23 @@ $root.SendMessageRequest = (function() {
             if (!$util.isString(message.fileId))
                 return "fileId: string expected";
         }
+        if (message.durationSec != null && message.hasOwnProperty("durationSec")) {
+            properties._durationSec = 1;
+            if (!$util.isInteger(message.durationSec))
+                return "durationSec: integer expected";
+        }
+        if (message.waveform != null && message.hasOwnProperty("waveform")) {
+            if (!Array.isArray(message.waveform))
+                return "waveform: array expected";
+            for (var i = 0; i < message.waveform.length; ++i)
+                if (typeof message.waveform[i] !== "number")
+                    return "waveform: number[] expected";
+        }
+        if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
+            properties._thumbUrl = 1;
+            if (!$util.isString(message.thumbUrl))
+                return "thumbUrl: string expected";
+        }
         return null;
     };
 
@@ -1674,6 +2606,17 @@ $root.SendMessageRequest = (function() {
             message.mediaGroupId = String(object.mediaGroupId);
         if (object.fileId != null)
             message.fileId = String(object.fileId);
+        if (object.durationSec != null)
+            message.durationSec = object.durationSec | 0;
+        if (object.waveform) {
+            if (!Array.isArray(object.waveform))
+                throw TypeError(".SendMessageRequest.waveform: array expected");
+            message.waveform = [];
+            for (var i = 0; i < object.waveform.length; ++i)
+                message.waveform[i] = Number(object.waveform[i]);
+        }
+        if (object.thumbUrl != null)
+            message.thumbUrl = String(object.thumbUrl);
         return message;
     };
 
@@ -1690,6 +2633,8 @@ $root.SendMessageRequest = (function() {
         if (!options)
             options = {};
         var object = {};
+        if (options.arrays || options.defaults)
+            object.waveform = [];
         if (options.defaults) {
             object.conversationId = "";
             object.content = "";
@@ -1718,6 +2663,21 @@ $root.SendMessageRequest = (function() {
             object.fileId = message.fileId;
             if (options.oneofs)
                 object._fileId = "fileId";
+        }
+        if (message.durationSec != null && message.hasOwnProperty("durationSec")) {
+            object.durationSec = message.durationSec;
+            if (options.oneofs)
+                object._durationSec = "durationSec";
+        }
+        if (message.waveform && message.waveform.length) {
+            object.waveform = [];
+            for (var j = 0; j < message.waveform.length; ++j)
+                object.waveform[j] = options.json && !isFinite(message.waveform[j]) ? String(message.waveform[j]) : message.waveform[j];
+        }
+        if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
+            object.thumbUrl = message.thumbUrl;
+            if (options.oneofs)
+                object._thumbUrl = "thumbUrl";
         }
         return object;
     };
@@ -1996,10 +2956,8 @@ $root.MessageInfo = (function() {
      * @property {number|Long|null} [createTime] MessageInfo createTime
      * @property {number|Long|null} [updateTime] MessageInfo updateTime
      * @property {string|null} [clientMsgId] MessageInfo clientMsgId
-     * @property {string|null} [fileId] MessageInfo fileId
      * @property {string|null} [mediaGroupId] MessageInfo mediaGroupId
-     * @property {string|null} [fileUrl] MessageInfo fileUrl
-     * @property {string|null} [thumbUrl] MessageInfo thumbUrl
+     * @property {IMediaInfo|null} [media] MessageInfo media
      */
 
     /**
@@ -2098,14 +3056,6 @@ $root.MessageInfo = (function() {
     MessageInfo.prototype.clientMsgId = "";
 
     /**
-     * MessageInfo fileId.
-     * @member {string|null|undefined} fileId
-     * @memberof MessageInfo
-     * @instance
-     */
-    MessageInfo.prototype.fileId = null;
-
-    /**
      * MessageInfo mediaGroupId.
      * @member {string|null|undefined} mediaGroupId
      * @memberof MessageInfo
@@ -2114,29 +3064,15 @@ $root.MessageInfo = (function() {
     MessageInfo.prototype.mediaGroupId = null;
 
     /**
-     * MessageInfo fileUrl.
-     * @member {string|null|undefined} fileUrl
+     * MessageInfo media.
+     * @member {IMediaInfo|null|undefined} media
      * @memberof MessageInfo
      * @instance
      */
-    MessageInfo.prototype.fileUrl = null;
-
-    /**
-     * MessageInfo thumbUrl.
-     * @member {string|null|undefined} thumbUrl
-     * @memberof MessageInfo
-     * @instance
-     */
-    MessageInfo.prototype.thumbUrl = null;
+    MessageInfo.prototype.media = null;
 
     // OneOf field names bound to virtual getters and setters
     var $oneOfFields;
-
-    // Virtual OneOf for proto3 optional field
-    Object.defineProperty(MessageInfo.prototype, "_fileId", {
-        get: $util.oneOfGetter($oneOfFields = ["fileId"]),
-        set: $util.oneOfSetter($oneOfFields)
-    });
 
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(MessageInfo.prototype, "_mediaGroupId", {
@@ -2145,14 +3081,8 @@ $root.MessageInfo = (function() {
     });
 
     // Virtual OneOf for proto3 optional field
-    Object.defineProperty(MessageInfo.prototype, "_fileUrl", {
-        get: $util.oneOfGetter($oneOfFields = ["fileUrl"]),
-        set: $util.oneOfSetter($oneOfFields)
-    });
-
-    // Virtual OneOf for proto3 optional field
-    Object.defineProperty(MessageInfo.prototype, "_thumbUrl", {
-        get: $util.oneOfGetter($oneOfFields = ["thumbUrl"]),
+    Object.defineProperty(MessageInfo.prototype, "_media", {
+        get: $util.oneOfGetter($oneOfFields = ["media"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -2200,14 +3130,10 @@ $root.MessageInfo = (function() {
             writer.uint32(/* id 9, wireType 0 =*/72).int64(message.updateTime);
         if (message.clientMsgId != null && Object.hasOwnProperty.call(message, "clientMsgId"))
             writer.uint32(/* id 10, wireType 2 =*/82).string(message.clientMsgId);
-        if (message.fileId != null && Object.hasOwnProperty.call(message, "fileId"))
-            writer.uint32(/* id 11, wireType 2 =*/90).string(message.fileId);
         if (message.mediaGroupId != null && Object.hasOwnProperty.call(message, "mediaGroupId"))
-            writer.uint32(/* id 12, wireType 2 =*/98).string(message.mediaGroupId);
-        if (message.fileUrl != null && Object.hasOwnProperty.call(message, "fileUrl"))
-            writer.uint32(/* id 13, wireType 2 =*/106).string(message.fileUrl);
-        if (message.thumbUrl != null && Object.hasOwnProperty.call(message, "thumbUrl"))
-            writer.uint32(/* id 14, wireType 2 =*/114).string(message.thumbUrl);
+            writer.uint32(/* id 11, wireType 2 =*/90).string(message.mediaGroupId);
+        if (message.media != null && Object.hasOwnProperty.call(message, "media"))
+            $root.MediaInfo.encode(message.media, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
         return writer;
     };
 
@@ -2285,19 +3211,11 @@ $root.MessageInfo = (function() {
                     break;
                 }
             case 11: {
-                    message.fileId = reader.string();
-                    break;
-                }
-            case 12: {
                     message.mediaGroupId = reader.string();
                     break;
                 }
-            case 13: {
-                    message.fileUrl = reader.string();
-                    break;
-                }
-            case 14: {
-                    message.thumbUrl = reader.string();
+            case 12: {
+                    message.media = $root.MediaInfo.decode(reader, reader.uint32());
                     break;
                 }
             default:
@@ -2366,25 +3284,18 @@ $root.MessageInfo = (function() {
         if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
             if (!$util.isString(message.clientMsgId))
                 return "clientMsgId: string expected";
-        if (message.fileId != null && message.hasOwnProperty("fileId")) {
-            properties._fileId = 1;
-            if (!$util.isString(message.fileId))
-                return "fileId: string expected";
-        }
         if (message.mediaGroupId != null && message.hasOwnProperty("mediaGroupId")) {
             properties._mediaGroupId = 1;
             if (!$util.isString(message.mediaGroupId))
                 return "mediaGroupId: string expected";
         }
-        if (message.fileUrl != null && message.hasOwnProperty("fileUrl")) {
-            properties._fileUrl = 1;
-            if (!$util.isString(message.fileUrl))
-                return "fileUrl: string expected";
-        }
-        if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
-            properties._thumbUrl = 1;
-            if (!$util.isString(message.thumbUrl))
-                return "thumbUrl: string expected";
+        if (message.media != null && message.hasOwnProperty("media")) {
+            properties._media = 1;
+            {
+                var error = $root.MediaInfo.verify(message.media);
+                if (error)
+                    return "media." + error;
+            }
         }
         return null;
     };
@@ -2435,14 +3346,13 @@ $root.MessageInfo = (function() {
                 message.updateTime = new $util.LongBits(object.updateTime.low >>> 0, object.updateTime.high >>> 0).toNumber();
         if (object.clientMsgId != null)
             message.clientMsgId = String(object.clientMsgId);
-        if (object.fileId != null)
-            message.fileId = String(object.fileId);
         if (object.mediaGroupId != null)
             message.mediaGroupId = String(object.mediaGroupId);
-        if (object.fileUrl != null)
-            message.fileUrl = String(object.fileUrl);
-        if (object.thumbUrl != null)
-            message.thumbUrl = String(object.thumbUrl);
+        if (object.media != null) {
+            if (typeof object.media !== "object")
+                throw TypeError(".MessageInfo.media: object expected");
+            message.media = $root.MediaInfo.fromObject(object.media);
+        }
         return message;
     };
 
@@ -2505,25 +3415,15 @@ $root.MessageInfo = (function() {
                 object.updateTime = options.longs === String ? $util.Long.prototype.toString.call(message.updateTime) : options.longs === Number ? new $util.LongBits(message.updateTime.low >>> 0, message.updateTime.high >>> 0).toNumber() : message.updateTime;
         if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
             object.clientMsgId = message.clientMsgId;
-        if (message.fileId != null && message.hasOwnProperty("fileId")) {
-            object.fileId = message.fileId;
-            if (options.oneofs)
-                object._fileId = "fileId";
-        }
         if (message.mediaGroupId != null && message.hasOwnProperty("mediaGroupId")) {
             object.mediaGroupId = message.mediaGroupId;
             if (options.oneofs)
                 object._mediaGroupId = "mediaGroupId";
         }
-        if (message.fileUrl != null && message.hasOwnProperty("fileUrl")) {
-            object.fileUrl = message.fileUrl;
+        if (message.media != null && message.hasOwnProperty("media")) {
+            object.media = $root.MediaInfo.toObject(message.media, options);
             if (options.oneofs)
-                object._fileUrl = "fileUrl";
-        }
-        if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
-            object.thumbUrl = message.thumbUrl;
-            if (options.oneofs)
-                object._thumbUrl = "thumbUrl";
+                object._media = "media";
         }
         return object;
     };

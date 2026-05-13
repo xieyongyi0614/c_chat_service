@@ -7,7 +7,7 @@ export class FileService {
   constructor(private prisma: PrismaService) {}
 
   async findFile(data: CheckFileHashDto) {
-    const { fileHash, size } = data;
-    return this.prisma.file.findFirst({ where: { fileHash, size } });
+    const { hash, size } = data;
+    return this.prisma.file.findUnique({ where: { hash, size } });
   }
 }

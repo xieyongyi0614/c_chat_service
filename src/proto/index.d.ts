@@ -345,6 +345,284 @@ export class TargetInfo implements ITargetInfo {
     public static getTypeUrl(typeUrlPrefix?: string): string;
 }
 
+/** Properties of a FileInfo. */
+export interface IFileInfo {
+
+    /** FileInfo id */
+    id?: (string|null);
+
+    /** FileInfo fileName */
+    fileName?: (string|null);
+
+    /** FileInfo url */
+    url?: (string|null);
+
+    /** FileInfo mimeType */
+    mimeType?: (string|null);
+
+    /** FileInfo ext */
+    ext?: (string|null);
+
+    /** FileInfo size */
+    size?: (number|Long|null);
+}
+
+/** Represents a FileInfo. */
+export class FileInfo implements IFileInfo {
+
+    /**
+     * Constructs a new FileInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IFileInfo);
+
+    /** FileInfo id. */
+    public id: string;
+
+    /** FileInfo fileName. */
+    public fileName: string;
+
+    /** FileInfo url. */
+    public url: string;
+
+    /** FileInfo mimeType. */
+    public mimeType: string;
+
+    /** FileInfo ext. */
+    public ext?: (string|null);
+
+    /** FileInfo size. */
+    public size: (number|Long);
+
+    /**
+     * Creates a new FileInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns FileInfo instance
+     */
+    public static create(properties?: IFileInfo): FileInfo;
+
+    /**
+     * Encodes the specified FileInfo message. Does not implicitly {@link FileInfo.verify|verify} messages.
+     * @param message FileInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IFileInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified FileInfo message, length delimited. Does not implicitly {@link FileInfo.verify|verify} messages.
+     * @param message FileInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IFileInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a FileInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns FileInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): FileInfo;
+
+    /**
+     * Decodes a FileInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns FileInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): FileInfo;
+
+    /**
+     * Verifies a FileInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a FileInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns FileInfo
+     */
+    public static fromObject(object: { [k: string]: any }): FileInfo;
+
+    /**
+     * Creates a plain object from a FileInfo message. Also converts values to other types if specified.
+     * @param message FileInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: FileInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this FileInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for FileInfo
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Properties of a MediaInfo. */
+export interface IMediaInfo {
+
+    /** MediaInfo id */
+    id?: (string|null);
+
+    /** MediaInfo type */
+    type?: (number|null);
+
+    /** MediaInfo fileId */
+    fileId?: (string|null);
+
+    /** MediaInfo file */
+    file?: (IFileInfo|null);
+
+    /** MediaInfo fileUrl */
+    fileUrl?: (string|null);
+
+    /** MediaInfo thumbUrl */
+    thumbUrl?: (string|null);
+
+    /** MediaInfo width */
+    width?: (number|null);
+
+    /** MediaInfo height */
+    height?: (number|null);
+
+    /** MediaInfo durationSec */
+    durationSec?: (number|null);
+
+    /** MediaInfo waveform */
+    waveform?: (number[]|null);
+}
+
+/** Represents a MediaInfo. */
+export class MediaInfo implements IMediaInfo {
+
+    /**
+     * Constructs a new MediaInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMediaInfo);
+
+    /** MediaInfo id. */
+    public id: string;
+
+    /** MediaInfo type. */
+    public type: number;
+
+    /** MediaInfo fileId. */
+    public fileId: string;
+
+    /** MediaInfo file. */
+    public file?: (IFileInfo|null);
+
+    /** MediaInfo fileUrl. */
+    public fileUrl?: (string|null);
+
+    /** MediaInfo thumbUrl. */
+    public thumbUrl?: (string|null);
+
+    /** MediaInfo width. */
+    public width?: (number|null);
+
+    /** MediaInfo height. */
+    public height?: (number|null);
+
+    /** MediaInfo durationSec. */
+    public durationSec?: (number|null);
+
+    /** MediaInfo waveform. */
+    public waveform: number[];
+
+    /**
+     * Creates a new MediaInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns MediaInfo instance
+     */
+    public static create(properties?: IMediaInfo): MediaInfo;
+
+    /**
+     * Encodes the specified MediaInfo message. Does not implicitly {@link MediaInfo.verify|verify} messages.
+     * @param message MediaInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMediaInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified MediaInfo message, length delimited. Does not implicitly {@link MediaInfo.verify|verify} messages.
+     * @param message MediaInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMediaInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a MediaInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns MediaInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): MediaInfo;
+
+    /**
+     * Decodes a MediaInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns MediaInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): MediaInfo;
+
+    /**
+     * Verifies a MediaInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a MediaInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns MediaInfo
+     */
+    public static fromObject(object: { [k: string]: any }): MediaInfo;
+
+    /**
+     * Creates a plain object from a MediaInfo message. Also converts values to other types if specified.
+     * @param message MediaInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: MediaInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this MediaInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for MediaInfo
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
 /** Properties of a ConversationInfo. */
 export interface IConversationInfo {
 
@@ -513,6 +791,15 @@ export interface ISendMessageRequest {
 
     /** SendMessageRequest fileId */
     fileId?: (string|null);
+
+    /** SendMessageRequest durationSec */
+    durationSec?: (number|null);
+
+    /** SendMessageRequest waveform */
+    waveform?: (number[]|null);
+
+    /** SendMessageRequest thumbUrl */
+    thumbUrl?: (string|null);
 }
 
 /** Represents a SendMessageRequest. */
@@ -544,6 +831,15 @@ export class SendMessageRequest implements ISendMessageRequest {
 
     /** SendMessageRequest fileId. */
     public fileId?: (string|null);
+
+    /** SendMessageRequest durationSec. */
+    public durationSec?: (number|null);
+
+    /** SendMessageRequest waveform. */
+    public waveform: number[];
+
+    /** SendMessageRequest thumbUrl. */
+    public thumbUrl?: (string|null);
 
     /**
      * Creates a new SendMessageRequest instance using the specified properties.
@@ -759,17 +1055,11 @@ export interface IMessageInfo {
     /** MessageInfo clientMsgId */
     clientMsgId?: (string|null);
 
-    /** MessageInfo fileId */
-    fileId?: (string|null);
-
     /** MessageInfo mediaGroupId */
     mediaGroupId?: (string|null);
 
-    /** MessageInfo fileUrl */
-    fileUrl?: (string|null);
-
-    /** MessageInfo thumbUrl */
-    thumbUrl?: (string|null);
+    /** MessageInfo media */
+    media?: (IMediaInfo|null);
 }
 
 /** Represents a MessageInfo. */
@@ -811,17 +1101,11 @@ export class MessageInfo implements IMessageInfo {
     /** MessageInfo clientMsgId. */
     public clientMsgId: string;
 
-    /** MessageInfo fileId. */
-    public fileId?: (string|null);
-
     /** MessageInfo mediaGroupId. */
     public mediaGroupId?: (string|null);
 
-    /** MessageInfo fileUrl. */
-    public fileUrl?: (string|null);
-
-    /** MessageInfo thumbUrl. */
-    public thumbUrl?: (string|null);
+    /** MessageInfo media. */
+    public media?: (IMediaInfo|null);
 
     /**
      * Creates a new MessageInfo instance using the specified properties.

@@ -18,6 +18,7 @@ import {
   ReadMessageResponse,
   AckSendMessage,
 } from 'src/proto';
+import { buildMessageInfoPayload } from '../utils/message-to-proto.util';
 import { MessageService } from '../services/message.service';
 import { ChatService } from '../services/chat.service';
 import { Server } from 'socket.io';
@@ -154,15 +155,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       pageSize,
     );
 
-    const encodedList = list.map((m) =>
-      MessageInfo.create({
-        ...m,
-        mediaGroupId: m.mediaGroupId ?? '',
-        // fileUrl: m.file?.url,
-        createTime: m.createTime.getTime(),
-        updateTime: m.updateTime.getTime(),
-      }),
-    );
+    const encodedList = list.map((m) => MessageInfo.create(buildMessageInfoPayload(m)));
 
     const response = GetMessageHistoryResponse.encode(
       GetMessageHistoryResponse.create({
@@ -208,209 +201,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
 
     this.sendMessageToClient(client, ServiceToClientEvent.ReadMessageResponse, response, requestId);
   };
-  /**
-   * 处理创建私聊会话
-   */
-  // private handleCreateConversation = async (
-  //   client: ChatSocket,
-  //   payload?: CreateConversationRequest | null,
-  //   requestId?: string,
-  // ) => {
-  //   // const senderId = client.data.user?.id;
-  //   // const targetId = payload?.targetId;
-  //   // if (!senderId || !targetId) {
-  //   //   return;
-  //   // }
-  //   // const conversation = await this.chatService.getOrCreatePrivateConversation(senderId, targetId);
-  //   // // 将参与双方的所有在线 Socket 加入该会话的 Socket.io 房间
-  //   // await this.joinUserToRoom(this.server, [senderId, targetId], conversation.id);
-  //   // // const targetInfo = conversation.participants.find(item=>item.userId === targetId)
-  //   // const response = ConversationInfo.encode(
-  //   //   ConversationInfo.create({
-  //   //     id: conversation.id,
-  //   //     type: conversation.type,
-  //   //     // targetId: conversation.targetId,
-  //   //     targetInfo: { id: targetId, name: '' },
-  //   //     lastMsgContent: conversation.lastMsgContent ?? undefined,
-  //   //     lastMsgTime: conversation.lastMsgTime?.getTime(),
-  //   //     updateTime: conversation.updateTime.getTime(),
-  //   //     createTime: conversation.createTime.getTime(),
-  //   //   }),
-  //   // ).finish();
-  //   // this.sendMessageToClient(client, ServiceToClientEvent.createConversation, response, requestId);
-  // };
 
-  /**
-   * 处理发送消息
-   */
-  // private handleSendMessage1 = async (
-  //   client: ChatSocket,
-  //   payload: SendMessageRequest,
-  //   requestId?: string,
-  // ) => {
-  //   const { conversationId, targetId, content } = payload ?? {};
-  //   const senderId = client.data.user?.id;
-  //   if (!senderId || (!conversationId && !targetId) || !content) {
-  //     return;
-  //   }
-
-  //   const message = await this.messageService.sendMessage({
-  //     senderId,
-  //     conversationId: payload.conversationId,
-  //     content: payload.content,
-  //     type: payload.type ?? 0,
-  //   });
-
-  //   const response = MessageInfo.encode(
-  //     MessageInfo.create({
-  //       id: message.id,
-  //       msgId: message.msgId,
-  //       senderId: message.senderId,
-  //       conversationId: message.conversationId,
-  //       content: message.content,
-  //       type: message.type,
-  //       state: message.state,
-  //       createTime: message.createTime.getTime(),
-  //       updateTime: message.updateTime.getTime(),
-  //     }),
-  //   ).finish();
-
-  //   // 1. 发送回执给发送者
-  //   this.sendMessageToClient(client, ServiceToClientEvent.newMessage, response, requestId);
-
-  //   // 2. 广播给会话参与者
-  //   this.broadcastToRoom(
-  //     payload.conversationId,
-  //     ServiceToClientEvent.newMessage,
-  //     response,
-  //     senderId,
-  //     client.id,
-  //   );
-  // };
-
-  // private handleSendMessage = async (
-  //   client: ChatSocket,
-  //   payload?: SendMessageRequest | null,
-  //   requestId?: string,
-  // ) => {
-  //   const senderId = client.data.user?.id;
-  //   let conversationId = payload?.conversationId;
-  //   const targetId = payload?.targetId;
-  //   const content = payload?.content;
-  //   const type = payload?.type ?? 0;
-
-  //   if (!senderId || !content) return;
-
-  //   let isNewConversation = false;
-
-  //   // 🚀 1️⃣ 优先用 conversationId，否则走创建逻辑
-  //   if (!conversationId) {
-  //     if (!targetId) return;
-
-  //     const conversation = await this.chatService.getOrCreatePrivateConversation(
-  //       senderId,
-  //       targetId,
-  //     );
-
-  //     conversationId = conversation.id;
-
-  //     // 👉 是否新会话（关键）
-  //     isNewConversation = !conversation.lastMsgTime;
-  //   }
-
-  //   // 🚀 2️⃣ 写消息（复用你现有 service）
-  //   const message = await this.messageService.sendMessage({
-  //     senderId,
-  //     conversationId,
-  //     content,
-  //     type,
-  //   });
-
-  //   // 🚀 3️⃣ 加入房间（兜底）
-  //   if (targetId) {
-  //     await this.joinUserToRoom(this.server, [senderId, targetId], conversationId);
-  //   }
-
-  //   // 🚀 4️⃣ message DTO
-  //   // const messageDTO = {
-  //   //   id: message.id,
-  //   //   conversationId,
-  //   //   senderId,
-  //   //   content,
-  //   //   type,
-  //   //   msgId: message.msgId,
-  //   //   createTime: message.createTime.getTime(),
-  //   // };
-  //   const response = MessageInfo.encode(
-  //     MessageInfo.create({
-  //       ...message,
-  //       createTime: message.createTime.getTime(),
-  //       updateTime: message.updateTime.getTime(),
-  //     }),
-  //   ).finish();
-
-  //   // 🚀 5️⃣ 推送给自己（高频，轻量）
-  //   this.sendMessageToClient(client, ServiceToClientEvent.newMessage, response, requestId);
-
-  //   // 🚀 6️⃣ 推送给对方
-  //   if (targetId) {
-  //     this.broadcastToRoom(
-  //       payload.conversationId,
-  //       ServiceToClientEvent.newMessage,
-  //       response,
-  //       senderId,
-  //       client.id,
-  //     );
-  //   }
-
-  //   // 🚀 7️⃣ ❗只有“新会话”才推 conversation（核心优化）
-  //   if (isNewConversation && targetId) {
-  //     const [sender, target] = await Promise.all([
-  //       this.userService.getUserById(senderId),
-  //       this.userService.getUserById(targetId),
-  //     ]);
-
-  //     const now = message.createTime.getTime();
-
-  //     const senderConvResp = ConversationInfo.encode(
-  //       ConversationInfo.create({
-  //         id: conversationId,
-  //         type: 1,
-  //         targetInfo: {
-  //           id: target?.id,
-  //           name: target?.nickname ?? target?.email,
-  //           avatarUrl: target?.avatarUrl,
-  //         },
-  //         lastMsgContent: content,
-  //         lastMsgTime: now,
-  //       }),
-  //     ).finish();
-
-  //     const targetConvResp = ConversationInfo.encode(
-  //       ConversationInfo.create({
-  //         id: conversationId,
-  //         type: 1,
-  //         targetInfo: {
-  //           id: sender?.id,
-  //           name: sender?.nickname,
-  //           avatarUrl: sender?.avatarUrl,
-  //         },
-  //         lastMsgContent: content,
-  //         lastMsgTime: now,
-  //       }),
-  //     ).finish();
-
-  //     this.sendMessageToClient(client, ServiceToClientEvent.newConversation, senderConvResp);
-  //     // 2. 广播给会话参与者
-  //     this.broadcastToRoom(
-  //       payload.conversationId,
-  //       ServiceToClientEvent.newConversation,
-  //       targetConvResp,
-  //       senderId,
-  //       client.id,
-  //     );
-  //   }
-  // };
   private handleSendMessage = async (
     client: ChatSocket,
     payload?: SendMessageRequest | null,
@@ -418,7 +209,17 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
   ) => {
     const senderId = client.data.user?.id;
 
-    const { targetId, content, fileId, type = 0, clientMsgId, mediaGroupId } = payload || {};
+    const {
+      targetId,
+      content,
+      fileId,
+      type = 0,
+      clientMsgId,
+      mediaGroupId,
+      durationSec,
+      waveform,
+      thumbUrl,
+    } = payload || {};
 
     let conversationId = payload?.conversationId;
     if (!senderId || (!content && !fileId) || !clientMsgId) {
@@ -458,6 +259,9 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       mediaGroupId,
       type,
       clientMsgId,
+      durationSec: durationSec ?? undefined,
+      waveform: waveform?.length ? waveform : [],
+      thumbUrl: thumbUrl ?? undefined,
     });
 
     // 🚀 4️⃣ 推送消息（带 clientMsgId）
@@ -473,11 +277,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     // };
 
     const response = MessageInfo.encode(
-      MessageInfo.create({
-        ...message,
-        createTime: message.createTime.getTime(),
-        updateTime: message.updateTime.getTime(),
-      }),
+      MessageInfo.create(buildMessageInfoPayload(message)),
     ).finish();
 
     this.broadcastToRoom(conversationId, ServiceToClientEvent.newMessage, response, senderId);

@@ -32,10 +32,6 @@ export class SessionService {
     });
   }
 
-  async findFile(hash: string, size: number) {
-    return this.prisma.file.findUnique({ where: { fileHash: hash, size } });
-  }
-
   async setMerging(uploadId: string) {
     return this.prisma.uploadSession.update({
       where: { id: uploadId },
