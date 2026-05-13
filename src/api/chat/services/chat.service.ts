@@ -40,7 +40,7 @@ export class ChatService {
         });
 
         // 创建参与者 (A 和 B)
-        await tx.conversation_participant.createMany({
+        await tx.conversationParticipant.createMany({
           data: [
             { conversationId: conversationId, userId: userIdA },
             { conversationId: conversationId, userId: userIdB },
@@ -95,7 +95,7 @@ export class ChatService {
 
         // 为当前所有群成员创建会话关联
         if (group.members.length > 0) {
-          await tx.conversation_participant.createMany({
+          await tx.conversationParticipant.createMany({
             data: group.members.map((m) => ({
               conversationId: newConversation.id,
               userId: m.userId,
@@ -137,7 +137,7 @@ export class ChatService {
   ) {
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.Conversation_participantWhereInput = {
+    const where: Prisma.ConversationParticipantWhereInput = {
       userId: userId,
       isDeleted: false,
     };
@@ -151,7 +151,7 @@ export class ChatService {
     }
 
     const [participants, total] = await Promise.all([
-      this.prisma.conversation_participant.findMany({
+      this.prisma.conversationParticipant.findMany({
         where,
         include: { conversation: true },
         orderBy: [
@@ -161,7 +161,7 @@ export class ChatService {
         skip,
         take: pageSize,
       }),
-      this.prisma.conversation_participant.count({ where }),
+      this.prisma.conversationParticipant.count({ where }),
     ]);
 
     if (participants.length === 0) {
@@ -171,7 +171,7 @@ export class ChatService {
     // 🚀 1️⃣ 批量查所有会话的参与者（一次查询）
     const conversationIds = participants.map((p) => p.conversationId);
 
-    const allParticipants = await this.prisma.conversation_participant.findMany({
+    const allParticipants = await this.prisma.conversationParticipant.findMany({
       where: {
         conversationId: { in: conversationIds },
       },
@@ -325,7 +325,7 @@ export class ChatService {
    * 获取用户参与的所有会话 ID
    */
   async getUserConversationIds(userId: string): Promise<string[]> {
-    const participants = await this.prisma.conversation_participant.findMany({
+    const participants = await this.prisma.conversationParticipant.findMany({
       where: {
         userId: userId,
         isDeleted: false,

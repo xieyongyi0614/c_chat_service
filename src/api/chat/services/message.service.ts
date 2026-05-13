@@ -14,7 +14,7 @@ export class MessageService {
   ) {}
 
   async getNextMsgId(tx: Prisma.TransactionClient, conversationId: string) {
-    const seq = await tx.conversation_sequence.upsert({
+    const seq = await tx.conversationSequence.upsert({
       where: { conversationId },
       update: { lastMsgId: { increment: 1 } },
       create: { conversationId, lastMsgId: 1 },
@@ -52,7 +52,7 @@ export class MessageService {
     const { senderId, conversationId, content, type, clientMsgId, fileId, mediaGroupId } = data;
 
     return this.prisma.$transaction(async (tx) => {
-      const existing = await tx.message_history.findFirst({
+      const existing = await tx.messageHistory.findFirst({
         where: {
           conversationId,
           clientMsgId,
@@ -68,7 +68,7 @@ export class MessageService {
         const file = await tx.file.findFirst({ where: { id: fileId }, select: { url: true } });
         fileUrl = file?.url ?? '';
       }
-      const created = await tx.message_history.create({
+      const created = await tx.messageHistory.create({
         data: {
           senderId,
           conversationId,
@@ -98,7 +98,7 @@ export class MessageService {
   async getConversationMessages(conversationId: string, page: number = 1, pageSize: number = 50) {
     const skip = (page - 1) * pageSize;
     const [messages] = await Promise.all([
-      this.prisma.message_history.findMany({
+      this.prisma.messageHistory.findMany({
         where: {
           conversationId: conversationId,
           state: 0,
@@ -123,7 +123,7 @@ export class MessageService {
   }
 
   async markConversationAsRead(userId: string, conversationId: string, messageId?: string) {
-    const participant = await this.prisma.conversation_participant.findUnique({
+    const participant = await this.prisma.conversationParticipant.findUnique({
       where: {
         conversationId_userId: {
           conversationId,
@@ -147,7 +147,7 @@ export class MessageService {
 
       // 兼容：如果客户端仍传的是 MessageHistory.id（cuid），先查出对应 msgId
       if (!Number.isNaN(parsedMsgId)) {
-        const target = await this.prisma.message_history.findFirst({
+        const target = await this.prisma.messageHistory.findFirst({
           where: {
             conversationId,
             msgId: parsedMsgId,
@@ -157,7 +157,7 @@ export class MessageService {
         });
         targetMsgId = target?.msgId ?? -1;
       } else {
-        const target = await this.prisma.message_history.findFirst({
+        const target = await this.prisma.messageHistory.findFirst({
           where: {
             id: messageId,
             conversationId,
@@ -172,7 +172,7 @@ export class MessageService {
         throw new Error('消息不存在');
       }
     } else {
-      const target = await this.prisma.message_history.findFirst({
+      const target = await this.prisma.messageHistory.findFirst({
         where: {
           conversationId,
           state: 0,
@@ -187,7 +187,7 @@ export class MessageService {
       targetMsgId = target?.msgId ?? -1;
     }
 
-    await this.prisma.conversation_participant.update({
+    await this.prisma.conversationParticipant.update({
       where: {
         conversationId_userId: {
           conversationId,
@@ -201,7 +201,7 @@ export class MessageService {
 
     const unreadCount =
       targetMsgId >= 0
-        ? await this.prisma.message_history.count({
+        ? await this.prisma.messageHistory.count({
             where: {
               conversationId,
               state: 0,
