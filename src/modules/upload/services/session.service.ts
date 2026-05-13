@@ -9,7 +9,7 @@ export class SessionService {
   async create(dto: InitUploadDto, userId: string) {
     const totalChunks = Math.ceil(dto.fileSize / dto.chunkSize);
 
-    return this.prisma.upload_session.create({
+    return this.prisma.uploadSession.create({
       data: {
         fileName: dto.fileName,
         fileHash: dto.fileHash,
@@ -23,7 +23,7 @@ export class SessionService {
   }
 
   async markUploaded(uploadId: string) {
-    return this.prisma.upload_session.update({
+    return this.prisma.uploadSession.update({
       where: { id: uploadId },
       data: {
         uploadedCount: { increment: 1 },
@@ -37,14 +37,14 @@ export class SessionService {
   }
 
   async setMerging(uploadId: string) {
-    return this.prisma.upload_session.update({
+    return this.prisma.uploadSession.update({
       where: { id: uploadId },
       data: { status: 2 },
     });
   }
 
   async setSuccess(uploadId: string) {
-    return this.prisma.upload_session.update({
+    return this.prisma.uploadSession.update({
       where: { id: uploadId },
       data: { status: 3 },
     });

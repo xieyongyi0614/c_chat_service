@@ -15,7 +15,7 @@ export class MergeService {
   ) {}
 
   async merge(uploadId: string) {
-    const s = await this.prisma.upload_session.findUnique({ where: { id: uploadId } });
+    const s = await this.prisma.uploadSession.findUnique({ where: { id: uploadId } });
     if (!s) throw new Error('upload session not found');
 
     await this.session.setMerging(uploadId);
