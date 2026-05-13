@@ -1,17 +1,32 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../core/database';
-import { ChatService } from './chat.service';
 import { Prisma } from 'generated/prisma/client';
+import {
+  messageHistoryWithMediaInclude,
+  MessageHistoryWithMedia,
+} from '../utils/message-to-proto.util';
 import { SendMessageRequest } from 'src/proto';
+
+/** 发送消息入参（Proto 里 repeated 字段在 TS 侧常为必填数组，这里放宽便于业务传参） */
+export type SendMessageInput = {
+  senderId: string;
+  conversationId: string;
+  content?: string | null;
+  type?: number;
+  clientMsgId: string;
+  fileId?: string | null;
+  mediaGroupId?: string | null;
+  durationSec?: number | null;
+  waveform?: number[] | null;
+  thumbUrl?: string | null;
+  targetId?: string | null;
+};
 
 @Injectable()
 export class MessageService {
   private readonly logger = new Logger(MessageService.name);
 
-  constructor(
-    private prisma: PrismaService,
-    private chatService: ChatService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async getNextMsgId(tx: Prisma.TransactionClient, conversationId: string) {
     const seq = await tx.conversationSequence.upsert({
@@ -24,7 +39,7 @@ export class MessageService {
 
   /**
    * 根据消息类型生成会话列表显示的内容
-   * 0:文本, 1:图片, 2:文件, 3:音频, 4:视频
+   * 0:文本, 1:图片, 2:视频, 3:文件, 4:音频
    */
   private generateLastMsgContent(content: string | null, type: number): string {
     if (content && content.trim()) {
@@ -34,55 +49,85 @@ export class MessageService {
     const typeMap: Record<number, string> = {
       0: '',
       1: '[图片]',
-      2: '[文件]',
-      3: '[音频]',
-      4: '[视频]',
+      2: '[视频]',
+      3: '[文件]',
+      4: '[音频]',
     };
     return typeMap[type] || '[消息]';
   }
 
   /**
-   * 创建并发送消息
+   * 创建并发送消息（媒体走 MessageHistory -> Media -> File）
    */
   async sendMessage(
     data: {
       senderId: string;
     } & Omit<SendMessageRequest, 'toJSON'>,
-  ) {
-    const { senderId, conversationId, content, type, clientMsgId, fileId, mediaGroupId } = data;
+  ): Promise<MessageHistoryWithMedia> {
+    const {
+      senderId,
+      conversationId,
+      content,
+      type,
+      clientMsgId,
+      fileId,
+      mediaGroupId,
+      durationSec,
+      waveform,
+      thumbUrl,
+    } = data;
 
-    return this.prisma.$transaction(async (tx) => {
+    const msgType = type ?? 0;
+
+    return this.prisma.$transaction(async (tx): Promise<MessageHistoryWithMedia> => {
       const existing = await tx.messageHistory.findFirst({
-        where: {
-          conversationId,
-          clientMsgId,
-          senderId,
-        },
+        where: { conversationId, clientMsgId, senderId },
       });
 
-      if (existing) return existing;
+      if (existing) {
+        return tx.messageHistory.findFirstOrThrow({
+          where: { id: existing.id },
+          include: messageHistoryWithMediaInclude,
+        });
+      }
+
+      let mediaId: string | undefined;
+      if (fileId) {
+        const file = await tx.file.findFirst({ where: { id: fileId } });
+        if (!file) {
+          throw new Error('文件不存在');
+        }
+
+        const wf = waveform && waveform.length > 0 ? waveform : undefined;
+
+        const data = {
+          type: msgType,
+          fileId: file.id,
+          fileUrl: file.url,
+          thumbUrl: thumbUrl ?? undefined,
+          duration: durationSec != null && durationSec > 0 ? durationSec : undefined,
+          waveform: wf,
+        };
+        const media = await tx.media.create({ data });
+        mediaId = media.id;
+      }
 
       const msgId = await this.getNextMsgId(tx, conversationId);
-      let fileUrl = '';
-      if (fileId) {
-        const file = await tx.file.findFirst({ where: { id: fileId }, select: { url: true } });
-        fileUrl = file?.url ?? '';
-      }
       const created = await tx.messageHistory.create({
         data: {
           senderId,
           conversationId,
           msgId,
           content,
-          type,
+          type: msgType,
           clientMsgId,
-          fileId,
-          fileUrl,
+          mediaId,
           mediaGroupId,
         },
+        include: messageHistoryWithMediaInclude,
       });
 
-      const lastMsgContent = this.generateLastMsgContent(content, type);
+      const lastMsgContent = this.generateLastMsgContent(content ?? null, msgType);
       await tx.conversation.update({
         where: { id: conversationId },
         data: { lastMsgContent, lastMsgTime: created.createTime },
@@ -106,9 +151,7 @@ export class MessageService {
         orderBy: {
           msgId: 'desc',
         },
-        // include: {
-        //   file: true,
-        // },
+        include: messageHistoryWithMediaInclude,
         skip,
         take: pageSize,
       }),

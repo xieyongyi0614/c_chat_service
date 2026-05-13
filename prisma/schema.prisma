@@ -144,12 +144,10 @@ model MessageHistory {
 
   state Int @default(0) // -2:撤回, -1:删除, 0:正常, 1:编辑
 
-  fileId String? @map("file_id")
-  file   File?   @relation(fields: [fileId], references: [id])
+  mediaId String? @map("media_id")
+  media   Media?  @relation(fields: [mediaId], references: [id])
 
   mediaGroupId String? @map("media_group_id") // 相册分组
-  fileUrl      String? @map("file_url") // 小图 / 可直接展示
-  thumbUrl     String? @map("thumb_url") // 缩略图
 
   createTime DateTime @default(now()) @map("create_time")
   updateTime DateTime @updatedAt @map("update_time")
@@ -163,70 +161,42 @@ model MessageHistory {
   @@index([conversationId, mediaGroupId])
 }
 
-// 资源表
-// model File {
-//   id String @id @default(cuid())
+model Media {
+  id         String           @id @default(cuid())
+  // 0:文本, 1:图片, 2:视频, 3:文件, 4:音频
+  type       Int
+  fileId     String           @map("file_id")
+  file       File             @relation(fields: [fileId], references: [id])
+  fileUrl    String?          @map("file_url")
+  thumbUrl   String?          @map("thumb_url")
+  width      Int?
+  height     Int?
+  // 音频/视频时长（秒，IM 语音一般足够；若要亚秒精度可改为毫秒并存 duration_ms）
+  duration   Int?
+  // 语音波形（如归一化振幅序列，JSON 数组便于客户端直接渲染）
+  waveform   Json?
+  // 未来扩展字段
+  extra      Json?
+  createTime DateTime         @default(now()) @map("create_time")
+  messages   MessageHistory[]
 
-//   hash        String  @unique
-//   fingerprint String?
-
-//   filename     String
-//   originalName String @map("original_name")
-
-//   mimeType String @map("mime_type")
-
-//   fileType Int @map("file_type") // 0图片 1视频 2音频 3文件
-
-//   size Int
-
-//   //  存储 vs 访问解耦
-//   storagePath String @map("storage_path")
-//   url         String
-
-//   //  缩略图
-//   thumbUrl String? @map("thumb_url")
-
-//   // 媒体信息
-//   width    Int?
-//   height   Int?
-//   duration Int?
-
-//   // 状态
-//   status Int @default(0) // 0上传中 1完成 -1失败
-
-//   //  引用计数
-//   refCount Int @default(0) @map("ref_count")
-
-//   alt         String?
-//   description String?
-
-//   uploaderId String   @map("uploader_id")
-//   updateTime DateTime @updatedAt @map("update_time")
-//   createTime DateTime @default(now()) @map("create_time")
-
-//   uploader User              @relation(fields: [uploaderId], references: [id])
-//   messages Message_history[]
-
-//   @@unique([hash, size])
-//   @@index([fingerprint, size])
-//   @@index([uploaderId])
-//   @@index([fileType])
-// }
+  @@index([fileId])
+}
 
 model UploadSession {
   id            String @id @default(cuid())
-  fileName      String
-  fileHash      String
-  fileSize      BigInt
-  chunkSize     Int
-  totalChunks   Int
-  uploadedCount Int    @default(0)
+  fileName      String @map("file_name")
+  fileHash      String @unique @map("file_hash")
+  fileSize      BigInt @map("file_size")
+  chunkSize     Int    @map("chunk_size")
+  totalChunks   Int    @map("total_chunks")
+  uploadedCount Int    @default(0) @map("uploader_count")
 
   status Int // 0 waiting / 1 uploading / 2 merging / 3 success / -1 fail
 
-  uploaderId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  uploaderId String   @map("uploader_id")
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
 }
 
 model UploadChunk {
@@ -241,15 +211,17 @@ model UploadChunk {
 }
 
 model File {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   fileName String
-  fileHash String @unique
+  hash     String  @unique
+  mimeType String  @map("mime_type")
+  ext      String?
   size     BigInt
   url      String
 
-  uploaderId       String
-  createdAt        DateTime         @default(now())
-  messageHistories MessageHistory[]
+  uploaderId String
+  createTime DateTime @default(now()) @map("create_time")
+  medias     Media[]
 
-  @@index([fileHash, size])
+  @@index([hash, size])
 }

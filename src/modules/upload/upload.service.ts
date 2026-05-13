@@ -6,10 +6,12 @@ import { ChunkService } from './services/chunk.service';
 import { MergeService } from './services/merge.service';
 import { InitUploadDto } from './dto/init-upload.dto';
 import { UploadChunkDto } from './dto/upload-chunk.dto';
+import { FileService } from './services/file.service';
 
 @Injectable()
 export class UploadService {
   constructor(
+    private file: FileService,
     private session: SessionService,
     private chunk: ChunkService,
     private merge: MergeService,
@@ -17,7 +19,7 @@ export class UploadService {
   ) {}
 
   async init(dto: InitUploadDto, userId: string) {
-    const file = await this.session.findFile(dto.fileHash, dto.fileSize);
+    const file = await this.file.findFile({ hash: dto.fileHash, size: dto.fileSize });
     if (file) {
       return { file: { ...file, size: Number(file.size) } };
     }
