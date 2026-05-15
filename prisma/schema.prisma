@@ -174,7 +174,7 @@ model Media {
   // 音频/视频时长（秒，IM 语音一般足够；若要亚秒精度可改为毫秒并存 duration_ms）
   duration   Int?
   // 语音波形（如归一化振幅序列，JSON 数组便于客户端直接渲染）
-  waveform   Json?
+  waveform   String?
   // 未来扩展字段
   extra      Json?
   createTime DateTime         @default(now()) @map("create_time")

@@ -503,7 +503,7 @@ export interface IMediaInfo {
     durationSec?: (number|null);
 
     /** MediaInfo waveform */
-    waveform?: (number[]|null);
+    waveform?: (string|null);
 }
 
 /** Represents a MediaInfo. */
@@ -543,7 +543,7 @@ export class MediaInfo implements IMediaInfo {
     public durationSec?: (number|null);
 
     /** MediaInfo waveform. */
-    public waveform: number[];
+    public waveform?: (string|null);
 
     /**
      * Creates a new MediaInfo instance using the specified properties.
