@@ -9,12 +9,6 @@ export type MessageHistoryWithMedia = Prisma.MessageHistoryGetPayload<{
   include: typeof messageHistoryWithMediaInclude;
 }>;
 
-function waveformFromJson(value: unknown): number[] | undefined {
-  if (!Array.isArray(value)) return undefined;
-  const out = value.filter((v): v is number => typeof v === 'number');
-  return out.length ? out : undefined;
-}
-
 export function buildMessageInfoPayload(m: MessageHistoryWithMedia): IMessageInfo {
   const media = m.media;
   const file = media?.file;
@@ -38,7 +32,7 @@ export function buildMessageInfoPayload(m: MessageHistoryWithMedia): IMessageInf
           width: media.width ?? undefined,
           height: media.height ?? undefined,
           durationSec: media.duration ?? undefined,
-          waveform: waveformFromJson(media.waveform),
+          waveform: media.waveform,
         })
       : undefined;
 

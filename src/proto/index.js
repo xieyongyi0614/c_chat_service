@@ -1249,7 +1249,7 @@ $root.MediaInfo = (function() {
      * @property {number|null} [width] MediaInfo width
      * @property {number|null} [height] MediaInfo height
      * @property {number|null} [durationSec] MediaInfo durationSec
-     * @property {Array.<number>|null} [waveform] MediaInfo waveform
+     * @property {string|null} [waveform] MediaInfo waveform
      */
 
     /**
@@ -1261,7 +1261,6 @@ $root.MediaInfo = (function() {
      * @param {IMediaInfo=} [properties] Properties to set
      */
     function MediaInfo(properties) {
-        this.waveform = [];
         if (properties)
             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -1342,11 +1341,11 @@ $root.MediaInfo = (function() {
 
     /**
      * MediaInfo waveform.
-     * @member {Array.<number>} waveform
+     * @member {string|null|undefined} waveform
      * @memberof MediaInfo
      * @instance
      */
-    MediaInfo.prototype.waveform = $util.emptyArray;
+    MediaInfo.prototype.waveform = null;
 
     // OneOf field names bound to virtual getters and setters
     var $oneOfFields;
@@ -1378,6 +1377,12 @@ $root.MediaInfo = (function() {
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(MediaInfo.prototype, "_durationSec", {
         get: $util.oneOfGetter($oneOfFields = ["durationSec"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(MediaInfo.prototype, "_waveform", {
+        get: $util.oneOfGetter($oneOfFields = ["waveform"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -1423,12 +1428,8 @@ $root.MediaInfo = (function() {
             writer.uint32(/* id 8, wireType 0 =*/64).int32(message.height);
         if (message.durationSec != null && Object.hasOwnProperty.call(message, "durationSec"))
             writer.uint32(/* id 9, wireType 0 =*/72).int32(message.durationSec);
-        if (message.waveform != null && message.waveform.length) {
-            writer.uint32(/* id 10, wireType 2 =*/82).fork();
-            for (var i = 0; i < message.waveform.length; ++i)
-                writer.float(message.waveform[i]);
-            writer.ldelim();
-        }
+        if (message.waveform != null && Object.hasOwnProperty.call(message, "waveform"))
+            writer.uint32(/* id 10, wireType 2 =*/82).string(message.waveform);
         return writer;
     };
 
@@ -1502,14 +1503,7 @@ $root.MediaInfo = (function() {
                     break;
                 }
             case 10: {
-                    if (!(message.waveform && message.waveform.length))
-                        message.waveform = [];
-                    if ((tag & 7) === 2) {
-                        var end2 = reader.uint32() + reader.pos;
-                        while (reader.pos < end2)
-                            message.waveform.push(reader.float());
-                    } else
-                        message.waveform.push(reader.float());
+                    message.waveform = reader.string();
                     break;
                 }
             default:
@@ -1588,11 +1582,9 @@ $root.MediaInfo = (function() {
                 return "durationSec: integer expected";
         }
         if (message.waveform != null && message.hasOwnProperty("waveform")) {
-            if (!Array.isArray(message.waveform))
-                return "waveform: array expected";
-            for (var i = 0; i < message.waveform.length; ++i)
-                if (typeof message.waveform[i] !== "number")
-                    return "waveform: number[] expected";
+            properties._waveform = 1;
+            if (!$util.isString(message.waveform))
+                return "waveform: string expected";
         }
         return null;
     };
@@ -1630,13 +1622,8 @@ $root.MediaInfo = (function() {
             message.height = object.height | 0;
         if (object.durationSec != null)
             message.durationSec = object.durationSec | 0;
-        if (object.waveform) {
-            if (!Array.isArray(object.waveform))
-                throw TypeError(".MediaInfo.waveform: array expected");
-            message.waveform = [];
-            for (var i = 0; i < object.waveform.length; ++i)
-                message.waveform[i] = Number(object.waveform[i]);
-        }
+        if (object.waveform != null)
+            message.waveform = String(object.waveform);
         return message;
     };
 
@@ -1653,8 +1640,6 @@ $root.MediaInfo = (function() {
         if (!options)
             options = {};
         var object = {};
-        if (options.arrays || options.defaults)
-            object.waveform = [];
         if (options.defaults) {
             object.id = "";
             object.type = 0;
@@ -1694,10 +1679,10 @@ $root.MediaInfo = (function() {
             if (options.oneofs)
                 object._durationSec = "durationSec";
         }
-        if (message.waveform && message.waveform.length) {
-            object.waveform = [];
-            for (var j = 0; j < message.waveform.length; ++j)
-                object.waveform[j] = options.json && !isFinite(message.waveform[j]) ? String(message.waveform[j]) : message.waveform[j];
+        if (message.waveform != null && message.hasOwnProperty("waveform")) {
+            object.waveform = message.waveform;
+            if (options.oneofs)
+                object._waveform = "waveform";
         }
         return object;
     };

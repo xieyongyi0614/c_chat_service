@@ -6,6 +6,7 @@ import {
   MessageHistoryWithMedia,
 } from '../utils/message-to-proto.util';
 import { SendMessageRequest } from 'src/proto';
+import { encodeWaveform, encodeWaveformToBase64 } from 'src/utils/waveform';
 
 /** 发送消息入参（Proto 里 repeated 字段在 TS 侧常为必填数组，这里放宽便于业务传参） */
 export type SendMessageInput = {
@@ -98,15 +99,14 @@ export class MessageService {
           throw new Error('文件不存在');
         }
 
-        const wf = waveform && waveform.length > 0 ? waveform : undefined;
-
+        const waveformBase64 = encodeWaveformToBase64(waveform);
         const data = {
           type: msgType,
           fileId: file.id,
           fileUrl: file.url,
           thumbUrl: thumbUrl ?? undefined,
           duration: durationSec != null && durationSec > 0 ? durationSec : undefined,
-          waveform: wf,
+          waveform: waveformBase64,
         };
         const media = await tx.media.create({ data });
         mediaId = media.id;
