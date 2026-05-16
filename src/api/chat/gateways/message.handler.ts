@@ -260,7 +260,7 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       type,
       clientMsgId,
       durationSec: durationSec ?? undefined,
-      waveform: waveform?.length ? waveform : [],
+      waveform,
       thumbUrl: thumbUrl ?? undefined,
     });
 

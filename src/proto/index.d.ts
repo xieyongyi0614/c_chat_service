@@ -796,7 +796,7 @@ export interface ISendMessageRequest {
     durationSec?: (number|null);
 
     /** SendMessageRequest waveform */
-    waveform?: (number[]|null);
+    waveform?: (string|null);
 
     /** SendMessageRequest thumbUrl */
     thumbUrl?: (string|null);
@@ -836,7 +836,7 @@ export class SendMessageRequest implements ISendMessageRequest {
     public durationSec?: (number|null);
 
     /** SendMessageRequest waveform. */
-    public waveform: number[];
+    public waveform?: (string|null);
 
     /** SendMessageRequest thumbUrl. */
     public thumbUrl?: (string|null);
