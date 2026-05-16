@@ -2218,7 +2218,7 @@ $root.SendMessageRequest = (function() {
      * @property {string|null} [mediaGroupId] SendMessageRequest mediaGroupId
      * @property {string|null} [fileId] SendMessageRequest fileId
      * @property {number|null} [durationSec] SendMessageRequest durationSec
-     * @property {Array.<number>|null} [waveform] SendMessageRequest waveform
+     * @property {string|null} [waveform] SendMessageRequest waveform
      * @property {string|null} [thumbUrl] SendMessageRequest thumbUrl
      */
 
@@ -2231,7 +2231,6 @@ $root.SendMessageRequest = (function() {
      * @param {ISendMessageRequest=} [properties] Properties to set
      */
     function SendMessageRequest(properties) {
-        this.waveform = [];
         if (properties)
             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -2304,11 +2303,11 @@ $root.SendMessageRequest = (function() {
 
     /**
      * SendMessageRequest waveform.
-     * @member {Array.<number>} waveform
+     * @member {string|null|undefined} waveform
      * @memberof SendMessageRequest
      * @instance
      */
-    SendMessageRequest.prototype.waveform = $util.emptyArray;
+    SendMessageRequest.prototype.waveform = null;
 
     /**
      * SendMessageRequest thumbUrl.
@@ -2342,6 +2341,12 @@ $root.SendMessageRequest = (function() {
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(SendMessageRequest.prototype, "_durationSec", {
         get: $util.oneOfGetter($oneOfFields = ["durationSec"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(SendMessageRequest.prototype, "_waveform", {
+        get: $util.oneOfGetter($oneOfFields = ["waveform"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -2391,12 +2396,8 @@ $root.SendMessageRequest = (function() {
             writer.uint32(/* id 7, wireType 2 =*/58).string(message.fileId);
         if (message.durationSec != null && Object.hasOwnProperty.call(message, "durationSec"))
             writer.uint32(/* id 8, wireType 0 =*/64).int32(message.durationSec);
-        if (message.waveform != null && message.waveform.length) {
-            writer.uint32(/* id 9, wireType 2 =*/74).fork();
-            for (var i = 0; i < message.waveform.length; ++i)
-                writer.float(message.waveform[i]);
-            writer.ldelim();
-        }
+        if (message.waveform != null && Object.hasOwnProperty.call(message, "waveform"))
+            writer.uint32(/* id 9, wireType 2 =*/74).string(message.waveform);
         if (message.thumbUrl != null && Object.hasOwnProperty.call(message, "thumbUrl"))
             writer.uint32(/* id 10, wireType 2 =*/82).string(message.thumbUrl);
         return writer;
@@ -2468,14 +2469,7 @@ $root.SendMessageRequest = (function() {
                     break;
                 }
             case 9: {
-                    if (!(message.waveform && message.waveform.length))
-                        message.waveform = [];
-                    if ((tag & 7) === 2) {
-                        var end2 = reader.uint32() + reader.pos;
-                        while (reader.pos < end2)
-                            message.waveform.push(reader.float());
-                    } else
-                        message.waveform.push(reader.float());
+                    message.waveform = reader.string();
                     break;
                 }
             case 10: {
@@ -2551,11 +2545,9 @@ $root.SendMessageRequest = (function() {
                 return "durationSec: integer expected";
         }
         if (message.waveform != null && message.hasOwnProperty("waveform")) {
-            if (!Array.isArray(message.waveform))
-                return "waveform: array expected";
-            for (var i = 0; i < message.waveform.length; ++i)
-                if (typeof message.waveform[i] !== "number")
-                    return "waveform: number[] expected";
+            properties._waveform = 1;
+            if (!$util.isString(message.waveform))
+                return "waveform: string expected";
         }
         if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
             properties._thumbUrl = 1;
@@ -2593,13 +2585,8 @@ $root.SendMessageRequest = (function() {
             message.fileId = String(object.fileId);
         if (object.durationSec != null)
             message.durationSec = object.durationSec | 0;
-        if (object.waveform) {
-            if (!Array.isArray(object.waveform))
-                throw TypeError(".SendMessageRequest.waveform: array expected");
-            message.waveform = [];
-            for (var i = 0; i < object.waveform.length; ++i)
-                message.waveform[i] = Number(object.waveform[i]);
-        }
+        if (object.waveform != null)
+            message.waveform = String(object.waveform);
         if (object.thumbUrl != null)
             message.thumbUrl = String(object.thumbUrl);
         return message;
@@ -2618,8 +2605,6 @@ $root.SendMessageRequest = (function() {
         if (!options)
             options = {};
         var object = {};
-        if (options.arrays || options.defaults)
-            object.waveform = [];
         if (options.defaults) {
             object.conversationId = "";
             object.content = "";
@@ -2654,10 +2639,10 @@ $root.SendMessageRequest = (function() {
             if (options.oneofs)
                 object._durationSec = "durationSec";
         }
-        if (message.waveform && message.waveform.length) {
-            object.waveform = [];
-            for (var j = 0; j < message.waveform.length; ++j)
-                object.waveform[j] = options.json && !isFinite(message.waveform[j]) ? String(message.waveform[j]) : message.waveform[j];
+        if (message.waveform != null && message.hasOwnProperty("waveform")) {
+            object.waveform = message.waveform;
+            if (options.oneofs)
+                object._waveform = "waveform";
         }
         if (message.thumbUrl != null && message.hasOwnProperty("thumbUrl")) {
             object.thumbUrl = message.thumbUrl;
