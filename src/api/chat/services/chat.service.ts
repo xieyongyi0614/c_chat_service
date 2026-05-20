@@ -20,6 +20,7 @@ export class ChatService {
    */
   async getOrCreatePrivateConversation(userIdA: string, userIdB: string) {
     const conversationId = generatePrivateConversationId(userIdA, userIdB);
+    let isNew = false;
 
     // 1. 查找会话
     let conversation = await this.prisma.conversation.findUnique({
@@ -29,6 +30,7 @@ export class ChatService {
 
     // 2. 如果不存在，创建
     if (!conversation) {
+      isNew = true;
       conversation = await this.prisma.$transaction(async (tx) => {
         // 创建会话
         const newConversation = await tx.conversation.create({
@@ -54,7 +56,7 @@ export class ChatService {
       });
     }
 
-    return conversation;
+    return { ...conversation, isNew };
   }
 
   /**
@@ -124,6 +126,31 @@ export class ChatService {
         participants: true,
       },
     });
+  }
+
+  async getConversationUpdateById(id: string) {
+    const participants = await this.prisma.conversationParticipant.findMany({
+      where: {
+        conversationId: id,
+        isDeleted: false,
+      },
+      include: {
+        conversation: true,
+        user: true,
+      },
+    });
+
+    return participants.map((participant) => ({
+      ...participant.conversation,
+      participants: participants
+        .filter((item) => item.userId !== participant.userId)
+        .map((item) => ({
+          ...item,
+          user: item.user,
+        })),
+      unreadCount: participant.unreadCount ?? 0,
+      lastReadMessageId: participant.lastReadMessageId,
+    }));
   }
 
   /**

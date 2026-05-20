@@ -123,4 +123,27 @@ export abstract class MessageHandlerRegistry {
       }
     }
   }
+
+  protected sendMessageToUser(
+    userId: string,
+    event: ClientDecodeProtoMapKey,
+    payload: Uint8Array | Uint8Array[],
+    senderId?: string,
+  ) {
+    const socketIds = this.userSockets.get(userId);
+    if (!socketIds?.size) {
+      return;
+    }
+
+    const sendCommand = Command.create({
+      event,
+      userId: senderId,
+      payload: Array.isArray(payload) ? payload : [payload],
+    });
+    const responseBuffer = Command.encode(sendCommand).finish();
+
+    for (const socketId of socketIds) {
+      this.server.to(socketId).emit('message', responseBuffer);
+    }
+  }
 }

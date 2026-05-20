@@ -17,6 +17,8 @@ import {
   ReadMessageRequest,
   ReadMessageResponse,
   AckSendMessage,
+  NewUpdateMessage,
+  IConversationInfo,
 } from 'src/proto';
 import { buildMessageInfoPayload } from '../utils/message-to-proto.util';
 import { MessageService } from '../services/message.service';
@@ -202,6 +204,72 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     this.sendMessageToClient(client, ServiceToClientEvent.ReadMessageResponse, response, requestId);
   };
 
+  private getLastMsgContent(content: string | null | undefined, type: number) {
+    if (content?.trim()) {
+      return content;
+    }
+
+    const typeMap: Record<number, string> = {
+      0: '',
+      1: '[Image]',
+      2: '[Video]',
+      3: '[File]',
+      4: '[Audio]',
+    };
+
+    return typeMap[type] || '[Message]';
+  }
+
+  private async buildNewPrivateConversationUpdates(
+    conversation: Awaited<ReturnType<ChatService['getOrCreatePrivateConversation']>>,
+    senderId: string,
+    targetId: string,
+    message: MessageInfo,
+  ): Promise<Map<string, IConversationInfo>> {
+    const users = await this.userService.getMultipleUsers([senderId, targetId]);
+    const userMap = new Map(users.map((user) => [user.id, user]));
+    const peerPairs = [
+      { userId: senderId, peerId: targetId },
+      { userId: targetId, peerId: senderId },
+    ];
+
+    return new Map(
+      peerPairs.map(({ userId, peerId }) => {
+        const peer = userMap.get(peerId);
+
+        return [
+          userId,
+          ConversationInfo.create({
+            id: conversation.id,
+            type: conversation.type,
+            targetInfo: peer
+              ? {
+                  id: peer.id,
+                  name: peer.nickname ?? '',
+                  avatarUrl: peer.avatarUrl ?? '',
+                }
+              : undefined,
+            lastMsgContent: this.getLastMsgContent(message.content, message.type),
+            lastMsgTime: message.createTime ? Number(message.createTime) : undefined,
+            updateTime: message.updateTime ? Number(message.updateTime) : undefined,
+            createTime: conversation.createTime.getTime(),
+            unreadCount: userId === senderId ? 0 : 1,
+            lastReadMessageId: userId === senderId ? message.msgId : 0,
+          }),
+        ];
+      }),
+    );
+  }
+
+  private buildNewUpdateMessage(messages: MessageInfo[], conversations: IConversationInfo[] = []) {
+    return NewUpdateMessage.encode(
+      NewUpdateMessage.create({
+        messages,
+        conversations,
+      }),
+    ).finish();
+  }
+
   private handleSendMessage = async (
     client: ChatSocket,
     payload?: SendMessageRequest | null,
@@ -222,7 +290,11 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     } = payload || {};
 
     let conversationId = payload?.conversationId;
-    if (!senderId || (!content && !fileId) || !clientMsgId) {
+    let isNewConversation = false;
+    let newConversation:
+      | Awaited<ReturnType<ChatService['getOrCreatePrivateConversation']>>
+      | undefined;
+    if (!senderId || (!content && !fileId) || !clientMsgId || (!conversationId && !targetId)) {
       this.sendMessageToClient(
         client,
         ServiceToClientEvent.ackSendMessage,
@@ -232,8 +304,6 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       return;
     }
 
-    // 🚀 1️⃣ 先 ACK（立即返回）
-
     this.sendMessageToClient(
       client,
       ServiceToClientEvent.ackSendMessage,
@@ -241,16 +311,16 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       requestId,
     );
 
-    // 🚀 2️⃣ 获取/创建会话
     if (!conversationId) {
       const conversation = await this.chatService.getOrCreatePrivateConversation(
         senderId,
         targetId!,
       );
+      isNewConversation = conversation.isNew;
+      newConversation = conversation;
       conversationId = conversation.id;
     }
 
-    // 🚀 3️⃣ 写消息
     const message = await this.messageService.sendMessage({
       senderId,
       conversationId,
@@ -263,34 +333,34 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
       waveform,
       thumbUrl: thumbUrl ?? undefined,
     });
+    const messagePayload = buildMessageInfoPayload(message);
 
-    // 🚀 4️⃣ 推送消息（带 clientMsgId）
-    // const messageDTO = {
-    //   id: message.id,
-    //   msgId: message.msgId,
-    //   clientMsgId, // ⭐ 关键
-    //   conversationId,
-    //   senderId,
-    //   content,
-    //   type,
-    //   createTime: message.createTime.getTime(),
-    // };
+    if (isNewConversation && targetId) {
+      await this.joinUserToRoom(this.server, [senderId, targetId], conversationId);
+    }
 
-    const response = MessageInfo.encode(
-      MessageInfo.create(buildMessageInfoPayload(message)),
-    ).finish();
+    const updateMessage = MessageInfo.create(messagePayload);
 
-    this.broadcastToRoom(conversationId, ServiceToClientEvent.newMessage, response, senderId);
-    // // 推给自己
-    // this.server.to(senderId).emit('newMessage', {
-    //   message: messageDTO,
-    // });
+    if (isNewConversation && targetId && newConversation) {
+      const conversationByUserId = await this.buildNewPrivateConversationUpdates(
+        newConversation,
+        senderId,
+        targetId,
+        updateMessage,
+      );
 
-    // // 推给对方
-    // if (targetId) {
-    //   this.server.to(targetId).emit('newMessage', {
-    //     message: messageDTO,
-    //   });
-    // }
+      for (const userId of [senderId, targetId]) {
+        const conversation = conversationByUserId.get(userId);
+        const response = this.buildNewUpdateMessage(
+          [updateMessage],
+          conversation ? [conversation] : [],
+        );
+        this.sendMessageToUser(userId, ServiceToClientEvent.newUpdateMessage, response, senderId);
+      }
+      return;
+    }
+
+    const response = this.buildNewUpdateMessage([updateMessage]);
+    this.broadcastToRoom(conversationId, ServiceToClientEvent.newUpdateMessage, response, senderId);
   };
 }

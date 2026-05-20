@@ -1,5 +1,5 @@
 import { Prisma } from 'generated/prisma/client';
-import { FileInfo, IMessageInfo, MediaInfo } from 'src/proto';
+import { ConversationInfo, FileInfo, IConversationInfo, IMessageInfo, MediaInfo } from 'src/proto';
 
 export const messageHistoryWithMediaInclude = {
   media: { include: { file: true } },
@@ -8,6 +8,43 @@ export const messageHistoryWithMediaInclude = {
 export type MessageHistoryWithMedia = Prisma.MessageHistoryGetPayload<{
   include: typeof messageHistoryWithMediaInclude;
 }>;
+
+export type ConversationUpdatePayload = Prisma.ConversationGetPayload<{
+  include: {
+    participants: {
+      include: {
+        user: true;
+      };
+    };
+  };
+}> & {
+  unreadCount?: number;
+  lastReadMessageId?: number;
+};
+
+export function buildConversationInfoPayload(
+  conversation: ConversationUpdatePayload,
+): IConversationInfo {
+  const targetUser = conversation.participants.find((participant) => participant.user)?.user;
+
+  return ConversationInfo.create({
+    id: conversation.id,
+    type: conversation.type,
+    targetInfo: targetUser
+      ? {
+          id: targetUser.id,
+          name: targetUser.nickname ?? '',
+          avatarUrl: targetUser.avatarUrl ?? '',
+        }
+      : undefined,
+    lastMsgContent: conversation.lastMsgContent ?? undefined,
+    lastMsgTime: conversation.lastMsgTime ? conversation.lastMsgTime.getTime() : undefined,
+    updateTime: conversation.updateTime.getTime(),
+    createTime: conversation.createTime.getTime(),
+    unreadCount: conversation.unreadCount ?? 0,
+    lastReadMessageId: conversation.lastReadMessageId ?? 0,
+  });
+}
 
 export function buildMessageInfoPayload(m: MessageHistoryWithMedia): IMessageInfo {
   const media = m.media;
