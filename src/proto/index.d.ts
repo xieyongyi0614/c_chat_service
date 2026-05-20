@@ -1906,6 +1906,115 @@ export class SendFileUploadComplete implements ISendFileUploadComplete {
     public static getTypeUrl(typeUrlPrefix?: string): string;
 }
 
+/** Properties of a NewUpdateMessage. */
+export interface INewUpdateMessage {
+
+    /** NewUpdateMessage messages */
+    messages?: (IMessageInfo[]|null);
+
+    /** NewUpdateMessage users */
+    users?: (IUserInfo[]|null);
+
+    /** NewUpdateMessage conversations */
+    conversations?: (IConversationInfo[]|null);
+}
+
+/** Represents a NewUpdateMessage. */
+export class NewUpdateMessage implements INewUpdateMessage {
+
+    /**
+     * Constructs a new NewUpdateMessage.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: INewUpdateMessage);
+
+    /** NewUpdateMessage messages. */
+    public messages: IMessageInfo[];
+
+    /** NewUpdateMessage users. */
+    public users: IUserInfo[];
+
+    /** NewUpdateMessage conversations. */
+    public conversations: IConversationInfo[];
+
+    /**
+     * Creates a new NewUpdateMessage instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns NewUpdateMessage instance
+     */
+    public static create(properties?: INewUpdateMessage): NewUpdateMessage;
+
+    /**
+     * Encodes the specified NewUpdateMessage message. Does not implicitly {@link NewUpdateMessage.verify|verify} messages.
+     * @param message NewUpdateMessage message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: INewUpdateMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified NewUpdateMessage message, length delimited. Does not implicitly {@link NewUpdateMessage.verify|verify} messages.
+     * @param message NewUpdateMessage message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: INewUpdateMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a NewUpdateMessage message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns NewUpdateMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): NewUpdateMessage;
+
+    /**
+     * Decodes a NewUpdateMessage message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns NewUpdateMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): NewUpdateMessage;
+
+    /**
+     * Verifies a NewUpdateMessage message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a NewUpdateMessage message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns NewUpdateMessage
+     */
+    public static fromObject(object: { [k: string]: any }): NewUpdateMessage;
+
+    /**
+     * Creates a plain object from a NewUpdateMessage message. Also converts values to other types if specified.
+     * @param message NewUpdateMessage
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: NewUpdateMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this NewUpdateMessage to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for NewUpdateMessage
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
 /** Namespace Common. */
 export namespace Common {
 

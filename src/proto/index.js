@@ -5118,6 +5118,321 @@ $root.SendFileUploadComplete = (function() {
     return SendFileUploadComplete;
 })();
 
+$root.NewUpdateMessage = (function() {
+
+    /**
+     * Properties of a NewUpdateMessage.
+     * @exports INewUpdateMessage
+     * @interface INewUpdateMessage
+     * @property {Array.<IMessageInfo>|null} [messages] NewUpdateMessage messages
+     * @property {Array.<IUserInfo>|null} [users] NewUpdateMessage users
+     * @property {Array.<IConversationInfo>|null} [conversations] NewUpdateMessage conversations
+     */
+
+    /**
+     * Constructs a new NewUpdateMessage.
+     * @exports NewUpdateMessage
+     * @classdesc Represents a NewUpdateMessage.
+     * @implements INewUpdateMessage
+     * @constructor
+     * @param {INewUpdateMessage=} [properties] Properties to set
+     */
+    function NewUpdateMessage(properties) {
+        this.messages = [];
+        this.users = [];
+        this.conversations = [];
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * NewUpdateMessage messages.
+     * @member {Array.<IMessageInfo>} messages
+     * @memberof NewUpdateMessage
+     * @instance
+     */
+    NewUpdateMessage.prototype.messages = $util.emptyArray;
+
+    /**
+     * NewUpdateMessage users.
+     * @member {Array.<IUserInfo>} users
+     * @memberof NewUpdateMessage
+     * @instance
+     */
+    NewUpdateMessage.prototype.users = $util.emptyArray;
+
+    /**
+     * NewUpdateMessage conversations.
+     * @member {Array.<IConversationInfo>} conversations
+     * @memberof NewUpdateMessage
+     * @instance
+     */
+    NewUpdateMessage.prototype.conversations = $util.emptyArray;
+
+    /**
+     * Creates a new NewUpdateMessage instance using the specified properties.
+     * @function create
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {INewUpdateMessage=} [properties] Properties to set
+     * @returns {NewUpdateMessage} NewUpdateMessage instance
+     */
+    NewUpdateMessage.create = function create(properties) {
+        return new NewUpdateMessage(properties);
+    };
+
+    /**
+     * Encodes the specified NewUpdateMessage message. Does not implicitly {@link NewUpdateMessage.verify|verify} messages.
+     * @function encode
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {INewUpdateMessage} message NewUpdateMessage message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    NewUpdateMessage.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.messages != null && message.messages.length)
+            for (var i = 0; i < message.messages.length; ++i)
+                $root.MessageInfo.encode(message.messages[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.users != null && message.users.length)
+            for (var i = 0; i < message.users.length; ++i)
+                $root.UserInfo.encode(message.users[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.conversations != null && message.conversations.length)
+            for (var i = 0; i < message.conversations.length; ++i)
+                $root.ConversationInfo.encode(message.conversations[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified NewUpdateMessage message, length delimited. Does not implicitly {@link NewUpdateMessage.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {INewUpdateMessage} message NewUpdateMessage message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    NewUpdateMessage.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a NewUpdateMessage message from the specified reader or buffer.
+     * @function decode
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {NewUpdateMessage} NewUpdateMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    NewUpdateMessage.decode = function decode(reader, length, error) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.NewUpdateMessage();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            if (tag === error)
+                break;
+            switch (tag >>> 3) {
+            case 1: {
+                    if (!(message.messages && message.messages.length))
+                        message.messages = [];
+                    message.messages.push($root.MessageInfo.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 2: {
+                    if (!(message.users && message.users.length))
+                        message.users = [];
+                    message.users.push($root.UserInfo.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 3: {
+                    if (!(message.conversations && message.conversations.length))
+                        message.conversations = [];
+                    message.conversations.push($root.ConversationInfo.decode(reader, reader.uint32()));
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a NewUpdateMessage message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {NewUpdateMessage} NewUpdateMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    NewUpdateMessage.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a NewUpdateMessage message.
+     * @function verify
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    NewUpdateMessage.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.messages != null && message.hasOwnProperty("messages")) {
+            if (!Array.isArray(message.messages))
+                return "messages: array expected";
+            for (var i = 0; i < message.messages.length; ++i) {
+                var error = $root.MessageInfo.verify(message.messages[i]);
+                if (error)
+                    return "messages." + error;
+            }
+        }
+        if (message.users != null && message.hasOwnProperty("users")) {
+            if (!Array.isArray(message.users))
+                return "users: array expected";
+            for (var i = 0; i < message.users.length; ++i) {
+                var error = $root.UserInfo.verify(message.users[i]);
+                if (error)
+                    return "users." + error;
+            }
+        }
+        if (message.conversations != null && message.hasOwnProperty("conversations")) {
+            if (!Array.isArray(message.conversations))
+                return "conversations: array expected";
+            for (var i = 0; i < message.conversations.length; ++i) {
+                var error = $root.ConversationInfo.verify(message.conversations[i]);
+                if (error)
+                    return "conversations." + error;
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Creates a NewUpdateMessage message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {NewUpdateMessage} NewUpdateMessage
+     */
+    NewUpdateMessage.fromObject = function fromObject(object) {
+        if (object instanceof $root.NewUpdateMessage)
+            return object;
+        var message = new $root.NewUpdateMessage();
+        if (object.messages) {
+            if (!Array.isArray(object.messages))
+                throw TypeError(".NewUpdateMessage.messages: array expected");
+            message.messages = [];
+            for (var i = 0; i < object.messages.length; ++i) {
+                if (typeof object.messages[i] !== "object")
+                    throw TypeError(".NewUpdateMessage.messages: object expected");
+                message.messages[i] = $root.MessageInfo.fromObject(object.messages[i]);
+            }
+        }
+        if (object.users) {
+            if (!Array.isArray(object.users))
+                throw TypeError(".NewUpdateMessage.users: array expected");
+            message.users = [];
+            for (var i = 0; i < object.users.length; ++i) {
+                if (typeof object.users[i] !== "object")
+                    throw TypeError(".NewUpdateMessage.users: object expected");
+                message.users[i] = $root.UserInfo.fromObject(object.users[i]);
+            }
+        }
+        if (object.conversations) {
+            if (!Array.isArray(object.conversations))
+                throw TypeError(".NewUpdateMessage.conversations: array expected");
+            message.conversations = [];
+            for (var i = 0; i < object.conversations.length; ++i) {
+                if (typeof object.conversations[i] !== "object")
+                    throw TypeError(".NewUpdateMessage.conversations: object expected");
+                message.conversations[i] = $root.ConversationInfo.fromObject(object.conversations[i]);
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a NewUpdateMessage message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {NewUpdateMessage} message NewUpdateMessage
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    NewUpdateMessage.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.arrays || options.defaults) {
+            object.messages = [];
+            object.users = [];
+            object.conversations = [];
+        }
+        if (message.messages && message.messages.length) {
+            object.messages = [];
+            for (var j = 0; j < message.messages.length; ++j)
+                object.messages[j] = $root.MessageInfo.toObject(message.messages[j], options);
+        }
+        if (message.users && message.users.length) {
+            object.users = [];
+            for (var j = 0; j < message.users.length; ++j)
+                object.users[j] = $root.UserInfo.toObject(message.users[j], options);
+        }
+        if (message.conversations && message.conversations.length) {
+            object.conversations = [];
+            for (var j = 0; j < message.conversations.length; ++j)
+                object.conversations[j] = $root.ConversationInfo.toObject(message.conversations[j], options);
+        }
+        return object;
+    };
+
+    /**
+     * Converts this NewUpdateMessage to JSON.
+     * @function toJSON
+     * @memberof NewUpdateMessage
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    NewUpdateMessage.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for NewUpdateMessage
+     * @function getTypeUrl
+     * @memberof NewUpdateMessage
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    NewUpdateMessage.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/NewUpdateMessage";
+    };
+
+    return NewUpdateMessage;
+})();
+
 $root.Common = (function() {
 
     /**
