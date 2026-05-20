@@ -42,8 +42,13 @@ export class UploadService {
     };
   }
 
-  async complete(uploadId: string) {
-    await this.queue.add('merge', { uploadId });
-    return { queued: true };
+  async complete(uploadId: string, usage: 'file' | 'message' = 'file') {
+    if (usage === 'message') {
+      await this.queue.add('merge-message', { uploadId });
+      return { queued: true };
+    }
+
+    const file = await this.merge.merge(uploadId);
+    return { queued: false, file: { ...file, size: Number(file.size) } };
   }
 }

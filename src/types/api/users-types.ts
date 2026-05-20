@@ -73,6 +73,8 @@ export namespace UsersTypes {
     UsersItem,
     'id' | 'email' | 'nickname' | 'avatarUrl' | 'state'
   >;
+
+  export type UpdateUserProfileParams = Partial<Pick<UsersItem, 'nickname' | 'avatarUrl'>>;
 }
 
 export namespace AuthTypes {

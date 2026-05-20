@@ -12,7 +12,7 @@ export class UploadProcessor {
     private chatGateway: ChatGateway,
   ) {}
 
-  @Process('merge')
+  @Process('merge-message')
   async handle(job: Job<{ uploadId: string }>) {
     try {
       const file = await this.merge.merge(job.data.uploadId);

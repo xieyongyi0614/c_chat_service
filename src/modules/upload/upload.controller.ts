@@ -42,8 +42,8 @@ export class UploadController {
   }
 
   @Post('complete')
-  complete(@Body('uploadId') uploadId: string) {
-    return this.uploadService.complete(uploadId);
+  complete(@Body('uploadId') uploadId: string, @Body('usage') usage?: 'file' | 'message') {
+    return this.uploadService.complete(uploadId, usage);
   }
 
   @Post('getFileByHash')

@@ -1,20 +1,15 @@
-import { Controller, Post, Body, Get, UseGuards, Headers, Request } from '@nestjs/common';
-import { AuthService, RegisterDto, LoginDto, RolesGuard, JwtAuthGuard, Roles } from '../../../auth';
-import { PrismaService } from '../../../core/database';
+import { Controller, Body, Get, Patch, UseGuards, Request } from '@nestjs/common';
+import { JwtAuthGuard } from '../../../auth';
 // import { SAFE_USER_SELECT } from './constants';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { paginationTrans } from '../../../utils';
-import { UserSearchDto } from './dto/user.dto';
-import { UsersTypes } from 'src/types/api/users-types';
+import { UpdateUserProfileDto } from './dto/user.dto';
 import { JwtRequest } from 'src/types/api/base-types';
+import { UsersService } from './users.service';
 
 @ApiTags('用户管理')
 @Controller('users')
 export class UserController {
-  constructor(
-    private authService: AuthService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private usersService: UsersService) {}
 
   // @Get()
   // @UseGuards(JwtAuthGuard, RolesGuard)
@@ -142,5 +137,18 @@ export class UserController {
   @ApiResponse({ status: 401, description: '未授权' })
   getProfile(@Request() req: JwtRequest) {
     return req.user;
+  }
+
+  @Patch('profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '更新当前用户资料' })
+  @ApiResponse({ status: 200, description: '更新成功' })
+  @ApiResponse({ status: 401, description: '未授权' })
+  updateProfile(@Request() req: JwtRequest, @Body() dto: UpdateUserProfileDto) {
+    return this.usersService.updateProfile(req.user.id, {
+      nickname: dto.nickname?.trim(),
+      avatarUrl: dto.avatarUrl?.trim(),
+    });
   }
 }

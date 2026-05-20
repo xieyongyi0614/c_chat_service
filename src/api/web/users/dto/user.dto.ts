@@ -18,3 +18,13 @@ export class UserSearchDto extends PaginationDto {
   @IsString()
   excludeUserId?: string;
 }
+
+export class UpdateUserProfileDto {
+  @IsOptional()
+  @IsString()
+  nickname?: string;
+
+  @IsOptional()
+  @IsString()
+  avatarUrl?: string;
+}

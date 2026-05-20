@@ -220,32 +220,36 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     return typeMap[type] || '[Message]';
   }
 
-  private async buildNewPrivateConversationUpdates(
-    conversation: Awaited<ReturnType<ChatService['getOrCreatePrivateConversation']>>,
+  private async buildConversationUpdatesByUserId(
+    conversationId: string,
     senderId: string,
-    targetId: string,
     message: MessageInfo,
   ): Promise<Map<string, IConversationInfo>> {
-    const users = await this.userService.getMultipleUsers([senderId, targetId]);
-    const userMap = new Map(users.map((user) => [user.id, user]));
-    const peerPairs = [
-      { userId: senderId, peerId: targetId },
-      { userId: targetId, peerId: senderId },
-    ];
+    const participants = await this.prisma.conversationParticipant.findMany({
+      where: {
+        conversationId,
+        isDeleted: false,
+      },
+      include: {
+        conversation: true,
+        user: true,
+      },
+    });
 
     return new Map(
-      peerPairs.map(({ userId, peerId }) => {
-        const peer = userMap.get(peerId);
+      participants.map((participant) => {
+        const peer = participants.find((item) => item.userId !== participant.userId)?.user;
+        const conversation = participant.conversation;
 
         return [
-          userId,
+          participant.userId,
           ConversationInfo.create({
             id: conversation.id,
             type: conversation.type,
             targetInfo: peer
               ? {
                   id: peer.id,
-                  name: peer.nickname ?? '',
+                  name: participant.remark || peer.nickname || '',
                   avatarUrl: peer.avatarUrl ?? '',
                 }
               : undefined,
@@ -253,8 +257,9 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
             lastMsgTime: message.createTime ? Number(message.createTime) : undefined,
             updateTime: message.updateTime ? Number(message.updateTime) : undefined,
             createTime: conversation.createTime.getTime(),
-            unreadCount: userId === senderId ? 0 : 1,
-            lastReadMessageId: userId === senderId ? message.msgId : 0,
+            unreadCount: participant.userId === senderId ? 0 : (participant.unreadCount ?? 0) + 1,
+            lastReadMessageId:
+              participant.userId === senderId ? message.msgId : participant.lastReadMessageId,
           }),
         ];
       }),
@@ -291,9 +296,6 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
 
     let conversationId = payload?.conversationId;
     let isNewConversation = false;
-    let newConversation:
-      | Awaited<ReturnType<ChatService['getOrCreatePrivateConversation']>>
-      | undefined;
     if (!senderId || (!content && !fileId) || !clientMsgId || (!conversationId && !targetId)) {
       this.sendMessageToClient(
         client,
@@ -317,7 +319,6 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
         targetId!,
       );
       isNewConversation = conversation.isNew;
-      newConversation = conversation;
       conversationId = conversation.id;
     }
 
@@ -341,26 +342,15 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
 
     const updateMessage = MessageInfo.create(messagePayload);
 
-    if (isNewConversation && targetId && newConversation) {
-      const conversationByUserId = await this.buildNewPrivateConversationUpdates(
-        newConversation,
-        senderId,
-        targetId,
-        updateMessage,
-      );
+    const conversationByUserId = await this.buildConversationUpdatesByUserId(
+      conversationId,
+      senderId,
+      updateMessage,
+    );
 
-      for (const userId of [senderId, targetId]) {
-        const conversation = conversationByUserId.get(userId);
-        const response = this.buildNewUpdateMessage(
-          [updateMessage],
-          conversation ? [conversation] : [],
-        );
-        this.sendMessageToUser(userId, ServiceToClientEvent.newUpdateMessage, response, senderId);
-      }
-      return;
+    for (const [userId, conversation] of conversationByUserId) {
+      const response = this.buildNewUpdateMessage([updateMessage], [conversation]);
+      this.sendMessageToUser(userId, ServiceToClientEvent.newUpdateMessage, response, senderId);
     }
-
-    const response = this.buildNewUpdateMessage([updateMessage]);
-    this.broadcastToRoom(conversationId, ServiceToClientEvent.newUpdateMessage, response, senderId);
   };
 }

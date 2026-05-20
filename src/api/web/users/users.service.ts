@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../core/database';
 import { UserSearchDto } from './dto/user.dto';
-import { UsersTypes } from 'src/types/api/users-types';
 import { paginationTrans } from 'src/utils';
 import { Prisma } from 'generated/prisma/client';
 
@@ -80,6 +79,23 @@ export class UsersService {
         avatarUrl: true,
         // state: true,
         // updateTime: true,
+      },
+    });
+  }
+
+  async updateProfile(id: string, data: { nickname?: string; avatarUrl?: string }) {
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        ...(data.nickname !== undefined ? { nickname: data.nickname } : {}),
+        ...(data.avatarUrl !== undefined ? { avatarUrl: data.avatarUrl } : {}),
+      },
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        avatarUrl: true,
+        state: true,
       },
     });
   }
