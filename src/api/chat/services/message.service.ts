@@ -7,11 +7,17 @@ import {
 } from '../utils/message-to-proto.util';
 import { SendMessageRequest } from 'src/proto';
 
+const MESSAGE_HISTORY_PAGE_SIZE = 20;
+
 @Injectable()
 export class MessageService {
   private readonly logger = new Logger(MessageService.name);
 
   constructor(private prisma: PrismaService) {}
+
+  private normalizeMessageLimit(limit: number = MESSAGE_HISTORY_PAGE_SIZE) {
+    return Math.max(1, Math.min(limit, MESSAGE_HISTORY_PAGE_SIZE));
+  }
 
   async getNextMsgId(tx: Prisma.TransactionClient, conversationId: string) {
     const seq = await tx.conversationSequence.upsert({
@@ -123,9 +129,15 @@ export class MessageService {
   /**
    * 获取会话消息历史
    */
-  async getConversationMessages(conversationId: string, page: number = 1, pageSize: number = 50) {
-    const skip = (page - 1) * pageSize;
-    const [messages] = await Promise.all([
+  async getConversationMessages(
+    conversationId: string,
+    page: number = 1,
+    pageSize: number = MESSAGE_HISTORY_PAGE_SIZE,
+  ) {
+    const safePage = Math.max(1, page);
+    const safePageSize = this.normalizeMessageLimit(pageSize);
+    const skip = (safePage - 1) * safePageSize;
+    const [messages, total] = await Promise.all([
       this.prisma.messageHistory.findMany({
         where: {
           conversationId: conversationId,
@@ -136,16 +148,108 @@ export class MessageService {
         },
         include: messageHistoryWithMediaInclude,
         skip,
-        take: pageSize,
+        take: safePageSize,
+      }),
+      this.prisma.messageHistory.count({
+        where: {
+          conversationId,
+          state: 0,
+        },
       }),
     ]);
 
     return {
       list: messages.reverse(),
-      total: 0,
-      page,
-      pageSize,
+      total,
+      page: safePage,
+      pageSize: safePageSize,
     };
+  }
+
+  async getLatestConversationMessages(
+    conversationId: string,
+    limit: number = MESSAGE_HISTORY_PAGE_SIZE,
+  ) {
+    const safeLimit = this.normalizeMessageLimit(limit);
+    const messages = await this.prisma.messageHistory.findMany({
+      where: {
+        conversationId,
+        state: 0,
+      },
+      orderBy: {
+        msgId: 'desc',
+      },
+      include: messageHistoryWithMediaInclude,
+      take: safeLimit,
+    });
+
+    return {
+      list: messages.reverse(),
+      total: messages.length,
+      page: 1,
+      pageSize: safeLimit,
+    };
+  }
+
+  async getConversationMessagesByMsgIdRange(
+    conversationId: string,
+    params: {
+      afterMsgId?: number;
+      beforeMsgId?: number;
+      limit?: number;
+    },
+  ) {
+    const limit = this.normalizeMessageLimit(params.limit ?? MESSAGE_HISTORY_PAGE_SIZE);
+
+    if (params.beforeMsgId != null && params.beforeMsgId > 0) {
+      const messages = await this.prisma.messageHistory.findMany({
+        where: {
+          conversationId,
+          state: 0,
+          msgId: {
+            lt: params.beforeMsgId,
+          },
+        },
+        orderBy: {
+          msgId: 'desc',
+        },
+        include: messageHistoryWithMediaInclude,
+        take: limit,
+      });
+
+      return {
+        list: messages.reverse(),
+        total: messages.length,
+        page: 1,
+        pageSize: limit,
+      };
+    }
+
+    if (params.afterMsgId != null && params.afterMsgId > 0) {
+      const messages = await this.prisma.messageHistory.findMany({
+        where: {
+          conversationId,
+          state: 0,
+          msgId: {
+            gt: params.afterMsgId,
+          },
+        },
+        orderBy: {
+          msgId: 'asc',
+        },
+        include: messageHistoryWithMediaInclude,
+        take: limit,
+      });
+
+      return {
+        list: messages,
+        total: messages.length,
+        page: 1,
+        pageSize: limit,
+      };
+    }
+
+    return this.getLatestConversationMessages(conversationId, limit);
   }
 
   async markConversationAsRead(userId: string, conversationId: string, messageId?: string) {

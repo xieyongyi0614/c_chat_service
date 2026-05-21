@@ -1393,6 +1393,15 @@ export interface IGetMessageHistoryRequest {
 
     /** GetMessageHistoryRequest pagination */
     pagination?: (Common.IPaginationRequest|null);
+
+    /** GetMessageHistoryRequest afterMsgId */
+    afterMsgId?: (number|null);
+
+    /** GetMessageHistoryRequest beforeMsgId */
+    beforeMsgId?: (number|null);
+
+    /** GetMessageHistoryRequest limit */
+    limit?: (number|null);
 }
 
 /** Represents a GetMessageHistoryRequest. */
@@ -1409,6 +1418,15 @@ export class GetMessageHistoryRequest implements IGetMessageHistoryRequest {
 
     /** GetMessageHistoryRequest pagination. */
     public pagination?: (Common.IPaginationRequest|null);
+
+    /** GetMessageHistoryRequest afterMsgId. */
+    public afterMsgId?: (number|null);
+
+    /** GetMessageHistoryRequest beforeMsgId. */
+    public beforeMsgId?: (number|null);
+
+    /** GetMessageHistoryRequest limit. */
+    public limit?: (number|null);
 
     /**
      * Creates a new GetMessageHistoryRequest instance using the specified properties.

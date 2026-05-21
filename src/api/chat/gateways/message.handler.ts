@@ -151,17 +151,31 @@ export abstract class MessageHandler extends MessageHandlerRegistry {
     if (!payload?.conversationId) return;
     const { page, pageSize } = transformPaginationParams(payload.pagination);
 
-    const { list, total } = await this.messageService.getConversationMessages(
-      payload.conversationId,
-      page,
-      pageSize,
-    );
+    const afterMsgId = Number(payload.afterMsgId ?? 0);
+    const beforeMsgId = Number(payload.beforeMsgId ?? 0);
+    const limit = Number(payload.limit || pageSize);
+    const hasMsgIdCursor = afterMsgId > 0 || beforeMsgId > 0;
+    const result = hasMsgIdCursor
+      ? await this.messageService.getConversationMessagesByMsgIdRange(payload.conversationId, {
+          afterMsgId,
+          beforeMsgId,
+          limit,
+        })
+      : payload.limit
+        ? await this.messageService.getLatestConversationMessages(payload.conversationId, limit)
+        : await this.messageService.getConversationMessages(payload.conversationId, page, pageSize);
+    const { list, total } = result;
 
     const encodedList = list.map((m) => MessageInfo.create(buildMessageInfoPayload(m)));
 
     const response = GetMessageHistoryResponse.encode(
       GetMessageHistoryResponse.create({
-        pagination: { total, page, pageSize, totalPage: Math.ceil(total / pageSize) },
+        pagination: {
+          total,
+          page: result.page,
+          pageSize: result.pageSize,
+          totalPage: Math.ceil(total / result.pageSize),
+        },
         list: encodedList,
       }),
     ).finish();

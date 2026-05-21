@@ -3900,6 +3900,9 @@ $root.GetMessageHistoryRequest = (function() {
      * @interface IGetMessageHistoryRequest
      * @property {string|null} [conversationId] GetMessageHistoryRequest conversationId
      * @property {Common.IPaginationRequest|null} [pagination] GetMessageHistoryRequest pagination
+     * @property {number|null} [afterMsgId] GetMessageHistoryRequest afterMsgId
+     * @property {number|null} [beforeMsgId] GetMessageHistoryRequest beforeMsgId
+     * @property {number|null} [limit] GetMessageHistoryRequest limit
      */
 
     /**
@@ -3934,6 +3937,51 @@ $root.GetMessageHistoryRequest = (function() {
     GetMessageHistoryRequest.prototype.pagination = null;
 
     /**
+     * GetMessageHistoryRequest afterMsgId.
+     * @member {number|null|undefined} afterMsgId
+     * @memberof GetMessageHistoryRequest
+     * @instance
+     */
+    GetMessageHistoryRequest.prototype.afterMsgId = null;
+
+    /**
+     * GetMessageHistoryRequest beforeMsgId.
+     * @member {number|null|undefined} beforeMsgId
+     * @memberof GetMessageHistoryRequest
+     * @instance
+     */
+    GetMessageHistoryRequest.prototype.beforeMsgId = null;
+
+    /**
+     * GetMessageHistoryRequest limit.
+     * @member {number|null|undefined} limit
+     * @memberof GetMessageHistoryRequest
+     * @instance
+     */
+    GetMessageHistoryRequest.prototype.limit = null;
+
+    // OneOf field names bound to virtual getters and setters
+    var $oneOfFields;
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(GetMessageHistoryRequest.prototype, "_afterMsgId", {
+        get: $util.oneOfGetter($oneOfFields = ["afterMsgId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(GetMessageHistoryRequest.prototype, "_beforeMsgId", {
+        get: $util.oneOfGetter($oneOfFields = ["beforeMsgId"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(GetMessageHistoryRequest.prototype, "_limit", {
+        get: $util.oneOfGetter($oneOfFields = ["limit"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    /**
      * Creates a new GetMessageHistoryRequest instance using the specified properties.
      * @function create
      * @memberof GetMessageHistoryRequest
@@ -3961,6 +4009,12 @@ $root.GetMessageHistoryRequest = (function() {
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.conversationId);
         if (message.pagination != null && Object.hasOwnProperty.call(message, "pagination"))
             $root.Common.PaginationRequest.encode(message.pagination, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.afterMsgId != null && Object.hasOwnProperty.call(message, "afterMsgId"))
+            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.afterMsgId);
+        if (message.beforeMsgId != null && Object.hasOwnProperty.call(message, "beforeMsgId"))
+            writer.uint32(/* id 4, wireType 0 =*/32).int32(message.beforeMsgId);
+        if (message.limit != null && Object.hasOwnProperty.call(message, "limit"))
+            writer.uint32(/* id 5, wireType 0 =*/40).int32(message.limit);
         return writer;
     };
 
@@ -4005,6 +4059,18 @@ $root.GetMessageHistoryRequest = (function() {
                     message.pagination = $root.Common.PaginationRequest.decode(reader, reader.uint32());
                     break;
                 }
+            case 3: {
+                    message.afterMsgId = reader.int32();
+                    break;
+                }
+            case 4: {
+                    message.beforeMsgId = reader.int32();
+                    break;
+                }
+            case 5: {
+                    message.limit = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -4040,6 +4106,7 @@ $root.GetMessageHistoryRequest = (function() {
     GetMessageHistoryRequest.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        var properties = {};
         if (message.conversationId != null && message.hasOwnProperty("conversationId"))
             if (!$util.isString(message.conversationId))
                 return "conversationId: string expected";
@@ -4047,6 +4114,21 @@ $root.GetMessageHistoryRequest = (function() {
             var error = $root.Common.PaginationRequest.verify(message.pagination);
             if (error)
                 return "pagination." + error;
+        }
+        if (message.afterMsgId != null && message.hasOwnProperty("afterMsgId")) {
+            properties._afterMsgId = 1;
+            if (!$util.isInteger(message.afterMsgId))
+                return "afterMsgId: integer expected";
+        }
+        if (message.beforeMsgId != null && message.hasOwnProperty("beforeMsgId")) {
+            properties._beforeMsgId = 1;
+            if (!$util.isInteger(message.beforeMsgId))
+                return "beforeMsgId: integer expected";
+        }
+        if (message.limit != null && message.hasOwnProperty("limit")) {
+            properties._limit = 1;
+            if (!$util.isInteger(message.limit))
+                return "limit: integer expected";
         }
         return null;
     };
@@ -4070,6 +4152,12 @@ $root.GetMessageHistoryRequest = (function() {
                 throw TypeError(".GetMessageHistoryRequest.pagination: object expected");
             message.pagination = $root.Common.PaginationRequest.fromObject(object.pagination);
         }
+        if (object.afterMsgId != null)
+            message.afterMsgId = object.afterMsgId | 0;
+        if (object.beforeMsgId != null)
+            message.beforeMsgId = object.beforeMsgId | 0;
+        if (object.limit != null)
+            message.limit = object.limit | 0;
         return message;
     };
 
@@ -4094,6 +4182,21 @@ $root.GetMessageHistoryRequest = (function() {
             object.conversationId = message.conversationId;
         if (message.pagination != null && message.hasOwnProperty("pagination"))
             object.pagination = $root.Common.PaginationRequest.toObject(message.pagination, options);
+        if (message.afterMsgId != null && message.hasOwnProperty("afterMsgId")) {
+            object.afterMsgId = message.afterMsgId;
+            if (options.oneofs)
+                object._afterMsgId = "afterMsgId";
+        }
+        if (message.beforeMsgId != null && message.hasOwnProperty("beforeMsgId")) {
+            object.beforeMsgId = message.beforeMsgId;
+            if (options.oneofs)
+                object._beforeMsgId = "beforeMsgId";
+        }
+        if (message.limit != null && message.hasOwnProperty("limit")) {
+            object.limit = message.limit;
+            if (options.oneofs)
+                object._limit = "limit";
+        }
         return object;
     };
 
